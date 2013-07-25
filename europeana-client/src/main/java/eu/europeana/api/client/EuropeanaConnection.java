@@ -1,0 +1,212 @@
+/*
+ * EuropeanaConnection.java - europeana4j
+ * (C) 2011 Digibis S.L.
+ */
+package eu.europeana.api.client;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.google.gson.Gson;
+
+import eu.europeana.api.client.adv.EuropeanaComplexQuery;
+import eu.europeana.api.client.config.ClientConfiguration;
+
+/**
+ * The EuropeanaConnection class is the main access point to the Europeana API,
+ * allowing to make querys and obtain the results in different formats.
+ *
+ * @author Andres Viedma Pelez
+ * @author Sergiu Gordea
+ */
+public class EuropeanaConnection {
+
+	private static final Log log = LogFactory.getLog(EuropeanaConnection.class);
+	
+    private String apiKey;
+    //v1 uri
+    //private String europeanaUri = "http://api.europeana.eu/api/opensearch.json";
+    //v2 uri
+    //private String europeanaUri = "http://www.europeana.eu/api/v2/search.json";
+    private String europeanaSearchUri = "";
+    private HttpConnector http = new HttpConnector();
+
+    /**
+     * Create a new connection to the Europeana API.
+     *
+     * @param apiKey API Key provided by Europeana to access the API
+     */
+    public EuropeanaConnection(String europeanaSearchUri, String apiKey) {
+        this.apiKey = apiKey;
+        this.europeanaSearchUri = europeanaSearchUri;
+    }
+
+    public EuropeanaConnection() {
+    	this(ClientConfiguration.getInstance().getSearchUri(), ClientConfiguration.getInstance().getApiKey());
+    	
+    }
+    
+    /**
+     * Execute a query to Europeana returning a limited set of results
+     *
+     * @param search
+     * @param offset
+     * @return The results as a EuropeanaResults object
+     * @throws IOException
+     */
+    public EuropeanaApi2Results search(EuropeanaQueryInterface search, long offset) throws IOException {
+        String json = this.searchJsonPage(search, 12, offset);
+
+        // Load results object from JSON
+        Gson gson = new Gson();
+        EuropeanaApi2Results res = gson.fromJson(json, EuropeanaApi2Results.class);
+
+        return res;
+    }
+
+    /**
+     * Execute a query to Europeana returning a limited set of results
+     *
+     * @param searchQuery
+     * @param limit
+     * @param offset
+     * @return
+     * @throws IOException
+     */
+    public EuropeanaApi2Results search(EuropeanaQueryInterface searchQuery, long limit, long offset) throws IOException {
+        String json = this.searchJsonPage(searchQuery, limit, offset);
+
+        // Load results object from JSON
+        Gson gson = new Gson();
+        EuropeanaApi2Results res = gson.fromJson(json, EuropeanaApi2Results.class);
+
+        return res;
+    }
+
+    /**
+     * Execute a query to Europeana returning a limited set of results
+     *
+     * @param searchQuery
+     * @return The results as a EuropeanaResults object
+     * @throws IOException
+     */
+    public EuropeanaApi2Results search(EuropeanaQueryInterface searchQuery) throws IOException {
+    	EuropeanaApi2Results results = search(searchQuery, -1, EuropeanaComplexQuery.DEFAULT_OFFSET);
+        return results;
+    }
+
+    /**
+     * Execute a query to Europeana and return one results page as JSON
+     *
+     * @param search
+     * @param limit
+     * @param offset
+     * @return The results as a JSON string
+     * @throws IOException
+     */
+    public String searchJsonPage(EuropeanaQueryInterface search, long limit, long offset) throws IOException {
+    	//search.getSearchTerms();
+    	//String cadenaBusq = 
+//		String url = this.europeanaUri + "?searchTerms="
+//				+ URLEncoder.encode(cadenaBusq, "UTF-8");
+//		url += "&startPage=" + startPage;
+//		url += "&wskey=" + this.getApiKey();
+        String url = search.getQueryUrl(this, limit, offset);
+        // Execute Europeana API request
+        String jSON = this.getJSONResult(url);
+
+        //TODO: verify if this workaround is still needed
+        // Workaround to Bug in Europeana JSON response: quotes not escaped
+        StringBuilder buf = new StringBuilder();
+        BufferedReader inJson = new BufferedReader(new StringReader(jSON));
+        String jsonLine = inJson.readLine();
+        while (jsonLine != null) {
+            int iSep = jsonLine.indexOf("\": \"");
+            if (iSep < 0) {
+                buf.append(jsonLine);
+            } else {
+                boolean end = false;
+                while ((!jsonLine.endsWith("\"") && !jsonLine.endsWith("\","))
+                        || jsonLine.endsWith("\": \"")) {
+                    String nextLine = inJson.readLine();
+                    end = (nextLine == null);
+                    if (!end) {
+                        jsonLine += nextLine;
+                    }
+                }
+
+                buf.append(jsonLine.substring(0, iSep));
+                buf.append("\": \"");
+                int iLastQuote = jsonLine.lastIndexOf('"');
+                String fieldValue = jsonLine.substring(iSep + 4, iLastQuote);
+                if (fieldValue.contains("\"") && !fieldValue.contains("\\\"")) {
+                    fieldValue = fieldValue.replace("\"", "\\\"");
+                }
+                buf.append(fieldValue);
+                buf.append(jsonLine.substring(iLastQuote));
+            }
+
+            jsonLine = inJson.readLine();
+        }
+        jSON = buf.toString();
+
+        //TODO: verify if this is still needed
+        // Namespaces are removed
+        jSON = jSON.replace("europeana:", "");
+        jSON = jSON.replace("enrichment:", "");
+
+        return jSON;
+    }
+
+         
+
+    String getJSONResult(String url) throws IOException {
+        log.trace("Call to Europeana API: " + url);
+        String res = http.getURLContent(url);
+        return res;
+    }
+
+    /**
+     * Returns the Europeana API URI for JSON calls
+     *
+     * @return
+     */
+    public String getEuropeanaUri() {
+        return europeanaSearchUri;
+    }
+
+    /**
+     * Modifies the Europeana API URI for JSON calls. The default value points
+     * to the "http://api.europeana.eu/api/opensearch.json"
+     *
+     * @param europeanaUri
+     */
+    public void setEuropeanaUri(String europeanaUri) {
+        this.europeanaSearchUri = europeanaUri;
+    }
+
+    /**
+     * @return the Europeana apiKey
+     */
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    /**
+     * @param apiKey the Europeana apiKey to set
+     */
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    //TODO: imrove the following code or remove it
+//    public String getRecordGuid(String id) {
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("http://www.europeana.eu/portal/record").append(id).append(".html?utm_source=api&utm_medium=api&utm_campaign=").append(apiKey);
+//        return sb.toString();
+//    }
+}
