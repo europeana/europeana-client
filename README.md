@@ -11,6 +11,8 @@ git clone ....
 
 File => Import => Existing Maven Projects ...
 
+update compilation level and the java version in the facets to 1.6 (through Window/Project => Preferences => Java Compiler) 
+
 copy src/main/resources/europeana-client.properties.template src/main/resources/europeana-client.properties
 
 == set the values in the europeana-client.properties file
