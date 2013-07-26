@@ -4,7 +4,7 @@
 
   <groupId>eu.europeana.api</groupId>
   <artifactId>europeana-client</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.2.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Europeana Client</name>
   <description>Implementation of Europeana Client by taking over the Europeana4J source code</description>
