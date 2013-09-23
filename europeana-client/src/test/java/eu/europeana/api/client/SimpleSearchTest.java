@@ -62,4 +62,38 @@ public class SimpleSearchTest {
        
         
 	} 
+	
+	@Test
+	public void testSearchInTitle() throws IOException{
+	
+		long ms0 = System.currentTimeMillis();
+
+        //create the query object
+		Api2Query europeanaQuery = new Api2Query();
+        europeanaQuery.setTitle("vooravond");
+        
+        //perform search
+        EuropeanaApi2Client europeanaClient = new EuropeanaApi2Client();
+        final int RESULTS_SIZE = 5;
+		EuropeanaApi2Results res = europeanaClient.searchApi2(europeanaQuery, RESULTS_SIZE, 0);
+
+      //print out response time
+        long t = System.currentTimeMillis() - ms0;
+        System.out.println("response time (client+server): " + (t / 1000d) + " seconds");
+
+        assertTrue(res.getItemCount() ==  RESULTS_SIZE);
+        
+        int count = 0;
+        for (EuropeanaApi2Item item : res.getAllItems()) {
+        	 System.out.println();
+             System.out.println("**** " + (count++ + 1));
+             System.out.println("Title: " + item.getTitle());
+             System.out.println("Europeana URL: " + item.getObjectURL());
+             System.out.println("Type: " + item.getType());
+             System.out.println("Creator(s): " + item.getDcCreator());
+             System.out.println("Thumbnail(s): " + item.getEdmPreview());
+             System.out.println("Data provider: "
+                     + item.getDataProvider());
+		}
+	}
 }
