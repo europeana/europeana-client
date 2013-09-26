@@ -107,21 +107,8 @@ public class EuropeanaConnection {
      * @throws IOException
      */
     public String searchJsonPage(EuropeanaQueryInterface search, long limit, long offset) throws IOException {
-    	//search.getSearchTerms();
-    	//String cadenaBusq = 
-//		String url = this.europeanaUri + "?searchTerms="
-//				+ URLEncoder.encode(cadenaBusq, "UTF-8");
-//		url += "&startPage=" + startPage;
-//		url += "&wskey=" + this.getApiKey();
         String url = search.getQueryUrl(this, limit, offset);
-        // Execute Europeana API request
         String jSON = this.getJSONResult(url);
-
-        //TODO: verify if this is still needed
-        // Namespaces are removed
-        jSON = jSON.replace("europeana:", "");
-        jSON = jSON.replace("enrichment:", "");
-
         return jSON;
     }
 
