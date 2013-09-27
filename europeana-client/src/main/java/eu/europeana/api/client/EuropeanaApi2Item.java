@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,8 @@ import com.google.gson.stream.JsonWriter;
 import eu.europeana.api.client.adv.EuropeanaComplexQuery;
 
 /**
- * A EuropeanaItem is the metadata of a work record provided by Europeana.
+ * An item is a search result and is represented by a summary of its metadata
+ * record. The actual content depends of the profile parameter.
  *
  * @author Andres Viedma Pelaez
  * @author Sergiu Gordea
@@ -30,37 +30,22 @@ public class EuropeanaApi2Item {
     private List<String> title;
     private String link;
     private String guid;
-    //private String description;
-    //private String enclosure;
-    // dcterms:
-    private List<String> isPartOf;
-    // europeana:
+    
     private String type;
     private List<String> year;
     private List<String> language;
     private List<String> provider;
     private List<String> dataProvider;
     private List<String> rights;
-    // enrichment:
-    //private List<String> period_begin;
-    //private List<String> period_end;
-    //private List<String> place_latitude;
-    //private List<String> place_longitude;
-    //private List<String> period_term;
-    //private List<String> period_label;
-    //private List<String> place_term;
-    //private List<String> place_label;
-    //private List<String> concept_term;
-    //private List<String> concept_label;
     
-    private ArrayList<HashMap<String, String>> edmTimespanLabel;
+    private List<Map<String, String>> edmConceptLabel;
+    private List<Map<String, String>> edmTimespanLabel;
     
     private List<String> europeanaCollectionName;
     private List<String> dcCreator;
     
     private String id;
-    private Integer index;
-    private Integer europeanaCompleteness;
+    private Integer completeness;
     
     private List<String> edmPreview;
 
@@ -112,24 +97,22 @@ public class EuropeanaApi2Item {
 
     
     /**
-     * Returns the object unique identifier.
+     * Returns the object identifier, removing the collection part
+     * (the part before "/").
+     * 
      * @return 
      */
     public String getObjectIdentifier() {
-        String part0 = this.getObjectURL();
-        if (part0 == null) {
+        String wholeId = this.getId();
+        if (wholeId == null) {
             return null;
         }
-        int iPart = part0.lastIndexOf('/');
+        int iPart = wholeId.lastIndexOf('/');
         if (iPart < 0) {
             return null;
         } else {
-            part0 = part0.substring(iPart + 1);
-            iPart = part0.indexOf('.');
-            if (iPart > 0) {
-                part0 = part0.substring(0, iPart);
-            }
-            return part0;
+            String res = wholeId.substring(iPart + 1);
+            return res;
         }
     }
 
@@ -322,28 +305,6 @@ public class EuropeanaApi2Item {
     }
 
    
-    public List<String> getIsPartOf() {
-        return isPartOf;
-    }
-
-    public void setIsPartOf(List<String> isPartOf) {
-        this.isPartOf = isPartOf;
-    }
-
-    /**
-     * @return the index
-     */
-    public Integer getIndex() {
-        return index;
-    }
-
-    /**
-     * @param index the index to set
-     */
-    public void setIndex(Integer index) {
-        this.index = index;
-    }
-
     /**
      * @return the europeanaCollectionName
      */
@@ -386,20 +347,28 @@ public class EuropeanaApi2Item {
         this.dcCreator = dcCreator;
     }
 
-	public void setEdmTimespanLabel(ArrayList<HashMap<String, String>> edmTimespanLabel) {
+	public void setEdmTimespanLabel(List<Map<String, String>> edmTimespanLabel) {
 		this.edmTimespanLabel = edmTimespanLabel;
 	}
 
-	public ArrayList<HashMap<String, String>> getEdmTimespanLabel() {
+	public List<Map<String, String>> getEdmTimespanLabel() {
 		return edmTimespanLabel;
 	}
 
-	public void setEuropeanaCompleteness(Integer europeanaCompleteness) {
-		this.europeanaCompleteness = europeanaCompleteness;
+	public void setEdmConceptLabel(List<Map<String, String>> edmConceptLabel) {
+		this.edmConceptLabel = edmConceptLabel;
 	}
 
-	public Integer getEuropeanaCompleteness() {
-		return europeanaCompleteness;
+	public List<Map<String, String>> getEdmConceptLabel() {
+		return edmConceptLabel;
+	}
+
+	public Integer getCompleteness() {
+		return completeness;
+	}
+
+	public void setCompleteness(Integer completeness) {
+		this.completeness = completeness;
 	}
 
 	public void setEdmPreview(List<String> edmPreview) {
