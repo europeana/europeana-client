@@ -130,8 +130,16 @@ public class EuropeanaApi2Results {
      * @param res2 
      */
     public void acumulate(EuropeanaApi2Results res2) {
-        // TODO: fix or remove this
-    	//boolean changed = this.items.addAll(res2.items);
+    	this.items.addAll(res2.items);
+    	this.itemsCount += res2.itemsCount;
+    }
+    
+    public void limitResults (int limit)
+    {
+        if (this.getItemCount() > limit) {
+            this.items = this.items.subList (0, limit);
+            this.itemsCount = limit;
+        }
     }
 
     public String toJSON() {
