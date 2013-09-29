@@ -4,9 +4,7 @@
  */
 package eu.europeana.api.client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringReader;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -109,56 +107,8 @@ public class EuropeanaConnection {
      * @throws IOException
      */
     public String searchJsonPage(EuropeanaQueryInterface search, long limit, long offset) throws IOException {
-    	//search.getSearchTerms();
-    	//String cadenaBusq = 
-//		String url = this.europeanaUri + "?searchTerms="
-//				+ URLEncoder.encode(cadenaBusq, "UTF-8");
-//		url += "&startPage=" + startPage;
-//		url += "&wskey=" + this.getApiKey();
         String url = search.getQueryUrl(this, limit, offset);
-        // Execute Europeana API request
         String jSON = this.getJSONResult(url);
-
-        //TODO: verify if this workaround is still needed
-        // Workaround to Bug in Europeana JSON response: quotes not escaped
-        StringBuilder buf = new StringBuilder();
-        BufferedReader inJson = new BufferedReader(new StringReader(jSON));
-        String jsonLine = inJson.readLine();
-        while (jsonLine != null) {
-            int iSep = jsonLine.indexOf("\": \"");
-            if (iSep < 0) {
-                buf.append(jsonLine);
-            } else {
-                boolean end = false;
-                while ((!jsonLine.endsWith("\"") && !jsonLine.endsWith("\","))
-                        || jsonLine.endsWith("\": \"")) {
-                    String nextLine = inJson.readLine();
-                    end = (nextLine == null);
-                    if (!end) {
-                        jsonLine += nextLine;
-                    }
-                }
-
-                buf.append(jsonLine.substring(0, iSep));
-                buf.append("\": \"");
-                int iLastQuote = jsonLine.lastIndexOf('"');
-                String fieldValue = jsonLine.substring(iSep + 4, iLastQuote);
-                if (fieldValue.contains("\"") && !fieldValue.contains("\\\"")) {
-                    fieldValue = fieldValue.replace("\"", "\\\"");
-                }
-                buf.append(fieldValue);
-                buf.append(jsonLine.substring(iLastQuote));
-            }
-
-            jsonLine = inJson.readLine();
-        }
-        jSON = buf.toString();
-
-        //TODO: verify if this is still needed
-        // Namespaces are removed
-        jSON = jSON.replace("europeana:", "");
-        jSON = jSON.replace("enrichment:", "");
-
         return jSON;
     }
 
