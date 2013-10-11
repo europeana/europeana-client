@@ -84,12 +84,20 @@ public class ThumbnailsForCollectionAccessorTest{
 
 	public int buildImageSet(String imageSet, String collectionName,
 			String generalTerms, String what, String objectType) throws IOException {
+		return buildImageSet(imageSet, collectionName, generalTerms, what, null, objectType); 
+	}
+
+		
+	public int buildImageSet(String imageSet, String collectionName,
+			String generalTerms, String what, String creator, String objectType) throws IOException {
 
 		ThumbnailsForCollectionAccessor tca = new ThumbnailsForCollectionAccessor(
 				collectionName);
 		tca.getQuery().setWhatTerms(what);
 		tca.getQuery().setGeneralTerms(generalTerms);
+		tca.getQuery().setCreator(creator);
 		tca.getQuery().setType(objectType);
+		
 
 		int resultsSize = -1;
 		Map<String, String> thumbnails = tca.getThumbnailsForCollection(0,

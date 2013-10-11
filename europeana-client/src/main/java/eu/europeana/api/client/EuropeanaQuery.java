@@ -31,7 +31,6 @@ public class EuropeanaQuery implements EuropeanaQueryInterface {
     private String language;
     private String whatTerms;
     
-
     /**
      * Creates an empry query
      */
@@ -212,6 +211,7 @@ public class EuropeanaQuery implements EuropeanaQueryInterface {
         if(this.generalTerms != null)
         	this.addSearchField(buf, "text", this.generalTerms);
         
+        //TODO: creator <> who ... needs to be corrected ...
         if(this.creator != null)
         	this.addSearchField(buf, "who", this.creator);
         
@@ -340,4 +340,5 @@ public class EuropeanaQuery implements EuropeanaQueryInterface {
 	public String getWhatTerms() {
 		return whatTerms;
 	}
+	
 }
