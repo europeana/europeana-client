@@ -6,7 +6,9 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import eu.europeana.api.client.adv.EuropeanaComplexQuery;
+import eu.europeana.api.client.connection.EuropeanaApi2Client;
+import eu.europeana.api.client.result.EuropeanaApi2Item;
+import eu.europeana.api.client.result.EuropeanaApi2Results;
 
 /**
  * Test Class generated from the SimpleSearch example

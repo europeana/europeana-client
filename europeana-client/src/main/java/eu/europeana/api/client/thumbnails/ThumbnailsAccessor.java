@@ -15,11 +15,11 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import eu.europeana.api.client.EuropeanaApi2Client;
-import eu.europeana.api.client.EuropeanaApi2Item;
-import eu.europeana.api.client.EuropeanaApi2Results;
 import eu.europeana.api.client.EuropeanaQuery;
-import eu.europeana.api.client.HttpConnector;
+import eu.europeana.api.client.connection.EuropeanaApi2Client;
+import eu.europeana.api.client.connection.HttpConnector;
+import eu.europeana.api.client.result.EuropeanaApi2Item;
+import eu.europeana.api.client.result.EuropeanaApi2Results;
 
 
 /**

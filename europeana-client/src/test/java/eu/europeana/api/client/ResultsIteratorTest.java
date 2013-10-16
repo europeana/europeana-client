@@ -11,6 +11,10 @@ import org.junit.Test;
 
 import com.google.gson.Gson;
 
+import eu.europeana.api.client.connection.EuropeanaApi2Client;
+import eu.europeana.api.client.result.EuropeanaApi2Item;
+import eu.europeana.api.client.result.EuropeanaApi2Results;
+
 /**
  * Test of EuropeanaConnection.iterateResults
  * 

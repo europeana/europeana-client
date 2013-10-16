@@ -8,10 +8,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import eu.europeana.api.client.Api2Query;
-import eu.europeana.api.client.EuropeanaApi2Client;
-import eu.europeana.api.client.EuropeanaApi2Item;
-import eu.europeana.api.client.EuropeanaApi2Results;
+import eu.europeana.api.client.connection.EuropeanaApi2Client;
 import eu.europeana.api.client.exception.TechnicalRuntimeException;
+import eu.europeana.api.client.result.EuropeanaApi2Item;
+import eu.europeana.api.client.result.EuropeanaApi2Results;
 
 public class ThumbnailsForCollectionAccessor extends ThumbnailsAccessor{
 
@@ -111,6 +111,8 @@ public class ThumbnailsForCollectionAccessor extends ThumbnailsAccessor{
 
 	private String getLargestThumbnail(EuropeanaApi2Item item) {
 		String largestThumbnail = item.getEdmPreview().get(0);
+		if(largestThumbnail == null)
+			System.out.println("No thumbnail found!");
 		//the following code is not needed, the API returns already the LARGE 
 //		for (String url : item.getEdmPreview()) {
 //			if(url.indexOf("size=LARGE") > 0){

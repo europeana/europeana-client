@@ -90,26 +90,38 @@ public class ThumbnailsForCollectionAccessorTest{
 		
 	public int buildImageSet(String imageSet, String collectionName,
 			String generalTerms, String what, String creator, String objectType) throws IOException {
+		
+		return buildImageSet(imageSet, collectionName,
+				generalTerms, what, creator, objectType, null);
+	}
 
+	public int buildImageSet(String imageSet, String collectionName,
+			String generalTerms, String what, String creator, String objectType, String provider) throws IOException {
+		
 		ThumbnailsForCollectionAccessor tca = new ThumbnailsForCollectionAccessor(
 				collectionName);
 		tca.getQuery().setWhatTerms(what);
 		tca.getQuery().setGeneralTerms(generalTerms);
 		tca.getQuery().setCreator(creator);
 		tca.getQuery().setType(objectType);
+		tca.getQuery().setProvider(provider);
 		
 
 		int resultsSize = -1;
 		Map<String, String> thumbnails = tca.getThumbnailsForCollection(0,
 				resultsSize);
 
-		String fileName = "/" + imageSet + "_" + collectionName + ".csv";
+		String fileName = "/" + imageSet + "_" + encode(collectionName) + ".csv";
 		writeThumbnailsToCsvFile(thumbnails, fileName);
 
 		// assert all image urls are correct
 		assertTrue(thumbnails.size() == tca.totalResults);
 
 		return thumbnails.size();
+	}
+
+	private String encode(String collectionName) {
+		return collectionName.replace('*', 'X');
 	}
 
 	//@Test
