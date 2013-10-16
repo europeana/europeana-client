@@ -5,7 +5,7 @@ import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import eu.europeana.api.client.Api2Query;
+import eu.europeana.api.client.Api2QueryInterface;
 import eu.europeana.api.client.result.EuropeanaApi2Results;
 
 public class EuropeanaApi2Client extends EuropeanaConnection {
@@ -18,7 +18,7 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
 		super(europeanaSearchUri, apiKey);
 	}
 
-	public EuropeanaApi2Results searchApi2(Api2Query query, int limit, int start) throws IOException {
+	public EuropeanaApi2Results searchApi2(Api2QueryInterface query, int limit, int start) throws IOException {
 		
 		//String cadenaBusq = search.getSearchTerms();
 		String url = query.getQueryUrl(this, limit, start);

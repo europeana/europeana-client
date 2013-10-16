@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import eu.europeana.api.client.Api2Query;
+import eu.europeana.api.client.Api2QueryInterface;
 import eu.europeana.api.client.connection.EuropeanaApi2Client;
 import eu.europeana.api.client.exception.TechnicalRuntimeException;
 import eu.europeana.api.client.result.EuropeanaApi2Item;
@@ -22,7 +23,7 @@ public class ThumbnailsForCollectionAccessor extends ThumbnailsAccessor{
 	private int blockSize = DEFAULT_BLOCKSIZE;
 	Map <String, String> res;
 	
-	private Api2Query query;
+	private Api2QueryInterface query;
 	long totalResults = -1; 
 	
 	public ThumbnailsForCollectionAccessor(String collectionName){
@@ -131,11 +132,11 @@ public class ThumbnailsForCollectionAccessor extends ThumbnailsAccessor{
 		this.blockSize = blockSize;
 	}
 
-	public void setQuery(Api2Query query) {
+	public void setQuery(Api2QueryInterface query) {
 		this.query = query;
 	}
 
-	public Api2Query getQuery() {
+	public Api2QueryInterface getQuery() {
 		return query;
 	}
 	
