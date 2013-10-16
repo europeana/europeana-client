@@ -1,7 +1,6 @@
 package eu.europeana.api.client;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,23 +15,26 @@ import eu.europeana.api.common.EuropeanaFields;
 public class Api2Query extends EuropeanaQuery implements Api2QueryInterface {
 
 	private List<String> queryRefinements;
+	private String collectionName;
     
 	/**
 	 * Constructor that supports searching objects within a collection
 	 * @param collectionName
 	 */
 	public Api2Query(String collectionName) {
-		super(EuropeanaFields.EUROPEANA_COLLECTION_NAME + IS + collectionName);
+		this.setCollectionName(collectionName);
 	}
 
 	public Api2Query() {
 		super();
 	}
 	
+	@Override
 	public List<String> getQueryRefinements() {
 		return queryRefinements;
 	}
 
+	@Override
 	public void addQueryRefinement(String qf) {
 		if(queryRefinements == null)
 			queryRefinements = new ArrayList<String>(3);
@@ -49,9 +51,15 @@ public class Api2Query extends EuropeanaQuery implements Api2QueryInterface {
 			long offset) throws UnsupportedEncodingException {
 		String searchTerms = getSearchTerms();
 		// connection.setEuropeanaUri("http://api.europeana.eu/api/opensearch.json");
+		searchTerms = encodeSearchTerms(searchTerms);
+				
 		StringBuilder url = new StringBuilder();
-		url.append(connection.getEuropeanaUri()).append("?query=")
-				.append(URLEncoder.encode(searchTerms, "UTF-8"));
+		
+		url.append(connection.getEuropeanaUri()).append("?query=");
+		url.append(searchTerms);
+		
+		appendQueryRefinements(url);
+		
 		if (limit > 0)
 			url.append("&rows=").append(limit);
 		if (offset > 0)
@@ -59,20 +67,19 @@ public class Api2Query extends EuropeanaQuery implements Api2QueryInterface {
 		url.append("&wskey=").append(connection.getApiKey());
 		return url.toString();
 	}
-	
-	@Override
-	protected void buildSearchQueryString(StringBuffer buf) {
-		super.buildSearchQueryString(buf);
+
+	void appendQueryRefinements(StringBuilder url) throws UnsupportedEncodingException {
 		
-		if(getQueryRefinements() != null){
-			for (String qf : getQueryRefinements()) {
-				appendQueryRefinement(buf, null, qf);
-			}
+		if(getQueryRefinements() == null)
+			return;
+		
+		for (String qf : getQueryRefinements()) {
+			appendQueryRefinement(url, qf);
 		}
-			
+		
 	}
 	
-	private void appendQueryRefinement(StringBuffer buf, String facetField, String qf) {
+	private void appendQueryRefinement(StringBuilder buf, String qf) throws UnsupportedEncodingException {
     	if (qf == null) {
             return;
         }
@@ -84,10 +91,26 @@ public class Api2Query extends EuropeanaQuery implements Api2QueryInterface {
         
         buf.append("&qf=");
         
-        if(facetField != null && !facetField.trim().isEmpty())
-        	buf.append(facetField).append(IS);
+//        if(facetField != null && !facetField.trim().isEmpty())
+//        	buf.append(facetField).append(IS);
         
-        buf.append(qf);
+        buf.append(encodeSearchTerms(qf));
+	}
+
+	@Override
+	protected void buildSearchQueryString(StringBuffer buf) {
+		super.buildSearchQueryString(buf);
+		
+		if(getCollectionName() !=null)
+			addSearchField(buf, EuropeanaFields.EUROPEANA_COLLECTION_NAME, collectionName);
+	}
+	
+	public String getCollectionName() {
+		return collectionName;
+	}
+
+	public void setCollectionName(String collectionName) {
+		this.collectionName = collectionName;
 	}
 
 	
