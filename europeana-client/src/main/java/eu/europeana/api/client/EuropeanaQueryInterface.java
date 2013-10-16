@@ -2,13 +2,15 @@ package eu.europeana.api.client;
 
 import java.io.UnsupportedEncodingException;
 
+import eu.europeana.api.client.connection.EuropeanaConnection;
+
 /**
  *
  * @author Cosmin Coman
  */
 public interface EuropeanaQueryInterface {
 
-    /**
+	/**
      * Returns the Europeana search terms query string
      * 
      * @return the searchTerms argument of the url

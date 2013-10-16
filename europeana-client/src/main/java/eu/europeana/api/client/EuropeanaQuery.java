@@ -7,14 +7,15 @@ package eu.europeana.api.client;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import eu.europeana.api.client.adv.EuropeanaComplexQuery;
+import eu.europeana.api.client.connection.EuropeanaConnection;
+import eu.europeana.api.common.EuropeanaOperators;
 
 /**
  * The EuropeanaQuery is an encapsulated query to a EuropeanaConnection object.
  *
  * @author Andres Viedma Pelaez
  */
-public class EuropeanaQuery implements EuropeanaQueryInterface {
+public class EuropeanaQuery implements EuropeanaQueryInterface, EuropeanaOperators {
 
     private String wholeSubQuery;
     private String generalTerms;
@@ -203,9 +204,15 @@ public class EuropeanaQuery implements EuropeanaQueryInterface {
 
     
     public String getSearchTerms() {
-        StringBuffer buf = new StringBuffer();
 
-        if (this.wholeSubQuery != null && this.wholeSubQuery.trim().length() > 0) {
+    	StringBuffer buf = new StringBuffer();
+        buildSearchQueryString(buf);
+        return buf.toString();
+    }
+
+	protected void buildSearchQueryString(StringBuffer buf) {
+		
+		if (this.wholeSubQuery != null && this.wholeSubQuery.trim().length() > 0) {
             buf.append(this.wholeSubQuery);
         }
         if(this.generalTerms != null)
@@ -247,9 +254,7 @@ public class EuropeanaQuery implements EuropeanaQueryInterface {
         
         if(this.whatTerms != null)
         	this.addSearchField(buf, "what", this.whatTerms, false, false);
-        
-        return buf.toString();
-    }
+	}
 
     public String getQueryUrl(EuropeanaConnection connection) throws UnsupportedEncodingException {
         return getQueryUrl(connection, EuropeanaComplexQuery.DEFAULT_OFFSET);
@@ -285,9 +290,9 @@ public class EuropeanaQuery implements EuropeanaQueryInterface {
         }
 
         if (not) {
-            buf.append(" NOT ");
+            buf.append(NOT).append(EMPTY_SPACE);
         } else if (buf.length() > 0) {
-            buf.append(" AND ");
+            buf.append(EMPTY_SPACE).append(AND).append(EMPTY_SPACE);
         }
 
         if (field != null) {
