@@ -14,6 +14,7 @@ import eu.europeana.api.common.EuropeanaOperators;
  * The EuropeanaQuery is an encapsulated query to a EuropeanaConnection object.
  *
  * @author Andres Viedma Pelaez
+ * @author Sergiu Gordea
  */
 public class EuropeanaQuery implements EuropeanaQueryInterface, EuropeanaOperators {
 
@@ -268,18 +269,19 @@ public class EuropeanaQuery implements EuropeanaQueryInterface, EuropeanaOperato
         String searchTerms = getSearchTerms();
         connection.setEuropeanaUri("http://api.europeana.eu/api/opensearch.json");
         StringBuilder url = new StringBuilder();
-        url.append(connection.getEuropeanaUri()).append("?searchTerms=").append(URLEncoder.encode(searchTerms, "UTF-8"));
+        url.append(connection.getEuropeanaUri()).append("?searchTerms=");
+        url.append(encodeSearchTerms(searchTerms));
         url.append("&rows=").append(limit);
         url.append("&startPage=").append(offset);
         url.append("&wskey=").append(connection.getApiKey());
         return url.toString();
     }
 
-    private void addSearchField(StringBuffer buf, String field, String value) {
+    protected void addSearchField(StringBuffer buf, String field, String value) {
         this.addSearchField(buf, field, value, false, false);
     }
 
-    private void addSearchField(StringBuffer buf, String field, String value, boolean not, boolean forceQuotes) {
+    protected void addSearchField(StringBuffer buf, String field, String value, boolean not, boolean forceQuotes) {
         if (value == null) {
             return;
         }
@@ -297,9 +299,10 @@ public class EuropeanaQuery implements EuropeanaQueryInterface, EuropeanaOperato
 
         if (field != null) {
             buf.append(field);
-            buf.append(": ");
+            buf.append(IS);
         }
 
+        //TODO: check if the brackets are really needed. In worst case add the boolean forceBrackets parameter
         buf.append("(");
 
         if (forceQuotes && !value.startsWith("\"")) {
@@ -346,4 +349,8 @@ public class EuropeanaQuery implements EuropeanaQueryInterface, EuropeanaOperato
 		return whatTerms;
 	}
 	
+	protected String encodeSearchTerms(String searchTerm)
+			throws UnsupportedEncodingException {
+		return URLEncoder.encode(searchTerm, "UTF-8");
+	}
 }
