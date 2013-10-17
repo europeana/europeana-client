@@ -31,7 +31,7 @@ public class SearchRefinementsTest {
 		//System.out.println(queryUrl);
 		String encodedUrl = "http://www.europeana.eu/api/v2/search.json?query=what%3A%28building%29+AND" +
 				"+europeana_collectionName%3A%28%2208511_Ag_EU_ATHENA_InstituteforCulturalMemory%28CIMEC%29%2CBucharest%22%29" +
-				"&qf=NOT+gips&qf=NOT+capitel&rows=1&start=1&wskey=HqHRSeD3j";
+				"&qf=NOT+gips&qf=NOT+capitel&rows=1&start=1&wskey=" + europeanaClient.getApiKey();
 		
 		assertEquals(encodedUrl, queryUrl);
 		
