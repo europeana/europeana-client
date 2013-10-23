@@ -1,8 +1,10 @@
 package eu.europeana.api.client.thumbnails;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
@@ -58,9 +60,15 @@ public class ThumbnailsForCollectionAccessorTest{
 //		writeThumbnailsToCsvFile(thumbnails, fileName);
 	}
 
-	private void writeThumbnailsToCsvFile(Map<String, String> thumbnails,
-			String fileName) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+	private void writeThumbnailsToCsvFile(String imageSet, Map<String, String> thumbnails,
+			String[] classifications, File file) throws IOException {
+		
+		//create parent dirs
+		file.getParentFile().mkdirs();
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+		writeCvsFileHeader(writer, imageSet, thumbnails, classifications);
+		
 		int count = 0;
 		for (Entry<String, String> thumbnail : thumbnails.entrySet()) {
 
@@ -76,27 +84,60 @@ public class ThumbnailsForCollectionAccessorTest{
 		writer.close();
 	}
 
-	public int buildImageSet(String imageSet, String collectionName,
+	private void writeCvsFileHeader(BufferedWriter writer, String imageSet, Map<String, String> thumbnails,
+			String[] classifications) throws IOException {
+		
+		writer.write("#");
+		writer.write(imageSet);
+		writer.write("; ");
+		writer.write("" + thumbnails.size());
+		writer.write("; ");
+		for (int i = 0; i < classifications.length; i++) {
+			writer.write(classifications[i]);
+			writer.write("; ");
+		}
+		writer.write("\n");
+		
+	}
+
+	public int buildImageSet(String imageSet, String collectionName, String[] classifications,
 			String generalTerms, String what) throws IOException {
 
-		return buildImageSet(imageSet, collectionName, generalTerms, what, null);
+		return buildImageSet(imageSet, collectionName, classifications, generalTerms, what, null);
 	}
 
-	public int buildImageSet(String imageSet, String collectionName,
+	public int buildImageSet(String imageSet, String collectionName, String[] classifications,
 			String generalTerms, String what, String objectType) throws IOException {
-		return buildImageSet(imageSet, collectionName, generalTerms, what, null, objectType); 
+		return buildImageSet(imageSet, collectionName, classifications, generalTerms, what, null, objectType); 
 	}
 
 		
-	public int buildImageSet(String imageSet, String collectionName,
+	public int buildImageSet(String imageSet, String collectionName, String[] classifications,
 			String generalTerms, String what, String creator, String objectType) throws IOException {
 		
-		return buildImageSet(imageSet, collectionName,
+		return buildImageSet(imageSet, collectionName, classifications,
 				generalTerms, what, creator, objectType, null);
 	}
 
-	public int buildImageSet(String imageSet, String collectionName,
+	public int buildImageSet(String imageSet, String collectionName, String[] classifications,
 			String generalTerms, String what, String creator, String objectType, String provider) throws IOException {
+		
+		return buildImageSet(imageSet, collectionName, classifications,
+				generalTerms, what, creator, objectType, provider, null);
+	}
+	
+
+	public int buildImageSet(String imageSet, String collectionName, String[] classifications,
+			String generalTerms, String what, String creator, String objectType, String provider, String[] refinements) throws IOException {
+		
+		return buildImageSet(imageSet, collectionName, classifications, 0, -1,
+				generalTerms, what, creator, objectType, provider, refinements);
+		
+	}
+
+
+	public int buildImageSet(String imageSet, String collectionName, String[] classifications, int start, int limit,
+			String generalTerms, String what, String creator, String objectType, String provider, String[] refinements) throws IOException {
 		
 		ThumbnailsForCollectionAccessor tca = new ThumbnailsForCollectionAccessor(
 				collectionName);
@@ -106,20 +147,41 @@ public class ThumbnailsForCollectionAccessorTest{
 		tca.getQuery().setType(objectType);
 		tca.getQuery().setProvider(provider);
 		
-
+		if(refinements != null && refinements.length > 0){
+			for (int i = 0; i < refinements.length; i++) {
+				tca.getQuery().addQueryRefinement(refinements[i]);		
+			}
+		}
+		
 		int resultsSize = -1;
-		Map<String, String> thumbnails = tca.getThumbnailsForCollection(0,
+		if(limit > 0)
+			resultsSize = limit;
+		
+		Map<String, String> thumbnails = tca.getThumbnailsForCollection(start,
 				resultsSize);
 
-		String fileName = "/" + imageSet + "_" + encode(collectionName) + ".csv";
-		writeThumbnailsToCsvFile(thumbnails, fileName);
+		File cvsFile = getCollectionCsvFile(imageSet, collectionName);
+		writeThumbnailsToCsvFile(imageSet, thumbnails, classifications, cvsFile);
 
 		// assert all image urls are correct
-		assertTrue(thumbnails.size() == tca.totalResults);
-
+		if(limit > 0)
+			assertEquals(limit, thumbnails.size());
+		else
+			assertEquals(tca.totalResults, thumbnails.size());
+		
 		return thumbnails.size();
 	}
 
+	File getCollectionCsvFile(String imageSet, String collectionName) {
+		String fileName = getCollectionsCvsFolder() + imageSet + "_" + encode(collectionName) + ".csv";
+		return new File(fileName);
+	}
+
+	protected String getCollectionsCvsFolder() {
+		return "/";
+	}
+
+	
 	private String encode(String collectionName) {
 		return collectionName.replace('*', 'X');
 	}
@@ -129,59 +191,6 @@ public class ThumbnailsForCollectionAccessorTest{
 		// int objects = buildImageSet("Rijksmuseum-portrets",
 		// "90402_M_NL_Rijksmuseum", "portret", "schilderij");
 		// assertEquals(objects, 1243) ;
-
-		// int objects = buildImageSet("Rijksmuseum-miniatur",
-		// "90402_M_NL_Rijksmuseum", "miniatuur beeld", null);
-		// assertEquals(objects, 69) ;
-
-//		int objects1 = buildImageSet("Rijksmuseum-landscape",
-//				"90402_M_NL_Rijksmuseum", "landschap", "schilderij");
-//		assertEquals(objects1, 425);
-//
-//		int objects2 = buildImageSet("Rijksmuseum-bottles",
-//				"90402_M_NL_Rijksmuseum", null, "fles");
-//		assertEquals(objects2, 144);
-//
-//		int objects3 = buildImageSet("Rijksmuseum-drawing-lanscape",
-//				"90402_M_NL_Rijksmuseum", "landschap", "tekening");
-//		assertEquals(objects3, 700);
-
-//		int objects4 = buildImageSet("Rijksmuseum-porcelain",
-//				"90402_M_NL_Rijksmuseum", null, "Hollands porselein");
-//		assertEquals(objects4, 131);
-//
-//		int objects5 = buildImageSet("Teylers-parrots",
-//				"10106_Ag_EU_STERNA_48", "parrot", null);
-//		assertEquals(objects5, 105);
-//
-//		int objects6 = buildImageSet("Teylers-duck", "10106_Ag_EU_STERNA_48",
-//				"duck", null);
-//		assertEquals(objects6, 120);
-//
-//		int objects7 = buildImageSet("Teylers-woodpecker",
-//				"10106_Ag_EU_STERNA_48", "woodpecker", null);
-//		assertEquals(objects7, 210);
-//
-//		int objects8 = buildImageSet("Teylers-eagle", "10106_Ag_EU_STERNA_48",
-//				"falco", null);
-//		assertEquals(objects8, 146);
-
-//		int objects9 = buildImageSet("Galileo-electric",
-//				"02301_Ag_IT_MG_catalogue", "ingegneria elettrica", null);
-//		assertEquals(objects9, 231);
-//
-//		int objects10 = buildImageSet("Galileo-optic", "02301_Ag_IT_MG_catalogue",
-//				"optics", null, "IMAGE");
-//		assertEquals(objects10, 195);
-//
-//		int objects11 = buildImageSet("MIMO-trompe", "09102_Ag_EU_MIMO_ESE",
-//				"trompe", null);
-//		assertEquals(objects11, 1092);
-//		
-//		int objects12 = buildImageSet("NHM-LISABON-butterfly", "2023901_Ag_EU_NaturalEurope_all",
-//				"butterflies", null, "IMAGE");
-//		assertEquals(objects12, 371);
-		
 	}
 
 }

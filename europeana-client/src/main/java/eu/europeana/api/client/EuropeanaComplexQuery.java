@@ -84,4 +84,28 @@ public class EuropeanaComplexQuery implements EuropeanaQueryInterface {
         return url.toString();
     }
 
+	@Override
+	public void setWhatTerms(String what) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setGeneralTerms(String generalTerms) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setCreator(String creator) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setProvider(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -13,11 +13,14 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * A HttpConnector is a class encapsulating simple HTTP access.
  *
  * @author Andres Viedma Pelez
+ * @author Sergiu Gordea
  */
 public class HttpConnector {
 
@@ -28,6 +31,8 @@ public class HttpConnector {
     private static final String ENCODING = "UTF-8";
     private HttpClient httpClient = null;
 
+    private static final Log log = LogFactory.getLog(HttpConnector.class);
+	
     public String getURLContent(String url) throws IOException {
         HttpClient client = this.getHttpClient(CONNECTION_RETRIES, TIMEOUT_CONNECTION);
         GetMethod consulta = new GetMethod(url);
@@ -54,19 +59,19 @@ public class HttpConnector {
 
     public boolean writeURLContent(String url, OutputStream out, String requiredMime) throws IOException {
         HttpClient client = this.getHttpClient(CONNECTION_RETRIES, TIMEOUT_CONNECTION);
-        GetMethod consulta = new GetMethod(url);
+        GetMethod getMethod = new GetMethod(url);
         try {
-            client.executeMethod(consulta);
+            client.executeMethod(getMethod);
 
-            Header tipoMimeHead = consulta.getResponseHeader("Content-Type");
+            Header tipoMimeHead = getMethod.getResponseHeader("Content-Type");
             String tipoMimeResp = "";
             if (tipoMimeHead != null) {
                 tipoMimeResp = tipoMimeHead.getValue();
             }
 
-            if (consulta.getStatusCode() >= STATUS_OK_START && consulta.getStatusCode() <= STATUS_OK_END
+            if (getMethod.getStatusCode() >= STATUS_OK_START && getMethod.getStatusCode() <= STATUS_OK_END
                     && ((requiredMime == null) || ((tipoMimeResp != null) && tipoMimeResp.contains(requiredMime)))) {
-                InputStream in = consulta.getResponseBodyAsStream();
+                InputStream in = getMethod.getResponseBodyAsStream();
 
                 // Copy input stream to output stream
                 byte[] b = new byte[4 * 1024];
@@ -75,14 +80,14 @@ public class HttpConnector {
                     out.write(b, 0, read);
                 }
 
-                consulta.releaseConnection();
+                getMethod.releaseConnection();
                 return true;
             } else {
                 return false;
             }
 
         } finally {
-            consulta.releaseConnection();
+            getMethod.releaseConnection();
         }
     }
 
@@ -91,7 +96,8 @@ public class HttpConnector {
             return this.writeURLContent(url, out, mimeType);
 
         } catch (Exception e) {
-            return false;
+           log.debug("Exception occured when copying thumbnail from url: " + url, e);
+        	return false;
         }
     }
 
@@ -107,14 +113,14 @@ public class HttpConnector {
         return bOk;
     }
 
-    private HttpClient getHttpClient(int reintentosConexion, int timeoutConexion) {
+    private HttpClient getHttpClient(int connectionRetry, int conectionTimeout) {
         if (this.httpClient == null) {
             HttpClient client = new HttpClient();
 
             //TODO: write english code comments 
             //Se configura el n�mero de reintentos
             client.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
-                    new DefaultHttpMethodRetryHandler(reintentosConexion, false));
+                    new DefaultHttpMethodRetryHandler(connectionRetry, false));
 
             //TODO: write english code comments 
             //Se comprueban las propiedades proxy del sistema. Si est�n rellenas, se rellena
@@ -144,7 +150,7 @@ public class HttpConnector {
                 bTimeout = true;
             }
             if (!bTimeout) {
-                client.getParams().setIntParameter(HttpMethodParams.SO_TIMEOUT, timeoutConexion);
+                client.getParams().setIntParameter(HttpMethodParams.SO_TIMEOUT, conectionTimeout);
             }
 
             this.httpClient = client;

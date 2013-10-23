@@ -22,12 +22,6 @@ public interface Api2QueryInterface extends EuropeanaQueryInterface {
 	 */
 	public List<String> getQueryRefinements();
 
-	public void setWhatTerms(String what);
-
-	public void setGeneralTerms(String generalTerms);
-
-	public void setCreator(String creator);
-
-	public void setProvider(String provider);
+	
 
 }

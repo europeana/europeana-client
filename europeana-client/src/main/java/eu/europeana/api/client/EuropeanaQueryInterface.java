@@ -50,4 +50,12 @@ public interface EuropeanaQueryInterface {
     public String getType();
 
     public void setType(String type);
+    
+    public void setWhatTerms(String what);
+
+	public void setGeneralTerms(String generalTerms);
+
+	public void setCreator(String creator);
+
+	public void setProvider(String provider);
 }
