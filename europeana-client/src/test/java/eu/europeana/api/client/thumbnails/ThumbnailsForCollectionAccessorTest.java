@@ -12,6 +12,9 @@ import java.util.Map.Entry;
 
 import org.junit.Test;
 
+import eu.europeana.api.client.Api2Query;
+import eu.europeana.api.client.Api2QueryInterface;
+
 public class ThumbnailsForCollectionAccessorTest{
 
 	protected static final String TEST_COLLECTION_NAME = "07501_*";
@@ -126,32 +129,50 @@ public class ThumbnailsForCollectionAccessorTest{
 				generalTerms, what, creator, objectType, provider, null);
 	}
 	
+	public int buildImageSet(String imageSet, String collectionName, String[] classifications,
+			String generalTerms, String what, String creator, String objectType, String provider, String dataProvider) throws IOException {
+		
+		return buildImageSet(imageSet, collectionName, classifications,
+				generalTerms, what, creator, objectType, provider, dataProvider, null);
+	}
 
 	public int buildImageSet(String imageSet, String collectionName, String[] classifications,
-			String generalTerms, String what, String creator, String objectType, String provider, String[] refinements) throws IOException {
+			String generalTerms, String what, String creator, String objectType, String provider, String dataProvider, String[] refinements) throws IOException {
 		
-		return buildImageSet(imageSet, collectionName, classifications, 0, -1,
-				generalTerms, what, creator, objectType, provider, refinements);
+		return buildImageSet(imageSet, collectionName, classifications,
+				generalTerms, what, creator, objectType, provider, dataProvider, refinements,  0, -1);
 		
 	}
 
 
-	public int buildImageSet(String imageSet, String collectionName, String[] classifications, int start, int limit,
-			String generalTerms, String what, String creator, String objectType, String provider, String[] refinements) throws IOException {
+	public int buildImageSet(String imageSet, String collectionName, String[] classifications, 
+			String generalTerms, String what, String creator, String objectType, String provider, String dataProvider, String[] refinements, int start, int limit) throws IOException {
 		
-		ThumbnailsForCollectionAccessor tca = new ThumbnailsForCollectionAccessor(
-				collectionName);
-		tca.getQuery().setWhatTerms(what);
-		tca.getQuery().setGeneralTerms(generalTerms);
-		tca.getQuery().setCreator(creator);
-		tca.getQuery().setType(objectType);
-		tca.getQuery().setProvider(provider);
+		Api2QueryInterface query = new Api2Query(collectionName);
+		
+		query.setWhatTerms(what);
+		query.setGeneralTerms(generalTerms);
+		query.setCreator(creator);
+		query.setType(objectType);
+		query.setProvider(provider);
+		query.setDataProvider(dataProvider);
+		
 		
 		if(refinements != null && refinements.length > 0){
 			for (int i = 0; i < refinements.length; i++) {
-				tca.getQuery().addQueryRefinement(refinements[i]);		
+				query.addQueryRefinement(refinements[i]);		
 			}
 		}
+		
+		return buildImageSet(imageSet, collectionName, classifications, query, start,
+				limit);
+	}
+
+	protected int buildImageSet(String imageSet, String collectionName,
+			String[] classifications, Api2QueryInterface query, int start,
+			int limit) throws IOException {
+		ThumbnailsForCollectionAccessor tca = new ThumbnailsForCollectionAccessor(query, null);
+		tca.setQuery(query);
 		
 		int resultsSize = -1;
 		if(limit > 0)
@@ -183,7 +204,12 @@ public class ThumbnailsForCollectionAccessorTest{
 
 	
 	private String encode(String collectionName) {
+		
+		if(collectionName == null)
+			return null;
+		
 		return collectionName.replace('*', 'X');
+		
 	}
 
 	//@Test

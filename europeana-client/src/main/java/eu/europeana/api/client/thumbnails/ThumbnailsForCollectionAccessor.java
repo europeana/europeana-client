@@ -32,15 +32,24 @@ public class ThumbnailsForCollectionAccessor extends ThumbnailsAccessor{
 		
 	
 	public ThumbnailsForCollectionAccessor(String collectionName, EuropeanaApi2Client apiClient){
+		
+		this(new Api2Query(collectionName), apiClient);
+	}
+
+
+	public ThumbnailsForCollectionAccessor(Api2QueryInterface query,
+			EuropeanaApi2Client apiClient) {
+		
 		if(apiClient != null)
 			europeanaClient = apiClient;
 		else
 			europeanaClient = new EuropeanaApi2Client();
 		
-		setQuery(new Api2Query(collectionName));
+		setQuery(query);
 		//setBlockSize(DEFAULT_BLOCKSIZE);
 		res = new HashMap<String, String>(getBlockSize());
 	}
+	
 	
 	/**
 	 * This method extracts the map of <thumbnailId, thumbnailURL> by invoking the search API.

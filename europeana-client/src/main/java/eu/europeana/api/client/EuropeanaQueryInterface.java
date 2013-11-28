@@ -58,4 +58,7 @@ public interface EuropeanaQueryInterface {
 	public void setCreator(String creator);
 
 	public void setProvider(String provider);
+	
+	public void setDataProvider(String dataProvider);
+	
 }

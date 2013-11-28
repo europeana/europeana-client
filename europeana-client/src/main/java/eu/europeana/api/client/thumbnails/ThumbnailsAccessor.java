@@ -143,11 +143,16 @@ public class ThumbnailsAccessor {
 			File imageFolder) throws FileNotFoundException, IOException {
 
 		List<String> skippedItems = new ArrayList<String>();
-
+		
+		int counter = 0;
 		for (Map.Entry<String, String> thumbnail : thumbnailsMap.entrySet()) {
 			if (!writeThumbnailToFolder(thumbnail.getKey(),
 					thumbnail.getValue(), imageFolder))
 				skippedItems.add(thumbnail.getKey());
+			
+			counter++;
+			if(counter % 1000 == 0)
+				System.out.println("Progress: items processed " + counter);
 		}
 		
 		return skippedItems;

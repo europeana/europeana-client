@@ -13,7 +13,7 @@ import eu.europeana.api.client.connection.EuropeanaConnection;
  */
 public class EuropeanaComplexQuery implements EuropeanaQueryInterface {
     
-    private EuropeanaSearchTerm sreachTerms = null;
+    private EuropeanaSearchTerm searchTerms = null;
     private String type = null;
     
     public static class TYPE {
@@ -33,21 +33,21 @@ public class EuropeanaComplexQuery implements EuropeanaQueryInterface {
      * @param sreachTerms 
      */
     public EuropeanaComplexQuery(EuropeanaSearchTerm sreachTerms) {
-        this.sreachTerms = sreachTerms;
+        this.searchTerms = sreachTerms;
     }
     
     /**
      * 
-     * @param sreachTerms
+     * @param searchTerms
      * @param queryType IMAGE, TEXT, etc. Defined in TYPE
      */
-    public EuropeanaComplexQuery(EuropeanaSearchTerm sreachTerms, String queryType) {
-        this.sreachTerms = sreachTerms;
+    public EuropeanaComplexQuery(EuropeanaSearchTerm searchTerms, String queryType) {
+        this.searchTerms = searchTerms;
         this.type = queryType;
     }
     
     public String getSearchTerms() {
-        return sreachTerms.toString();
+        return searchTerms.toString();
     }
 
     public String getQueryUrl(EuropeanaConnection connection) throws UnsupportedEncodingException {
@@ -67,7 +67,7 @@ public class EuropeanaComplexQuery implements EuropeanaQueryInterface {
     }
 
     public String getQueryUrl(EuropeanaConnection connection, long limit, long offset) throws UnsupportedEncodingException {
-        String seachTerms = this.sreachTerms.toString();
+        String seachTerms = this.searchTerms.toString();
         StringBuilder url = new StringBuilder();
         url.append(connection.getEuropeanaUri()).append("?query=").append(URLEncoder.encode(seachTerms, "UTF-8"));
         url.append("&rows=").append(limit);
@@ -104,6 +104,12 @@ public class EuropeanaComplexQuery implements EuropeanaQueryInterface {
 
 	@Override
 	public void setProvider(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setDataProvider(String dataProvider) {
 		// TODO Auto-generated method stub
 		
 	}
