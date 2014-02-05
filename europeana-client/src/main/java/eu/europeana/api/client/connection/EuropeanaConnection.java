@@ -2,7 +2,7 @@
  * EuropeanaConnection.java - europeana4j
  * (C) 2011 Digibis S.L.
  */
-package eu.europeana.api.client;
+package eu.europeana.api.client.connection;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -13,8 +13,11 @@ import org.apache.commons.logging.LogFactory;
 
 import com.google.gson.Gson;
 
-import eu.europeana.api.client.adv.EuropeanaComplexQuery;
+import eu.europeana.api.client.EuropeanaComplexQuery;
+import eu.europeana.api.client.EuropeanaQueryInterface;
 import eu.europeana.api.client.config.ClientConfiguration;
+import eu.europeana.api.client.result.EuropeanaApi2Item;
+import eu.europeana.api.client.result.EuropeanaApi2Results;
 import eu.europeana.api.client.util.BlockIterator;
 import eu.europeana.api.client.util.BlockIterator.BlockLoader;
 

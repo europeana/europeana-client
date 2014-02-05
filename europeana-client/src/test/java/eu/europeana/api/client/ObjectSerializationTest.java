@@ -1,0 +1,30 @@
+package eu.europeana.api.client;
+
+import static org.junit.Assert.*;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.junit.Test;
+
+import eu.europeana.api.client.connection.EuropeanaApi2Client;
+import eu.europeana.api.client.result.EuropeanaApi2Results;
+import eu.europeana.api.client.result.EuropeanaApi2Item;
+import eu.europeana.api.client.result.EuropeanaObject;
+import eu.europeana.api.client.result.EuropeanaObjects;
+
+public class ObjectSerializationTest {
+
+	@Test
+	public void test() throws IOException {
+		EuropeanaApi2Client ec = new EuropeanaApi2Client();
+		Api2Query query = new Api2Query();
+		query.setCollectionName("08515*");
+        EuropeanaApi2Results results = ec.searchApi2(query, 10, 0);
+        for(EuropeanaApi2Item result : results.getAllItems()) {
+        	EuropeanaObject eo = ec.getObject(result.getId());
+        	System.out.println(eo.toString());
+        }
+	}
+
+}

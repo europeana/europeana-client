@@ -2,7 +2,7 @@
  * EuropeanaItem.java - europeana4j
  * (C) 2011 Digibis S.L.
  */
-package eu.europeana.api.client;
+package eu.europeana.api.client.result;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonWriter;
 
-import eu.europeana.api.client.adv.EuropeanaComplexQuery;
+import eu.europeana.api.client.EuropeanaComplexQuery;
 
 /**
  * An item is a search result and is represented by a summary of its metadata
@@ -27,27 +27,27 @@ import eu.europeana.api.client.adv.EuropeanaComplexQuery;
  */
 public class EuropeanaApi2Item {
 
-    private List<String> title;
-    private String link;
-    private String guid;
+    protected List<String> title;
+    protected String link;
+    protected String guid;
     
-    private String type;
-    private List<String> year;
-    private List<String> language;
-    private List<String> provider;
-    private List<String> dataProvider;
-    private List<String> rights;
+    protected String type;
+    protected List<String> year;
+    protected List<String> language;
+    protected List<String> provider;
+    protected List<String> dataProvider;
+    protected List<String> rights;
     
-    private List<Map<String, String>> edmConceptLabel;
-    private List<Map<String, String>> edmTimespanLabel;
+    protected List<Map<String, String>> edmConceptLabel;
+    protected List<Map<String, String>> edmTimespanLabel;
     
-    private List<String> europeanaCollectionName;
-    private List<String> dcCreator;
+    protected List<String> europeanaCollectionName;
+    protected List<String> dcCreator;
     
-    private String id;
-    private Integer completeness;
+    protected String id;
+    protected Integer completeness;
     
-    private List<String> edmPreview;
+    protected List<String> edmPreview;
 
     public EuropeanaApi2Item() {
     }

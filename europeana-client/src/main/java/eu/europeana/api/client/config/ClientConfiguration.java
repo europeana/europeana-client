@@ -9,7 +9,9 @@ public class ClientConfiguration {
 
 	protected static final String EUROPEANA_CLIENT_PROPERTIES_FILE = "/europeana-client.properties";
 	protected static final String PROP_EUROPEANA_API_KEY = "europeana.api.key";
-	protected static final String PROP_EUROPEANA_SEARCH_URI = "europeana.search.uri";
+	protected static final String PROP_EUROPEANA_API_URI = "europeana.api.uri";
+	protected static final String PROP_EUROPEANA_SEARCH_URN = "europeana.search.urn";
+	protected static final String PROP_EUROPEANA_RECORD_URN = "europeana.record.urn";
 	private static Properties properties = null;
 
 	private static ClientConfiguration singleton;
@@ -86,11 +88,22 @@ public class ClientConfiguration {
 	/**
 	 * This method provides access to the search uri value defined in the configuration
 	 * file
-	 * @see PROP_EUROPEANA_SEARCH_URI
+	 * @see PROP_EUROPEANA_SEARCH_URN
 	 * 
 	 * @return
 	 */
 	public String getSearchUri() {
-		return getProperties().getProperty(PROP_EUROPEANA_SEARCH_URI);
+		return (getProperties().getProperty(PROP_EUROPEANA_API_URI) + getProperties().getProperty(PROP_EUROPEANA_SEARCH_URN));
+	}
+	
+	/**
+	 * This method provides access to the record uri value defined in the configuration
+	 * file
+	 * @see PROP_EUROPEANA_RECORD_URN
+	 * 
+	 * @return
+	 */
+	public String getRecordUri() {
+		return (getProperties().getProperty(PROP_EUROPEANA_API_URI) + getProperties().getProperty(PROP_EUROPEANA_RECORD_URN));
 	}
 }

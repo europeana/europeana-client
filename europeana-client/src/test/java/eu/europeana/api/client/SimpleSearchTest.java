@@ -60,9 +60,6 @@ public class SimpleSearchTest {
              System.out.println("Data provider: "
                      + item.getDataProvider());
 		}
-        
-       
-        
 	} 
 	
 	@Test

@@ -2,7 +2,7 @@
  * EuropeanaResults.java - europeana4j
  * (C) 2011 Digibis S.L.
  */
-package eu.europeana.api.client;
+package eu.europeana.api.client.result;
 
 import java.io.IOException;
 import java.io.Reader;
