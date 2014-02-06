@@ -1,5 +1,8 @@
 package eu.europeana.api.client.result;
 
+import java.util.List;
+import java.util.Map;
+
 public class EuropeanaObjects {
 	private String apikey;
 	private String action;
@@ -8,10 +11,28 @@ public class EuropeanaObjects {
 	private int itemsCount;
 	private int totalResults;
 	private EuropeanaObject[] items;
+	private int statsDuration;
+	private EuropeanaObject object;
 	
+	public EuropeanaObject getObject() {
+		return object;
+	}
+
+	public void setObject(EuropeanaObject object) {
+		this.object = object;
+	}
+
+	public int getStatsDuration() {
+		return statsDuration;
+	}
+
+	public void setStatsDuration(int statsDuration) {
+		this.statsDuration = statsDuration;
+	}
+
 	public EuropeanaObject getObject(String id) {
 		for(EuropeanaObject item : this.items) {
-			if(item.getId().equals(id)) {
+			if(item.getAbout().equals(id)) {
 				return item;
 			}
 		}

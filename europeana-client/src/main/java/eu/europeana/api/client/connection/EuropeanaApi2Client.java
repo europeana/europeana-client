@@ -39,14 +39,19 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
 
 	} 
 	
-	public EuropeanaObject getObject(String id) {
+	public EuropeanaObject getObject(String id) throws IOException {
 		EuropeanaObject result = null;
 		
 		Gson gson = new GsonBuilder().create();
 		this.objects = gson.fromJson(this.jsonResult, EuropeanaObjects.class);
-		result = this.objects.getObject(id);
+		for(EuropeanaObject o : this.objects.getItems()) {
+			String json = getJSONResult(o.getLink());
+			result = gson.fromJson(json, EuropeanaObjects.class).getObject();
+			if(result.getAbout().equals(id))
+				return result;
+		}
 		
-		return result;
+		return null;
 	}
 	
 }
