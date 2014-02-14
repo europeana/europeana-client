@@ -1,17 +1,13 @@
 package eu.europeana.api.client;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
-import java.util.List;
 
 import org.junit.Test;
 
 import eu.europeana.api.client.connection.EuropeanaApi2Client;
-import eu.europeana.api.client.result.EuropeanaApi2Results;
 import eu.europeana.api.client.result.EuropeanaApi2Item;
+import eu.europeana.api.client.result.EuropeanaApi2Results;
 import eu.europeana.api.client.result.EuropeanaObject;
-import eu.europeana.api.client.result.EuropeanaObjects;
 
 public class ObjectSerializationTest {
 

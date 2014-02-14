@@ -1,6 +1,12 @@
 # the uri of the search API using JSON response => http://www.europeana.eu/api/v2/search.json
-# for testing within the development environment a local URI can be used e.g. localhost:8989/api/v2/search.json  
-europeana.search.uri = 
+# for testing within the development environment a local URI can be used e.g. localhost:8989/api/v2/search.json
+europeana.api.uri = http://www.europeana.eu/api/v2/
 
-# the user key used to access Europeana API. For more information see http://pro.europeana.eu/api 
+# the uri of the search API using JSON response => http://www.europeana.eu/api/v2/search.json
+# for testing within the development environment a local URI can be used e.g. localhost:8989/api/v2/search.json
+europeana.search.urn = search.json
+
+europeana.record.urn = record
+
+# the user key used to access Europeana API. For more information see http://pro.europeana.eu/api
 europeana.api.key = 
