@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import eu.europeana.api.client.connection.EuropeanaApi2Client;
+import eu.europeana.api.client.exception.EuropeanaApiProblem;
 import eu.europeana.api.client.result.EuropeanaApi2Item;
 import eu.europeana.api.client.result.EuropeanaApi2Results;
 import eu.europeana.api.client.result.EuropeanaObject;
@@ -12,7 +13,7 @@ import eu.europeana.api.client.result.EuropeanaObject;
 public class ObjectSerializationTest {
 
 	@Test
-	public void test() throws IOException {
+	public void test() throws IOException, EuropeanaApiProblem {
 		EuropeanaApi2Client ec = new EuropeanaApi2Client();
 		Api2Query query = new Api2Query();
 		query.setCollectionName("08515*");
