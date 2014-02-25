@@ -130,8 +130,7 @@ public class EuropeanaConnection {
      */
     public String searchJsonPage(EuropeanaQueryInterface search, long limit, long offset) throws IOException {
         String url = search.getQueryUrl(this, limit, offset);
-        String jSON = this.getJSONResult(url);
-        return jSON;
+        return this.getJSONResult(url);
     }
 
     /**
@@ -178,8 +177,8 @@ public class EuropeanaConnection {
 
     String getJSONResult(String url) throws IOException {
         log.trace("Call to Europeana API: " + url);
-        String res = http.getURLContent(url);
-        return res;
+        return http.getURLContent(url);
+        
     }
 
     /**

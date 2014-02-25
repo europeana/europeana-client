@@ -35,21 +35,15 @@ public class HttpConnector {
 	
     public String getURLContent(String url) throws IOException {
         HttpClient client = this.getHttpClient(CONNECTION_RETRIES, TIMEOUT_CONNECTION);
-        GetMethod consulta = new GetMethod(url);
+        GetMethod getRequest = new GetMethod(url);
 
         try {
-            client.executeMethod(consulta);
-
-            if (consulta.getStatusCode() >= STATUS_OK_START && consulta.getStatusCode() <= STATUS_OK_END) {
-                byte[] byteResponse = consulta.getResponseBody();
-                String res = new String(byteResponse, ENCODING);
-                return res;
-            } else {
-                return null;
-            }
+            client.executeMethod(getRequest);
+            byte[] byteResponse = getRequest.getResponseBody();
+            return new String(byteResponse, ENCODING);
 
         } finally {
-            consulta.releaseConnection();
+            getRequest.releaseConnection();
         }
     }
 

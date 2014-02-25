@@ -35,6 +35,7 @@ public class EuropeanaApi2Results {
     private Boolean success;
     private long requestNumber;
     private int itemsCount;
+    private String error;
     
     private List<EuropeanaApi2Item> items = new ArrayList<EuropeanaApi2Item>();
 
@@ -120,7 +121,9 @@ public class EuropeanaApi2Results {
     /**
      * Returns the number of results provided in this results object
      * @return 
+     * Used in Client API 1
      */
+    @Deprecated 
     public long getItemCount() {
         return (this.items == null ? 0 : this.items.size());
     }
@@ -177,4 +180,12 @@ public class EuropeanaApi2Results {
         }.getType();
         return gson.fromJson(json, collectionType);
     }
+
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
 }

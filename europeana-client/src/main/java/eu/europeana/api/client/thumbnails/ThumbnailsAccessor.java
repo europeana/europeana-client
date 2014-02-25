@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import eu.europeana.api.client.EuropeanaQueryInterface;
 import eu.europeana.api.client.connection.EuropeanaApi2Client;
 import eu.europeana.api.client.connection.HttpConnector;
+import eu.europeana.api.client.exception.EuropeanaApiProblem;
 import eu.europeana.api.client.result.EuropeanaApi2Item;
 import eu.europeana.api.client.result.EuropeanaApi2Results;
 
@@ -33,6 +34,11 @@ public class ThumbnailsAccessor {
 
 	private HttpConnector http = new HttpConnector();
 	EuropeanaApi2Client europeanaClient;
+	
+	public static int ERROR_POLICY_RETHROW = 1;
+	public static int ERROR_POLICY_STOP = 5;
+	public static int ERROR_POLICY_IGNORE = 9;
+	public static int ERROR_POLICY_CONTINUE = 99;
 
 	public ThumbnailsAccessor() {
 	}
@@ -42,7 +48,7 @@ public class ThumbnailsAccessor {
 	}
 
 	public List<String> copyThumbnails(EuropeanaQueryInterface search,
-			File dir, int maxResults) throws IOException {
+			File dir, int maxResults) throws IOException, EuropeanaApiProblem {
 		EuropeanaApi2Results res = europeanaClient.searchApi2(search,
 				maxResults, 0);
 

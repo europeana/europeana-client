@@ -16,6 +16,11 @@ public class Api2Query extends EuropeanaQuery implements Api2QueryInterface {
 
 	private List<String> queryRefinements;
 	private String collectionName;
+	/**
+	 * This attribute is used to set directly the aggregated query parameters, possibly by reusing a portal query
+	 *  This must start with query= string as it has the same semantic like the query parameter in the portal search url. 
+	 */
+	private String queryParams;
     
 	/**
 	 * Constructor that supports searching objects within a collection
@@ -49,16 +54,19 @@ public class Api2Query extends EuropeanaQuery implements Api2QueryInterface {
 	 */
 	public String getQueryUrl(EuropeanaConnection connection, long limit,
 			long offset) throws UnsupportedEncodingException {
-		String searchTerms = getSearchTerms();
-		// connection.setEuropeanaUri("http://api.europeana.eu/api/opensearch.json");
-		searchTerms = encodeSearchTerms(searchTerms);
 				
 		StringBuilder url = new StringBuilder();
+		url.append(connection.getEuropeanaUri()).append("?");
 		
-		url.append(connection.getEuropeanaUri()).append("?query=");
-		url.append(searchTerms);
-		
-		appendQueryRefinements(url);
+		if(getQueryParams() != null){
+			url.append(queryParams);
+		}else{
+			String searchTerms = getSearchTerms();
+			// connection.setEuropeanaUri("http://api.europeana.eu/api/opensearch.json");
+			searchTerms = encodeSearchTerms(searchTerms);
+			url.append("query=").append(searchTerms);
+			appendQueryRefinements(url);			
+		}
 		
 		if (limit > 0)
 			url.append("&rows=").append(limit);
@@ -67,7 +75,7 @@ public class Api2Query extends EuropeanaQuery implements Api2QueryInterface {
 		url.append("&wskey=").append(connection.getApiKey());
 		return url.toString();
 	}
-
+	
 	void appendQueryRefinements(StringBuilder url) throws UnsupportedEncodingException {
 		
 		if(getQueryRefinements() == null)
@@ -111,6 +119,14 @@ public class Api2Query extends EuropeanaQuery implements Api2QueryInterface {
 
 	public void setCollectionName(String collectionName) {
 		this.collectionName = collectionName;
+	}
+
+	public String getQueryParams() {
+		return queryParams;
+	}
+
+	public void setQueryParams(String queryParams) {
+		this.queryParams = queryParams;
 	}
 
 	

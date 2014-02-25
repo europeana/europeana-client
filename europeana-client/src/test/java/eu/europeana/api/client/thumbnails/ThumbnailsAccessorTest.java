@@ -11,11 +11,12 @@ import org.junit.Test;
 import eu.europeana.api.client.Api2Query;
 import eu.europeana.api.client.EuropeanaQueryInterface;
 import eu.europeana.api.client.connection.EuropeanaApi2Client;
+import eu.europeana.api.client.exception.EuropeanaApiProblem;
 
 public class ThumbnailsAccessorTest {
 
 	@Test
-	public void testCopyThumbnails() throws IOException {
+	public void testCopyThumbnails() throws IOException, EuropeanaApiProblem {
 	
 		ThumbnailsAccessor ta = new ThumbnailsAccessor(new EuropeanaApi2Client());
 		EuropeanaQueryInterface query = new Api2Query();

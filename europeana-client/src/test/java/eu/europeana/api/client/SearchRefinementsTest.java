@@ -7,13 +7,14 @@ import java.io.IOException;
 import org.junit.Test;
 
 import eu.europeana.api.client.connection.EuropeanaApi2Client;
+import eu.europeana.api.client.exception.EuropeanaApiProblem;
 import eu.europeana.api.client.result.EuropeanaApi2Item;
 import eu.europeana.api.client.result.EuropeanaApi2Results;
 
 public class SearchRefinementsTest {
 
 	@Test
-	public void testQueryRefinements() throws IOException {
+	public void testQueryRefinements() throws IOException, EuropeanaApiProblem {
 
 		long ms0 = System.currentTimeMillis();
 
