@@ -131,6 +131,7 @@ public class ThumbnailsAccessor {
 		return new FileOutputStream(imageFile);
 	}
 
+	
 	File getImageFile(File dir, String id) {
 		String fileName = id + ".jpg";
 		File imageFile = new File(dir, fileName);

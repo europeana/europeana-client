@@ -1,4 +1,4 @@
-package eu.europeana.api.client.thumbnails.processing;
+package eu.europeana.api.client.thumbnails.download;
 
 import java.io.File;
 import java.util.Map;
@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import eu.europeana.api.client.exception.TechnicalRuntimeException;
 import eu.europeana.api.client.thumbnails.ThumbnailsAccessor;
+import eu.europeana.api.client.thumbnails.processing.LargeThumbnailsetProcessing;
 
 public class ThumbnailDownloader extends ThumbnailsAccessor implements Observer {
 

@@ -66,7 +66,7 @@ public class LargeThumbnailsetProcessing extends Observable{
 			// FileReader("/collection_07501_thumbnails.csv"));
 
 			String europeanaUriAndObject = null;
-			String[] values;
+			
 			
 			while ((europeanaUriAndObject = reader.readLine()) != null) {
 				//ignore comments
@@ -83,30 +83,46 @@ public class LargeThumbnailsetProcessing extends Observable{
 					continue;
 				}
 				
-				//parse values
-				values = europeanaUriAndObject.split(";");
-				thumbnailBlock.put(values[0], values[1]);
+				extractValues(europeanaUriAndObject);
 				
 				//increase processed items counter
 				itemsProcessed++;
 				
 				//process objects blockwise
 				if(thumbnailBlock.size() == blockSize || isLimitReached(itemsProcessed, limit) ){
-					setChanged();
-					notifyObservers(thumbnailBlock);
-					thumbnailBlock.clear();
-					
-					log.info("items processed: " + lastReadPosition);
+					processThumbnailBlock();
 				}
 				
 				if(isLimitReached(itemsProcessed, limit))
 					break;
 				
 			}
+			
+			//process last incomplete block
+			if(!thumbnailBlock.isEmpty()){
+				processThumbnailBlock();
+			}
+			
 		} finally {
 				closeReader(reader); 
 		}
 		
+	}
+
+	protected void processThumbnailBlock() {
+		setChanged();
+		notifyObservers(thumbnailBlock);
+		thumbnailBlock.clear();
+		
+		log.info("items processed: " + lastReadPosition);
+	}
+
+	protected String[] extractValues(String europeanaUriAndObject) {
+		String[] values;
+		//parse file entries, first one should be the object id
+		values = europeanaUriAndObject.split(";", 2);
+		thumbnailBlock.put(values[0], values[1]);
+		return values;
 	}
 
 	protected boolean isLimitReached(int itemsProcessed, int limit) {
