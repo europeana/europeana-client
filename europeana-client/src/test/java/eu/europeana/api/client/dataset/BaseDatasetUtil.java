@@ -34,7 +34,7 @@ public abstract class BaseDatasetUtil {
 	}
 	
 	
-	BufferedWriter getDataSetFileWriter(boolean urls)
+	protected getDataSetFileWriter(boolean urls)
 			throws IOException {
 		File datasetFile = getDataSetFile(urls);
 		datasetFile.getParentFile().mkdirs();
