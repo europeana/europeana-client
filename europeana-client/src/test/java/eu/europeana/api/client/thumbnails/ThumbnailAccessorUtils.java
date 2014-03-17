@@ -9,8 +9,9 @@ import java.util.Map.Entry;
 
 import eu.europeana.api.client.Api2QueryBuilder;
 import eu.europeana.api.client.dataset.DatasetDescriptor;
+import eu.europeana.api.client.dataset.EuClientDatasetUtil;
 
-public class ThumbnailAccessorUtils {
+public class ThumbnailAccessorUtils  extends EuClientDatasetUtil{
 
 	Api2QueryBuilder queryBuilder = new Api2QueryBuilder();
 

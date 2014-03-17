@@ -10,3 +10,9 @@ europeana.record.urn = record
 
 # the user key used to access Europeana API. For more information see http://pro.europeana.eu/api
 europeana.api.key = 
+
+# the folder used for downloading images locally
+europeana.client.base.image.folder = ./src/test/resources/image
+
+# the folder used to store the thumbnail urls of all collections locally
+europeana.client.base.cvs.folder = ./src/test/resources/cvs

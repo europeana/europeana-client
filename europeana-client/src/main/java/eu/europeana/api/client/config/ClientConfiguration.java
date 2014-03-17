@@ -1,33 +1,42 @@
 package eu.europeana.api.client.config;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.Properties;
 
 import eu.europeana.api.client.exception.TechnicalRuntimeException;
 
-public class ClientConfiguration {
+public class ClientConfiguration implements EuropeanaApiConfiguration, ThumbnailAccessConfiguration {
 
 	protected static final String EUROPEANA_CLIENT_PROPERTIES_FILE = "/europeana-client.properties";
-	protected static final String PROP_EUROPEANA_API_KEY = "europeana.api.key";
-	protected static final String PROP_EUROPEANA_API_URI = "europeana.api.uri";
-	protected static final String PROP_EUROPEANA_SEARCH_URN = "europeana.search.urn";
-	protected static final String PROP_EUROPEANA_RECORD_URN = "europeana.record.urn";
+	//API CONFIG KEYS
+	public static final String PROP_EUROPEANA_API_KEY = "europeana.api.key";
+	public static final String PROP_EUROPEANA_API_URI = "europeana.api.uri";
+	public static final String PROP_EUROPEANA_SEARCH_URN = "europeana.search.urn";
+	public static final String PROP_EUROPEANA_RECORD_URN = "europeana.record.urn";
+	//Thumbnail Access KEYS
+	public static final String PROP_BASE_FOLDER_KEY = "europeana.client.base.folder";
+	public static final String PROP_DATASETS_FOLDER_KEY = "europeana.client.datasets.folder";
+	
+	//static configs
+	public static final String DATASET_FILE_EXTENSION = ".csv";
+	
+	//local attributes
 	private static Properties properties = null;
-
 	private static ClientConfiguration singleton;
 
 	/**
 	 * Hide the default constructor
 	 */
 	private ClientConfiguration() {
-	};
+	}
 
 	/**
 	 * Accessor method for the singleton
 	 * 
 	 * @return
 	 */
-	public static synchronized ClientConfiguration getInstance() {
+	public static synchronized EuropeanaApiConfiguration getInstance() {
 		singleton = new ClientConfiguration();
 		singleton.loadProperties();
 		return singleton;
@@ -81,6 +90,7 @@ public class ClientConfiguration {
 	 * 
 	 * @return
 	 */
+	@Override
 	public String getApiKey() {
 		return getProperties().getProperty(PROP_EUROPEANA_API_KEY);
 	}
@@ -92,6 +102,7 @@ public class ClientConfiguration {
 	 * 
 	 * @return
 	 */
+	@Override
 	public String getSearchUri() {
 		return (getProperties().getProperty(PROP_EUROPEANA_API_URI) + getProperties().getProperty(PROP_EUROPEANA_SEARCH_URN));
 	}
@@ -103,7 +114,37 @@ public class ClientConfiguration {
 	 * 
 	 * @return
 	 */
+	@Override
 	public String getRecordUri() {
 		return (getProperties().getProperty(PROP_EUROPEANA_API_URI) + getProperties().getProperty(PROP_EUROPEANA_RECORD_URN));
 	}
+	
+	@Override
+	public String getDatasetsFolder() {
+		return (getProperties().getProperty(PROP_DATASETS_FOLDER_KEY));
+	}
+	
+	@Override
+	public String getImageFolder(String dataset) {
+		String ret = getBaseFolder();
+		final String separator = "/";
+		if(!ret.endsWith(separator))
+			ret += separator;
+				
+		ret += ("image" + separator);
+		ret += dataset;
+		
+		return ret;
+	}
+
+	@Override
+	public String getBaseFolder() {
+		return (getProperties().getProperty(PROP_BASE_FOLDER_KEY));
+	}
+
+	@Override
+	public File getDatasetFile(String dataset) {
+		return new File(getDatasetsFolder(), dataset + DATASET_FILE_EXTENSION);
+	}
+	
 }

@@ -21,7 +21,7 @@ public class ThumbnailsAccessorTest {
 		ThumbnailsAccessor ta = new ThumbnailsAccessor(new EuropeanaApi2Client());
 		EuropeanaQueryInterface query = new Api2Query();
 		query.setType("IMAGE");
-		query.setGeneralTerms("test");
+		query.setGeneralTerms("da vinci");
 		
 		File tmpFolder = new File("/tmp/europeana/images");
 		
