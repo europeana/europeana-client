@@ -123,7 +123,7 @@ public class ThumbnailAccessorUtils  extends EuClientDatasetUtil{
 	}
 
 	protected String getCollectionsCvsFolder() {
-		return "/";
+		return getConfiguration().getBaseFolder()+"/collections";
 	}
 
 	private String encode(String collectionName) {
