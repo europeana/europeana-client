@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import eu.europeana.api.client.Api2QueryBuilder;
 import eu.europeana.api.client.Api2QueryInterface;
 import eu.europeana.api.client.EuropeanaQueryInterface;
+import eu.europeana.api.client.config.ClientConfiguration;
 import eu.europeana.api.client.exception.EuropeanaApiProblem;
 import eu.europeana.api.client.result.EuropeanaApi2Results;
 import eu.europeana.api.client.result.EuropeanaObject;
@@ -75,22 +76,14 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
 	
 	public EuropeanaObject getObject(String id) throws IOException {
 		EuropeanaObject result = null;
-		
-		
-		//TODO needs new implementation
+		String record_url =  ClientConfiguration.getInstance().getRecordUri() + id + ".json?wskey=" + ClientConfiguration.getInstance().getApiKey();
+		this.jsonResult = getJSONResult(record_url);
 		
 		Gson gson = new GsonBuilder().create();
 		this.objects = gson.fromJson(this.jsonResult, EuropeanaObjects.class);
-		for(EuropeanaObject o : this.objects.getItems()) {
-			String json = getJSONResult(o.getLink());
-			result = gson.fromJson(json, EuropeanaObjects.class).getObject();
-			
-			//TODO check the status code and the error for better exception handling
-			if(result.getAbout().equals(id))
-				return result;
-		}
+		result = this.objects.getObject();
 		
-		return null;
+		return result;
 	}
 	
 }

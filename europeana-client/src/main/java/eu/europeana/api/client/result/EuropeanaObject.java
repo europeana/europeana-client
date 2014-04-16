@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 public class EuropeanaObject extends EuropeanaApi2Item {
-	private int index;private List<String> edmIsShownAt;
+	private int index;
+	private List<String> edmIsShownAt;
 	private float score;
 	private String about;
 	private List<ObjectProxy> proxies;
@@ -140,6 +141,17 @@ public class EuropeanaObject extends EuropeanaApi2Item {
 	}
 	
 	public class ObjectAggregation {
+		private String about;
+		private String[] europeanaCollectionName;
+		private List<ObjectTimeSpan> timespans;
+		private int europeanaCompleteness;
+		private List<ObjectProvidedCHO> providedCHOs;
+		private List<String> edmDatasetName;
+		private int timestamp_created_epoch;
+		private int timestamp_update_epoch;
+		private String timestamp_created;
+		private String timestamp_update;
+		
 		private String edmIsShownBy;
 		private String edmIsShownAt;
 		private String edmObject;
@@ -267,6 +279,96 @@ public class EuropeanaObject extends EuropeanaApi2Item {
 		public void setEdmPreviewNoDistribute(Boolean edmPreviewNoDistribute) {
 			this.edmPreviewNoDistribute = edmPreviewNoDistribute;
 		}
+		
+		public String getAbout() {
+			return about;
+		}
+
+		public void setAbout(String about) {
+			this.about = about;
+		}
+
+		public String[] getEuropeanaCollectionName() {
+			return europeanaCollectionName;
+		}
+
+		public void setEuropeanaCollectionName(String[] europeanaCollectionName) {
+			this.europeanaCollectionName = europeanaCollectionName;
+		}
+
+		public List<ObjectTimeSpan> getTimespans() {
+			return timespans;
+		}
+
+		public void setTimespans(List<ObjectTimeSpan> timespans) {
+			this.timespans = timespans;
+		}
+
+		public int getEuropeanaCompleteness() {
+			return europeanaCompleteness;
+		}
+
+		public void setEuropeanaCompleteness(int europeanaCompleteness) {
+			this.europeanaCompleteness = europeanaCompleteness;
+		}
+
+		public List<ObjectProvidedCHO> getProvidedCHOs() {
+			return providedCHOs;
+		}
+
+		public void setProvidedCHOs(List<ObjectProvidedCHO> providedCHOs) {
+			this.providedCHOs = providedCHOs;
+		}
+
+		public List<String> getEdmDatasetName() {
+			return edmDatasetName;
+		}
+
+		public void setEdmDatasetName(List<String> edmDatasetName) {
+			this.edmDatasetName = edmDatasetName;
+		}
+
+		public int getTimestamp_created_epoch() {
+			return timestamp_created_epoch;
+		}
+
+		public void setTimestamp_created_epoch(int timestamp_created_epoch) {
+			this.timestamp_created_epoch = timestamp_created_epoch;
+		}
+
+		public int getTimestamp_update_epoch() {
+			return timestamp_update_epoch;
+		}
+
+		public void setTimestamp_update_epoch(int timestamp_update_epoch) {
+			this.timestamp_update_epoch = timestamp_update_epoch;
+		}
+
+		public String getTimestamp_created() {
+			return timestamp_created;
+		}
+
+		public void setTimestamp_created(String timestamp_created) {
+			this.timestamp_created = timestamp_created;
+		}
+
+		public String getTimestamp_update() {
+			return timestamp_update;
+		}
+
+		public void setTimestamp_update(String timestamp_update) {
+			this.timestamp_update = timestamp_update;
+		}
+
+		public ObjectEuropeanaAggregation getEuropeanaAggregation() {
+			return europeanaAggregation;
+		}
+
+		public void setEuropeanaAggregation(
+				ObjectEuropeanaAggregation europeanaAggregation) {
+			this.europeanaAggregation = europeanaAggregation;
+		}
+
 		
 		public class ObjectWebResource {
 			private Map<String,List<String>> webResourceEdmRights;
