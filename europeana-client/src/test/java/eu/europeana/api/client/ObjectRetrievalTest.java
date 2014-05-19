@@ -29,4 +29,18 @@ public class ObjectRetrievalTest {
         	System.out.println(eo.toString());
         }
 	}	
+	
+	@Test
+	public void testCompleteObject() throws IOException, EuropeanaApiProblem {
+		EuropeanaApi2Client ec = new EuropeanaApi2Client();
+		Api2Query query = new Api2Query();
+		query.setGeneralTerms("europeana_completeness:10");
+		
+		EuropeanaApi2Results results = ec.searchApi2(query, 3, 0);
+        
+        for(EuropeanaApi2Item result : results.getAllItems()) {
+        	EuropeanaObject eo = ec.getObject(result.getId());
+        	System.out.println(eo.toString());
+        }
+	}	
 }
