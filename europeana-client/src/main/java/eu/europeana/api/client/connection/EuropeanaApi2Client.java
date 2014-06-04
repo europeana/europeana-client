@@ -15,7 +15,11 @@ import eu.europeana.api.client.result.EuropeanaObject;
 import eu.europeana.api.client.result.EuropeanaObjects;
 
 
-
+/**
+ * The main class used for accessing the Europeana Search API - V2
+ * @author Sergiu Gordea 
+ *
+ */
 public class EuropeanaApi2Client extends EuropeanaConnection {
 	private String jsonResult = "";
 	private EuropeanaObjects objects;
