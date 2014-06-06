@@ -15,6 +15,16 @@ import eu.europeana.api.client.exception.TechnicalRuntimeException;
 import eu.europeana.api.client.result.EuropeanaApi2Item;
 import eu.europeana.api.client.result.EuropeanaApi2Results;
 
+/**
+ * A ThumbnailsAccesor is a tool that makes easier the handling of thumbnails of
+ * the Europeana items.
+ * 
+ * @author Andres Viedma
+ * @version 1.0
+ * 
+ * The class provides functionality to copy thumbnails and write a thumbnail to
+ * a folder.
+ */
 public class ThumbnailsForCollectionAccessor extends ThumbnailsAccessor{
 
 	private static final Log logger = LogFactory.getLog(ThumbnailsForCollectionAccessor.class);
@@ -100,7 +110,13 @@ public class ThumbnailsForCollectionAccessor extends ThumbnailsAccessor{
 		return res;
 	}
 
-
+	/**
+	 * Helper method to fetch a block in a thumbnail.
+	 * 
+	 * @param blockStartPosition: starting position for block fetching.
+	 * @param blockLimit: limit of blocks to be fetched.
+	 * @param errorHandlingPolicy: policy for error handling.
+	 */
 	protected void fetchBlock(int blockStartPosition,
 			int blockLimit, int errorHandlingPolicy) {
 		try{
@@ -124,6 +140,12 @@ public class ThumbnailsForCollectionAccessor extends ThumbnailsAccessor{
 		}
 	}
 	
+	/**
+	 * Helper method to fetch the next block in a thumbnail.
+	 * 
+	 * @param start: starting position for block fetching.
+	 * @param limit: limit of blocks to be fetched.
+	 */
 	protected void fetchNextBlock(int start, int limit) throws TechnicalRuntimeException, EuropeanaApiProblem{
 		int noThumbnailCount = 0;
 		
@@ -151,6 +173,12 @@ public class ThumbnailsForCollectionAccessor extends ThumbnailsAccessor{
 		} 
 	}
 
+	/**
+	 * Helper method to retrieve the largest thumbnail in a Europeana item.
+	 * 
+	 * @param item: Europeana item where the thumbnail is searched.
+	 * @return string containing a uri of the largest thumbnail.
+	 */
 	private String getLargestThumbnail(EuropeanaApi2Item item) {
 		String largestThumbnail = item.getEdmPreview().get(0);
 		if(largestThumbnail == null)
@@ -165,18 +193,38 @@ public class ThumbnailsForCollectionAccessor extends ThumbnailsAccessor{
 		return largestThumbnail;
 	}
 	
+	/**
+	 * Method to get the block size.
+	 * 
+	 * @return int representing the block size.
+	 */
 	public int getBlockSize() {
 		return blockSize;
 	}
 
+	/**
+	 * Method to set the block size.
+	 * 
+	 * @param blockSize int representing the block size.
+	 */
 	public void setBlockSize(int blockSize) {
 		this.blockSize = blockSize;
 	}
 
+	/**
+	 * Method to set the query.
+	 * 
+	 * @param query: Api2QueryInterface object representing the query to be set.
+	 */
 	public void setQuery(Api2QueryInterface query) {
 		this.query = query;
 	}
 
+	/**
+	 * Method to retrieve the query.
+	 * 
+	 * @return Api2QueryInterface object representing the retrieved query.
+	 */
 	public Api2QueryInterface getQuery() {
 		return query;
 	}
