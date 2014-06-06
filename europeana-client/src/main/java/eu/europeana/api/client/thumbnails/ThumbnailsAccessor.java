@@ -28,6 +28,10 @@ import eu.europeana.api.client.result.EuropeanaApi2Results;
  * the Europeana items.
  * 
  * @author Andres Viedma
+ * @version 1.0
+ * 
+ * The class provides functionality to copy thumbnails and write a thumbnail to
+ * a folder.
  */
 public class ThumbnailsAccessor {
 	private static final Log log = LogFactory.getLog(ThumbnailsAccessor.class);
@@ -40,13 +44,32 @@ public class ThumbnailsAccessor {
 	public static int ERROR_POLICY_IGNORE = 9;
 	public static int ERROR_POLICY_CONTINUE = 99;
 
+	/**
+	 * Default constructor.
+	 */
 	public ThumbnailsAccessor() {
 	}
 
+	/**
+	 * Constructor with predefined europeana client.
+	 * 
+	 * @param europeanaClient: EuropeanaApi2Client object defining the used europeana client.
+	 */
 	public ThumbnailsAccessor(EuropeanaApi2Client europeanaClient) {
 		this.europeanaClient = europeanaClient;
 	}
 
+	/**
+	 * The copyThumbnails method extracts a thumbnail image from the 
+	 * search results and stores it in the provided directory.
+	 * 
+	 * @param search: EuropeanaQueryInterface object representing the search.
+	 * @param dir: A directory where the thumbnail will be saved.
+	 * @param maxResults: The maximal amount of result retrieved by the search.
+	 * @return a list of ids from items which provided valid thumbnails.
+	 * @throws IOException
+	 * @throws EuropeanaApiProblem
+	 */
 	public List<String> copyThumbnails(EuropeanaQueryInterface search,
 			File dir, int maxResults) throws IOException, EuropeanaApiProblem {
 		EuropeanaApi2Results res = europeanaClient.searchApi2(search,
@@ -85,6 +108,16 @@ public class ThumbnailsAccessor {
 		return itemsOk;
 	}
 
+	/**
+	 * The method writeThumbnailToFolder creates an output stream
+	 * and writes the binary content of the thumbnail to a new file
+	 * in a specified folder.
+	 * 
+	 * @param id: ID string of the image file.
+	 * @param thumbnailUrl: URL of the thumbnail.
+	 * @param imageFolder: Folder where the resulting images are to be saved.
+	 * @return boolean indicating wheter the operation has been successful.
+	 */
 	public boolean writeThumbnailToFolder(String id, String thumbnailUrl,
 			File imageFolder){
 
@@ -122,6 +155,14 @@ public class ThumbnailsAccessor {
 		return false;
 	}
 
+	/**
+	 * Helper method for the creation of a file output stream.
+	 *  
+	 * @param imageFolder: folder where images are to be saved.
+	 * @param id: id of spcefic image file.
+	 * @return FileOutputStream object prepared to store images.
+	 * @throws FileNotFoundException
+	 */
 	protected FileOutputStream createOutputStream(File imageFolder, String id)
 			throws FileNotFoundException {
 
@@ -131,7 +172,13 @@ public class ThumbnailsAccessor {
 		return new FileOutputStream(imageFile);
 	}
 
-	
+	/**
+	 * Helper method to get an image file in a certain directory.
+	 * 
+	 * @param dir: directory where to search the image file.
+	 * @param id: id of the image file.
+	 * @return File object representing the found image.
+	 */
 	File getImageFile(File dir, String id) {
 		String fileName = id + ".jpg";
 		File imageFile = new File(dir, fileName);
@@ -139,10 +186,13 @@ public class ThumbnailsAccessor {
 	}
 
 	/**
+	 * The copyThumbnails method iterates the provided thumbnails map and
+	 * filters the items that are skipped due to failed write operations 
+	 * in the specified folder.
 	 * 
-	 * @param thumbnailsMap
-	 * @param imageFolder
-	 * @return the list of items that were not saved on disk
+	 * @param thumbnailsMap: map of thumbnails to be searched.
+	 * @param imageFolder: folder where to save found thumbnails.
+	 * @return the list of items that were not saved on disk.
 	 * @throws IOException 
 	 * @throws FileNotFoundException 
 	 */
