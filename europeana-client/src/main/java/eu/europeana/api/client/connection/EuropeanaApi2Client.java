@@ -17,24 +17,46 @@ import eu.europeana.api.client.result.EuropeanaObjects;
 
 /**
  * The main class used for accessing the Europeana Search API - V2
+ * 
  * @author Sergiu Gordea 
- *
+ * @version 1.0
+ * 
+ * EuropeanaApi2Client class accesses the Search API V2 by setting up a connection via 
+ * search URI and API key (see also config file). Furthermore, it sends search requests, 
+ * retrieves results and gets objects from the search service. 
  */
 public class EuropeanaApi2Client extends EuropeanaConnection {
 	private String jsonResult = "";
 	private EuropeanaObjects objects;
 	private Api2QueryBuilder queryBuilder;
 
+	/**
+	 * Method for creation of an Api2QueryBuilder
+	 * 
+	 * @return Api2QueryBuilder: object for generation of a new query.
+	 */
 	public Api2QueryBuilder getQueryBuilder() {
 		if(queryBuilder == null)
 			queryBuilder = new Api2QueryBuilder();
 		return queryBuilder;
 	}
 
+	/**
+	 * Default constructor which calls the default constructor of the
+	 * EuropeanaConnection class which is the parent class of 
+	 * EuropeanaApi2Client.
+	 */
 	public EuropeanaApi2Client(){
 		super();
 	}
 	
+	/**
+	 * Constructor which provides new strings for the search URI and
+	 * and the API key.
+	 *  
+	 * @param europeanaSearchUri: Search URI for the Europeana search request (see config file).
+	 * @param apiKey: API key for the Europeana search request (see config file).
+	 */
 	public EuropeanaApi2Client(String europeanaSearchUri, String apiKey){
 		super(europeanaSearchUri, apiKey);
 	}
@@ -42,10 +64,14 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
 	/**
 	 * Method for remote invocation of Europeana Search API, Version 2
 	 * 
-	 * @param query @see Api2Query
-	 * @param limit
-	 * @param start
-	 * @return
+	 * This method takes a query interface object and the limit and start of a query
+	 * to generate a URL and use it to get search results from the search API by
+	 * calling the {@link #getSearchResults(String)} method.
+	 * 
+	 * @param query @see Api2Query: a query object representing the expected results.
+	 * @param limit: the limit for the amount of results retrieved.
+	 * @param start: the starting index for the query results.
+	 * @return The return value is a EuropeanaApi2Results object containing the search results.
 	 * @throws IOException
 	 * @throws EuropeanaApiProblem 
 	 */
@@ -56,6 +82,17 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
         return getSearchResults(url);
 	}
 
+	/**
+	 * Method for search results from Europeana Search API, Version 2
+	 * 
+	 * The method retrievsen a json result from the provided URL and
+	 * generates a EuropeanaApi2Results object based on the json data.
+	 * 
+	 * @param url: URL for the search request.
+	 * @return generated object from json data.
+	 * @throws IOException
+	 * @throws EuropeanaApiProblem
+	 */
 	protected EuropeanaApi2Results getSearchResults(String url)
 			throws IOException, EuropeanaApiProblem {
 		// Execute Europeana API request
@@ -71,6 +108,20 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
         return res;
 	} 
 	
+	/**
+	 * Method for remote invocation of Europeana Search API, Version 2
+	 * 
+	 * This method takes a portal search url string and the limit and start of a query
+	 * to generate a query interface object and URL and use them to get search results 
+	 * from the search API by calling the {@link #getSearchResults(String)} method.
+	 * 
+	 * @param portalSearchUrl: search URL for the portal search.
+	 * @param limit: the limit for the amount of results retrieved.
+	 * @param start: the starting index for the query results.
+	 * @return The return value is a EuropeanaApi2Results object containing the search results.
+	 * @throws IOException
+	 * @throws EuropeanaApiProblem 
+	 */
 	public EuropeanaApi2Results searchApi2(String portalSearchUrl, int limit, int start) throws IOException, EuropeanaApiProblem{
 		Api2QueryInterface query = getQueryBuilder().buildQuery(portalSearchUrl);
 		String queryUrl = query.getQueryUrl(this, limit, start);
@@ -78,6 +129,17 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
 		return getSearchResults(queryUrl);
 	}
 	
+	/**
+	 * Method for retrieval of a EuropeanaObject
+	 * 
+	 * The method uses the client configuration to generate a url and
+	 * retrieve json results. The json results are used to generate a full
+	 * EuropeanaObject which is then return by the method.
+	 * 
+	 * @param id: id of the new object.
+	 * @return EuropeanaObject which represents a full result object of the search.
+	 * @throws IOException
+	 */
 	public EuropeanaObject getObject(String id) throws IOException {
 		EuropeanaObject result = null;
 		String record_url =  ClientConfiguration.getInstance().getRecordUri() + id + ".json?wskey=" + ClientConfiguration.getInstance().getApiKey();
