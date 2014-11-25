@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import eu.europeana.api.client.EuropeanaComplexQuery;
 import eu.europeana.api.client.EuropeanaQueryInterface;
 import eu.europeana.api.client.config.ClientConfiguration;
+import eu.europeana.api.client.result.AbstractApiResponse;
 import eu.europeana.api.client.result.EuropeanaApi2Item;
 import eu.europeana.api.client.result.EuropeanaApi2Results;
 import eu.europeana.api.client.util.BlockIterator;
@@ -24,7 +25,7 @@ import eu.europeana.api.client.util.BlockIterator.BlockLoader;
 /**
  * The EuropeanaConnection class is the main access point to the Europeana API,
  * allowing to make querys and obtain the results in different formats.
- *
+ * @deprecated - to be changed with the usage of BaseApiConnection
  * @author Andres Viedma Pelaez
  * @author Sergiu Gordea
  */
@@ -65,12 +66,12 @@ public class EuropeanaConnection {
      * @return The results as a EuropeanaResults object
      * @throws IOException
      */
-    public EuropeanaApi2Results search(EuropeanaQueryInterface search, long offset) throws IOException {
+    public AbstractApiResponse search(EuropeanaQueryInterface search, long offset) throws IOException {
         String json = this.searchJsonPage(search, 12, offset);
 
         // Load results object from JSON
         Gson gson = new Gson();
-        EuropeanaApi2Results res = gson.fromJson(json, EuropeanaApi2Results.class);
+        AbstractApiResponse res = gson.fromJson(json, EuropeanaApi2Results.class);
 
         return res;
     }
@@ -114,8 +115,8 @@ public class EuropeanaConnection {
      * @return The results as a EuropeanaResults object
      * @throws IOException
      */
-    public EuropeanaApi2Results search(EuropeanaQueryInterface searchQuery) throws IOException {
-    	EuropeanaApi2Results results = search(searchQuery, -1, EuropeanaComplexQuery.DEFAULT_OFFSET);
+    public AbstractApiResponse search(EuropeanaQueryInterface searchQuery) throws IOException {
+    	AbstractApiResponse results = search(searchQuery, -1, EuropeanaComplexQuery.DEFAULT_OFFSET);
         return results;
     }
 

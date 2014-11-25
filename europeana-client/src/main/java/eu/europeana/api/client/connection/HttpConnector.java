@@ -12,6 +12,7 @@ import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -150,5 +151,26 @@ public class HttpConnector {
             this.httpClient = client;
         }
         return this.httpClient;
+    }
+    
+    public String getURLContent(String url, String jsonParamName, String jsonParamValue) throws IOException {
+        HttpClient client = this.getHttpClient(CONNECTION_RETRIES, TIMEOUT_CONNECTION);
+        PostMethod post = new PostMethod(url);
+        post.setParameter(jsonParamName, jsonParamValue);
+
+        try {
+            client.executeMethod(post);
+
+            if (post.getStatusCode() >= STATUS_OK_START && post.getStatusCode() <= STATUS_OK_END) {
+                byte[] byteResponse = post.getResponseBody();
+                String res = new String(byteResponse, ENCODING);
+                return res;
+            } else {
+                return null;
+            }
+
+        } finally {
+        	post.releaseConnection();
+        }
     }
 }

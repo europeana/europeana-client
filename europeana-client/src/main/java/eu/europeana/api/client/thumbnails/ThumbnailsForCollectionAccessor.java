@@ -29,9 +29,6 @@ public class ThumbnailsForCollectionAccessor extends ThumbnailsAccessor{
 
 	private static final Log logger = LogFactory.getLog(ThumbnailsForCollectionAccessor.class);
 	//this should be the same as the maximum of results by the invocation of the Europeana API
-	public static final int DEFAULT_BLOCKSIZE = 100; 
-	//private String collectionName;
-	private int blockSize = DEFAULT_BLOCKSIZE;
 	Map <String, String> res;
 	
 	private Api2QueryInterface query;
@@ -51,10 +48,7 @@ public class ThumbnailsForCollectionAccessor extends ThumbnailsAccessor{
 	public ThumbnailsForCollectionAccessor(Api2QueryInterface query,
 			EuropeanaApi2Client apiClient) {
 		
-		if(apiClient != null)
-			europeanaClient = apiClient;
-		else
-			europeanaClient = new EuropeanaApi2Client();
+		super(apiClient);
 		
 		setQuery(query);
 		//setBlockSize(DEFAULT_BLOCKSIZE);
@@ -171,44 +165,6 @@ public class ThumbnailsForCollectionAccessor extends ThumbnailsAccessor{
 		} catch (IOException e) {
 			throw new TechnicalRuntimeException("Cannot fetch search results!", e);
 		} 
-	}
-
-	/**
-	 * Helper method to retrieve the largest thumbnail in a Europeana item.
-	 * 
-	 * @param item: Europeana item where the thumbnail is searched.
-	 * @return string containing a uri of the largest thumbnail.
-	 */
-	private String getLargestThumbnail(EuropeanaApi2Item item) {
-		String largestThumbnail = item.getEdmPreview().get(0);
-		if(largestThumbnail == null)
-			System.out.println("No thumbnail found!");
-		//the following code is not needed, the API returns already the LARGE 
-//		for (String url : item.getEdmPreview()) {
-//			if(url.indexOf("size=LARGE") > 0){
-//				largestThumbnail = url;
-//				break;//the large version of the thumbnail was found
-//			}
-//		}
-		return largestThumbnail;
-	}
-	
-	/**
-	 * Method to get the block size.
-	 * 
-	 * @return int representing the block size.
-	 */
-	public int getBlockSize() {
-		return blockSize;
-	}
-
-	/**
-	 * Method to set the block size.
-	 * 
-	 * @param blockSize int representing the block size.
-	 */
-	public void setBlockSize(int blockSize) {
-		this.blockSize = blockSize;
 	}
 
 	/**

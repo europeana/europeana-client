@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public class EuropeanaObject extends EuropeanaApi2Item {
-	private int index;
+	private long index;
 	private List<String> edmIsShownAt;
 	private float score;
 	private String about;
@@ -14,16 +14,16 @@ public class EuropeanaObject extends EuropeanaApi2Item {
 	private int europeanaCompleteness;
 	private List<ObjectProvidedCHO> providedCHOs;
 	private ObjectEuropeanaAggregation europeanaAggregation;
-	private int timestamp_created_epoch;
-	private int timestamp_update_epoch;
+	private long timestamp_created_epoch;
+	private long timestamp_update_epoch;
 	private String timestamp_created;
 	private String timestamp_update;
 
-	public int getIndex() {
+	public long getIndex() {
 		return index;
 	}
 
-	public void setIndex(int index) {
+	public void setIndex(long index) {
 		this.index = index;
 	}
 
@@ -100,19 +100,19 @@ public class EuropeanaObject extends EuropeanaApi2Item {
 		this.europeanaAggregation = europeanaAggregation;
 	}
 
-	public int getTimestamp_created_epoch() {
+	public long getTimestamp_created_epoch() {
 		return timestamp_created_epoch;
 	}
 
-	public void setTimestamp_created_epoch(int timestamp_created_epoch) {
+	public void setTimestamp_created_epoch(long timestamp_created_epoch) {
 		this.timestamp_created_epoch = timestamp_created_epoch;
 	}
 
-	public int getTimestamp_update_epoch() {
+	public long getTimestamp_update_epoch() {
 		return timestamp_update_epoch;
 	}
 
-	public void setTimestamp_update_epoch(int timestamp_update_epoch) {
+	public void setTimestamp_update_epoch(long timestamp_update_epoch) {
 		this.timestamp_update_epoch = timestamp_update_epoch;
 	}
 

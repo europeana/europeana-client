@@ -7,5 +7,7 @@ public interface EuropeanaApiConfiguration {
 	public abstract String getSearchUri();
 
 	public abstract String getApiKey();
+	
+	public abstract String getEuropeanaUri();
 
 }

@@ -104,7 +104,7 @@ public class ClientConfiguration implements EuropeanaApiConfiguration, Thumbnail
 	 */
 	@Override
 	public String getSearchUri() {
-		return (getProperties().getProperty(PROP_EUROPEANA_API_URI) + getProperties().getProperty(PROP_EUROPEANA_SEARCH_URN));
+		return (getEuropeanaUri() + getProperties().getProperty(PROP_EUROPEANA_SEARCH_URN));
 	}
 	
 	/**
@@ -116,7 +116,7 @@ public class ClientConfiguration implements EuropeanaApiConfiguration, Thumbnail
 	 */
 	@Override
 	public String getRecordUri() {
-		return (getProperties().getProperty(PROP_EUROPEANA_API_URI) + getProperties().getProperty(PROP_EUROPEANA_RECORD_URN));
+		return (getEuropeanaUri() + getProperties().getProperty(PROP_EUROPEANA_RECORD_URN));
 	}
 	
 	@Override
@@ -145,6 +145,11 @@ public class ClientConfiguration implements EuropeanaApiConfiguration, Thumbnail
 	@Override
 	public File getDatasetFile(String dataset) {
 		return new File(getDatasetsFolder(), dataset + DATASET_FILE_EXTENSION);
+	}
+
+	@Override
+	public String getEuropeanaUri() {
+		return getProperties().getProperty(PROP_EUROPEANA_API_URI);
 	}
 	
 }

@@ -16,7 +16,7 @@ public class ThumbnailsForCollectionAccessorTest extends ThumbnailAccessorUtils{
 		ThumbnailsForCollectionAccessor tca = new ThumbnailsForCollectionAccessor(
 				TEST_COLLECTION_NAME);
 		//201 = 2* 100 +1  
-		int resultsSize = (2 * ThumbnailsForCollectionAccessor.DEFAULT_BLOCKSIZE) + 1;
+		int resultsSize = (2 * ThumbnailsAccessor.DEFAULT_BLOCKSIZE) + 1;
 		//start at second page
 		int startPosition = 0; 
 		Map<String, String> thumbnails = tca.getThumbnailsForCollection(startPosition,

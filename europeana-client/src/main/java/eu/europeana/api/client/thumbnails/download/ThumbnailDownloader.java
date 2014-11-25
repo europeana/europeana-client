@@ -17,6 +17,7 @@ public class ThumbnailDownloader extends ThumbnailsAccessor implements Observer 
 	
 	File downloadFolder;
 	
+	
 	public File getDownloadFolder() {
 		return downloadFolder;
 	}
@@ -47,6 +48,8 @@ public class ThumbnailDownloader extends ThumbnailsAccessor implements Observer 
 		}
 		
 		((LargeThumbnailsetProcessing) o).increaseFailureCount(failureCount);
+		((LargeThumbnailsetProcessing) o).increaseSkippedItemsCount(getSkippedItems());
+		this.resetSkippedItems();
 	}
 
 }

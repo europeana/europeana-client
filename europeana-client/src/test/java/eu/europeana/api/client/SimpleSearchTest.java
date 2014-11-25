@@ -19,7 +19,7 @@ import eu.europeana.api.client.result.EuropeanaApi2Results;
 public class SimpleSearchTest extends BaseSearchUtils{
 
 	@Test
-	public void testsimpleSearch() throws IOException, EuropeanaApiProblem{
+	public void testSimpleSearch() throws IOException, EuropeanaApiProblem{
 		long ms0 = System.currentTimeMillis();
 
         //create the query object

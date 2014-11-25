@@ -20,11 +20,14 @@ public class LargeThumbnailsetProcessing extends Observable{
 	int lastReadPosition;
 	Map<String, String> thumbnailBlock; 
 	int failureCount;
+	int skippedItemsCount;
+	int itemsProcessed;
+	
+	
 	public int getFailureCount() {
 		return failureCount;
 	}
 
-	int itemsProcessed;
 	
 	public LargeThumbnailsetProcessing(File datasetFile) {
 		this.datasetfile = datasetFile;
@@ -139,6 +142,20 @@ public class LargeThumbnailsetProcessing extends Observable{
 		}
 	}
 
-	
+
+	public int getSkippedItemsCount() {
+		return skippedItemsCount;
+	}
+
+
+	public void increaseSkippedItemsCount(int amount) {
+		this.skippedItemsCount += amount;
+	}
+
+
+	public int getItemsProcessed() {
+		return itemsProcessed;
+	}
+
 	
 }

@@ -20,8 +20,10 @@ import eu.europeana.api.client.EuropeanaQueryInterface;
 import eu.europeana.api.client.connection.EuropeanaApi2Client;
 import eu.europeana.api.client.connection.HttpConnector;
 import eu.europeana.api.client.exception.EuropeanaApiProblem;
+import eu.europeana.api.client.exception.EuropeanaClientException;
 import eu.europeana.api.client.result.EuropeanaApi2Item;
 import eu.europeana.api.client.result.EuropeanaApi2Results;
+import eu.europeana.api.client.result.EuropeanaObject;
 
 /**
  * A ThumbnailsAccesor is a tool that makes easier the handling of thumbnails of
@@ -38,16 +40,26 @@ public class ThumbnailsAccessor {
 
 	private HttpConnector http = new HttpConnector();
 	EuropeanaApi2Client europeanaClient;
+	boolean skipExistingFiles = true;
+	int skippedItems = 0;
+	
+	public static final int DEFAULT_BLOCKSIZE = 100; 
+	//private String collectionName;
+	private int blockSize = DEFAULT_BLOCKSIZE;
 	
 	public static int ERROR_POLICY_RETHROW = 1;
 	public static int ERROR_POLICY_STOP = 5;
 	public static int ERROR_POLICY_IGNORE = 9;
 	public static int ERROR_POLICY_CONTINUE = 99;
+	
+	public final String SIZE_IS_LARGE = "size=LARGE";
+	
 
 	/**
 	 * Default constructor.
 	 */
 	public ThumbnailsAccessor() {
+		this(null);
 	}
 
 	/**
@@ -55,8 +67,13 @@ public class ThumbnailsAccessor {
 	 * 
 	 * @param europeanaClient: EuropeanaApi2Client object defining the used europeana client.
 	 */
-	public ThumbnailsAccessor(EuropeanaApi2Client europeanaClient) {
-		this.europeanaClient = europeanaClient;
+	public ThumbnailsAccessor(EuropeanaApi2Client apiClient) {
+		
+		if(apiClient != null)
+			this.europeanaClient = apiClient;
+		else
+			this.europeanaClient = new EuropeanaApi2Client();
+		
 	}
 
 	/**
@@ -124,10 +141,17 @@ public class ThumbnailsAccessor {
 		FileOutputStream out = null;
 		try {
 			// write thumbnail to output folder
-			out = createOutputStream(imageFolder, id);
-			
-			String mime = "image";
-			this.http.silentWriteURLContent(thumbnailUrl, out, mime);
+			File imageFile = getImageFile(imageFolder, id);
+			if(isSkipExistingFiles() && imageFile.exists()){
+				//skip file
+				incrementSkippedItems();
+			}else{
+				//download file
+				out = createOutputStream(imageFile);
+				
+				String mime = "image";
+				this.http.silentWriteURLContent(thumbnailUrl, out, mime);	
+			}	
 		}catch(IOException e){
 			log.trace("Cannot write file to disk!", e);
 			
@@ -163,12 +187,17 @@ public class ThumbnailsAccessor {
 	 * @return FileOutputStream object prepared to store images.
 	 * @throws FileNotFoundException
 	 */
-	protected FileOutputStream createOutputStream(File imageFolder, String id)
+//	protected FileOutputStream createOutputStream(File imageFolder, String id)
+//			throws FileNotFoundException {
+//
+//		File imageFile = getImageFile(imageFolder, id);
+//		return createOutputStream(imageFile);
+//	}
+
+	protected FileOutputStream createOutputStream(File imageFile)
 			throws FileNotFoundException {
-
-		File imageFile = getImageFile(imageFolder, id);
+		
 		imageFile.getParentFile().mkdirs();
-
 		return new FileOutputStream(imageFile);
 	}
 
@@ -214,4 +243,100 @@ public class ThumbnailsAccessor {
 		
 		return skippedItems;
 	}
+
+	/**
+	 * This method uses the Europeana API to retrieve the URL of the Thumbnail and copies it to the given folder
+	 * see {@link #getImageFile(File, String)}
+	 *  
+	 * @param europeanaId
+	 * @param imageFolder
+	 * @return the URL used to access the Thumbnail from europeana
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws EuropeanaClientException 
+	 */
+	public String copyThumbnail(String europeanaId,
+			File imageFolder) throws FileNotFoundException, IOException, EuropeanaClientException {
+
+		EuropeanaObject euObject = europeanaClient.getObject(europeanaId);
+		String thumbnailUrl = getLargestThumbnail(euObject);
+		
+		if (!writeThumbnailToFolder(europeanaId,
+					thumbnailUrl, imageFolder))
+				throw new EuropeanaClientException("Cannot write the thumbnail file for object: " + europeanaId + " to folder: " + imageFolder);
+			
+		return thumbnailUrl;
+	}
+	
+	public boolean isSkipExistingFiles() {
+		return skipExistingFiles;
+	}
+
+	public void setSkipExistingFiles(boolean skipExistingFiles) {
+		this.skipExistingFiles = skipExistingFiles;
+	}
+
+	public int getSkippedItems() {
+		return skippedItems;
+	}
+
+	protected void incrementSkippedItems() {
+		this.skippedItems++;
+	}
+	
+	protected void resetSkippedItems() {
+		this.skippedItems = 0;
+	}
+
+	public int getBlockSize() {
+		return blockSize;
+	}
+
+	public void setBlockSize(int blockSize) {
+		this.blockSize = blockSize;
+	}
+
+	/**
+	 * Helper method to retrieve the largest thumbnail in a Europeana item.
+	 * 
+	 * @param item: Europeana item where the thumbnail is searched.
+	 * @return string containing a uri of the largest thumbnail.
+	 */
+	protected String getLargestThumbnail(EuropeanaApi2Item item) {
+		
+		//if no edmPreviewList
+		if(item.getEdmPreview() == null || item.getEdmPreview().isEmpty()){
+			//check in europeana aggregation	
+			if(item instanceof EuropeanaObject)
+				return getEdmPreviewFromAggregation((EuropeanaObject) item);
+				
+		}
+			
+			
+		//if there is an edmPreviewList
+		String largestThumbnail = item.getEdmPreview().get(0);
+			
+			//search for large thumbnail if not default
+			if(largestThumbnail.indexOf(SIZE_IS_LARGE) < 0){
+				for (String url : item.getEdmPreview()) {
+					if(url.indexOf(SIZE_IS_LARGE) > 0){
+						largestThumbnail = url;
+						break;//the large version of the thumbnail was found
+					}
+				}
+			}
+			
+			return largestThumbnail;
+		}
+
+	private String getEdmPreviewFromAggregation(EuropeanaObject item) {
+		if(item.getEuropeanaAggregation() !=null)
+			return item.getEuropeanaAggregation().getEdmPreview();
+		else//cannot find edmPreview
+			return null;
+		
+		//System.out.println("No thumbnail found! for item: " + item.getId());
+		
+	}
 }
+
