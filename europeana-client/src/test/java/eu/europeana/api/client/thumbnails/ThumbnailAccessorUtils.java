@@ -9,6 +9,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -143,7 +145,7 @@ public class ThumbnailAccessorUtils extends EuClientDatasetUtil {
 		return getConfiguration().getBaseFolder() + "/collections";
 	}
 
-	private String encode(String collectionName) {
+	protected String encode(String collectionName) {
 
 		if (collectionName == null)
 			return null;
@@ -220,7 +222,7 @@ public class ThumbnailAccessorUtils extends EuClientDatasetUtil {
 					continue;
 				
 				idAndThumbnail = line.split(";", 2);
-				thumbnailMap.put(idAndThumbnail[0], idAndThumbnail[0]); 
+				thumbnailMap.put(idAndThumbnail[0], idAndThumbnail[1]); 
 			}
 			
 			//process last incomplete block
@@ -240,4 +242,16 @@ public class ThumbnailAccessorUtils extends EuClientDatasetUtil {
 			log.warn("cannot close reader" + e); 
 		}
 	}
+
+	protected void createSubset(String subsetName, String collectionName, String portalUrl,
+			int start, int expectedResults) throws MalformedURLException,
+			UnsupportedEncodingException, IOException {
+			
+				DatasetDescriptor dataset = new DatasetDescriptor(subsetName,
+						collectionName);
+				Api2QueryInterface query = getQueryBuilder().buildQuery(portalUrl);
+				int objects = buildImageSet(dataset, query, start, -1,
+						ThumbnailsAccessor.ERROR_POLICY_CONTINUE);
+				assertEquals(expectedResults, objects);
+			}
 }
