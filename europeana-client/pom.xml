@@ -51,23 +51,23 @@
   </dependencies>
   <build>
   		<!--  configure source and output locations -->
-		<directory>target</directory>
-		<outputDirectory>target/classes</outputDirectory>
-		<finalName>${artifactId}-${version}</finalName>
-		<testOutputDirectory>target/test-classes</testOutputDirectory>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<scriptSourceDirectory>src/main/scripts</scriptSourceDirectory>
-		<testSourceDirectory>src/test/java</testSourceDirectory>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-		</resources>
-		<testResources>
-			<testResource>
-				<directory>src/test/resources</directory>
-			</testResource>
-		</testResources>
+<!-- 		<directory>target</directory> -->
+<!-- 		<outputDirectory>target/classes</outputDirectory> -->
+<!-- 		<finalName>${artifactId}-${version}</finalName> -->
+<!-- 		<testOutputDirectory>target/test-classes</testOutputDirectory> -->
+<!-- 		<sourceDirectory>src/main/java</sourceDirectory> -->
+<!-- 		<scriptSourceDirectory>src/main/scripts</scriptSourceDirectory> -->
+<!-- 		<testSourceDirectory>src/test/java</testSourceDirectory> -->
+<!-- 		<resources> -->
+<!-- 			<resource> -->
+<!-- 				<directory>src/main/resources</directory> -->
+<!-- 			</resource> -->
+<!-- 		</resources> -->
+<!-- 		<testResources> -->
+<!-- 			<testResource> -->
+<!-- 				<directory>src/test/resources</directory> -->
+<!-- 			</testResource> -->
+<!-- 		</testResources> -->
 		<!-- build plugins  -->	
 		<plugins>
 			<plugin>
