@@ -6,22 +6,23 @@ import java.util.Properties;
 
 import eu.europeana.api.client.exception.TechnicalRuntimeException;
 
-public class ClientConfiguration implements EuropeanaApiConfiguration, ThumbnailAccessConfiguration {
+public class ClientConfiguration implements EuropeanaApiConfiguration,
+		ThumbnailAccessConfiguration {
 
 	protected static final String EUROPEANA_CLIENT_PROPERTIES_FILE = "/europeana-client.properties";
-	//API CONFIG KEYS
+	// API CONFIG KEYS
 	public static final String PROP_EUROPEANA_API_KEY = "europeana.api.key";
 	public static final String PROP_EUROPEANA_API_URI = "europeana.api.uri";
 	public static final String PROP_EUROPEANA_SEARCH_URN = "europeana.search.urn";
 	public static final String PROP_EUROPEANA_RECORD_URN = "europeana.record.urn";
-	//Thumbnail Access KEYS
+	// Thumbnail Access KEYS
 	public static final String PROP_BASE_FOLDER_KEY = "europeana.client.base.folder";
 	public static final String PROP_DATASETS_FOLDER_KEY = "europeana.client.datasets.folder";
-	
-	//static configs
+
+	// static configs
 	public static final String DATASET_FILE_EXTENSION = ".csv";
-	
-	//local attributes
+
+	// local attributes
 	private static Properties properties = null;
 	private static ClientConfiguration singleton;
 
@@ -37,8 +38,10 @@ public class ClientConfiguration implements EuropeanaApiConfiguration, Thumbnail
 	 * @return
 	 */
 	public static synchronized EuropeanaApiConfiguration getInstance() {
-		singleton = new ClientConfiguration();
-		singleton.loadProperties();
+		if (singleton == null) {
+			singleton = new ClientConfiguration();
+			singleton.loadProperties();
+		}
 		return singleton;
 	}
 
@@ -86,6 +89,7 @@ public class ClientConfiguration implements EuropeanaApiConfiguration, Thumbnail
 	/**
 	 * This method provides access to the API key defined in the configuration
 	 * file
+	 * 
 	 * @see PROP_EUROPEANA_API_KEY
 	 * 
 	 * @return
@@ -94,46 +98,50 @@ public class ClientConfiguration implements EuropeanaApiConfiguration, Thumbnail
 	public String getApiKey() {
 		return getProperties().getProperty(PROP_EUROPEANA_API_KEY);
 	}
-	
+
 	/**
-	 * This method provides access to the search uri value defined in the configuration
-	 * file
+	 * This method provides access to the search uri value defined in the
+	 * configuration file
+	 * 
 	 * @see PROP_EUROPEANA_SEARCH_URN
 	 * 
 	 * @return
 	 */
 	@Override
 	public String getSearchUri() {
-		return (getEuropeanaUri() + getProperties().getProperty(PROP_EUROPEANA_SEARCH_URN));
+		return (getEuropeanaUri() + getProperties().getProperty(
+				PROP_EUROPEANA_SEARCH_URN));
 	}
-	
+
 	/**
-	 * This method provides access to the record uri value defined in the configuration
-	 * file
+	 * This method provides access to the record uri value defined in the
+	 * configuration file
+	 * 
 	 * @see PROP_EUROPEANA_RECORD_URN
 	 * 
 	 * @return
 	 */
 	@Override
 	public String getRecordUri() {
-		return (getEuropeanaUri() + getProperties().getProperty(PROP_EUROPEANA_RECORD_URN));
+		return (getEuropeanaUri() + getProperties().getProperty(
+				PROP_EUROPEANA_RECORD_URN));
 	}
-	
+
 	@Override
 	public String getDatasetsFolder() {
 		return (getProperties().getProperty(PROP_DATASETS_FOLDER_KEY));
 	}
-	
+
 	@Override
 	public String getImageFolder(String dataset) {
 		String ret = getBaseFolder();
 		final String separator = "/";
-		if(!ret.endsWith(separator))
+		if (!ret.endsWith(separator))
 			ret += separator;
-				
+
 		ret += ("image" + separator);
 		ret += dataset;
-		
+
 		return ret;
 	}
 
@@ -151,5 +159,5 @@ public class ClientConfiguration implements EuropeanaApiConfiguration, Thumbnail
 	public String getEuropeanaUri() {
 		return getProperties().getProperty(PROP_EUROPEANA_API_URI);
 	}
-	
+
 }
