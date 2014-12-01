@@ -37,13 +37,15 @@ public class ClientConfiguration implements EuropeanaApiConfiguration, Thumbnail
 	 * @return
 	 */
 	public static synchronized EuropeanaApiConfiguration getInstance() {
+		if(singleton != null) return singleton;
+		
 		singleton = new ClientConfiguration();
 		singleton.loadProperties();
 		return singleton;
 	}
 
 	/**
-	 * Laizy loading of configuration properties
+	 * Lazy loading of configuration properties
 	 */
 	public synchronized void loadProperties() {
 		try {
