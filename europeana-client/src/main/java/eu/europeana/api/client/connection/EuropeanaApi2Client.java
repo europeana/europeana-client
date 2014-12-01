@@ -85,7 +85,7 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
 	/**
 	 * Method for search results from Europeana Search API, Version 2
 	 * 
-	 * The method retrievsen a json result from the provided URL and
+	 * The method retrieve a json result from the provided URL and
 	 * generates a EuropeanaApi2Results object based on the json data.
 	 * 
 	 * @param url: URL for the search request.

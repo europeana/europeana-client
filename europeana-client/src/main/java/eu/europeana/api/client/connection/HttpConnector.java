@@ -37,7 +37,7 @@ public class HttpConnector {
     public String getURLContent(String url) throws IOException {
         HttpClient client = this.getHttpClient(CONNECTION_RETRIES, TIMEOUT_CONNECTION);
         GetMethod getRequest = new GetMethod(url);
-
+        
         try {
             client.executeMethod(getRequest);
             byte[] byteResponse = getRequest.getResponseBody();

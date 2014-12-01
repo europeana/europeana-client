@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import static junit.framework.Assert.*;
+
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 
@@ -23,14 +25,16 @@ public class DownloadThumbnailsTest extends
 	}
 	
 	
+	//TODO : add real tests and counting number of images downloaded.
 	@Test
 	public void downloadThumbnails() throws FileNotFoundException, IOException {
-
-		ensureParamsInit();
 		
 		File datasetFile = getDatasetFile();
+		
+		assertTrue(datasetFile.exists());
+		
 		File downloadFolder = getDatasetImageFolder();
-
+		
 		LargeThumbnailsetProcessing datasetDownloader = new LargeThumbnailsetProcessing(datasetFile);
 		datasetDownloader.addObserver(new ThumbnailDownloader(downloadFolder));
 		datasetDownloader.processThumbnailset(0, -1, 1000);
@@ -41,21 +45,13 @@ public class DownloadThumbnailsTest extends
 //		}
 	}
 
-
-	protected void ensureParamsInit() {
-		//if not sent through parameters set it to test.
-		if(getDataset() == null)
-			setDataset("test");
-	}
-
-
 	protected File getDatasetImageFolder() {
 		return new File(getConfiguration().getImageFolder(getDataset()));		
 	}
 
 
 	protected File getDatasetFile() {
-		return super.getDataSetFile(false);
+		return new File(getConfiguration().getDatasetsFolder() + "/test.csv");
 	}
 	
 	

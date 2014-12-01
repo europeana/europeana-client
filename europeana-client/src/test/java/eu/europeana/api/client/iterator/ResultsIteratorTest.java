@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.gson.Gson;
@@ -25,6 +26,7 @@ import eu.europeana.api.client.result.EuropeanaApi2Results;
  * This was used with the API 1 client. The API V2 client is implementing the retrieval of large datasets in one query. I did not notice any performce problems even when retrieving hundreds of thousend of objects.   
  */
 @Deprecated
+@Ignore //tests are desactivated as the underlying code don't apply to apiV2.
 public class ResultsIteratorTest {
     
     @Test
