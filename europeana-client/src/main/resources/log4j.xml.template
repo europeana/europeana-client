@@ -47,7 +47,16 @@
 
 	<!--  We redirect everything to console in development environment -->
 	<!--  Please change appender and Debug levels in production environments -->
+	<!--  We redirect everything to console in development environment -->
+	<!--  Please change appender and Debug levels in production environments -->
 	<logger name="eu.europeana.api.client">
+		<level value="TRACE" />
+		<!-- 
+		<appender-ref ref="console" />
+		 -->
+	</logger>
+	
+	<logger name="eu.europeana">
 		<level value="DEBUG" />
 		<!-- 
 		<appender-ref ref="console" />
