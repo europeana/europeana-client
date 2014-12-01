@@ -16,3 +16,6 @@ europeana.client.base.image.folder = ./src/test/resources/image
 
 # the folder used to store the thumbnail urls of all collections locally
 europeana.client.base.cvs.folder = ./src/test/resources/cvs
+
+europeana.client.base.folder = ./src/test/resources/europeanaclient
+europeana.client.datasets.folder = ./src/test/resources/europeanaclient/datasets
