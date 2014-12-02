@@ -19,8 +19,7 @@ public class SearchRefinementsTest {
 		long ms0 = System.currentTimeMillis();
 
 		// create the query object
-		Api2Query europeanaQuery = new Api2Query(
-				"\"08511_Ag_EU_ATHENA_InstituteforCulturalMemory(CIMEC),Bucharest\"");
+		Api2Query europeanaQuery = new Api2Query("\"05812_L_RO_CIMEC_ese\"");
 		europeanaQuery.setWhatTerms("building");
 		europeanaQuery.addQueryRefinement("NOT gips");
 		europeanaQuery.addQueryRefinement("NOT capitel");
@@ -28,31 +27,28 @@ public class SearchRefinementsTest {
 		EuropeanaApi2Client europeanaClient = new EuropeanaApi2Client();
 		final int RESULTS_SIZE = 1;
 		final int OFFSET = 1;
-		String queryUrl = europeanaQuery.getQueryUrl(europeanaClient, RESULTS_SIZE, OFFSET);
-		//System.out.println(queryUrl);
-		String encodedUrl = "http://www.europeana.eu/api/v2/search.json?query=what%3A%28building%29+AND" +
-				"+europeana_collectionName%3A%28%2208511_Ag_EU_ATHENA_InstituteforCulturalMemory%28CIMEC%29%2CBucharest%22%29" +
-				"&qf=NOT+gips&qf=NOT+capitel&rows=1&start=1&wskey=" + europeanaClient.getApiKey();
-		
+		String queryUrl = europeanaQuery.getQueryUrl(europeanaClient,
+				RESULTS_SIZE, OFFSET);
+		// System.out.println(queryUrl);
+		String encodedUrl = "http://www.europeana.eu/api/v2/search.json?query=what%3A%28building%29+AND+" +
+				"europeana_collectionName%3A%28%2205812_L_RO_CIMEC_ese%22%29&qf=NOT+gips&qf=NOT+capitel&rows=1&start=1&wskey="
+				+ europeanaClient.getApiKey();
+
 		assertEquals(encodedUrl, queryUrl);
-		
-		
-		
+
 		// perform search
 		EuropeanaApi2Results res = europeanaClient.searchApi2(europeanaQuery,
 				RESULTS_SIZE, OFFSET);
 
-		
 		// print out response time
 		long t = System.currentTimeMillis() - ms0;
 		System.out.println("response time (client+server): " + (t / 1000d)
 				+ " seconds");
 
-		assertEquals(RESULTS_SIZE, res.getItemCount());
-		//we expect the collection to remain stable
-		int TOTAL_EXPECTED_RESULTS = 192;
+		assertEquals(RESULTS_SIZE, res.getItemsCount());
+		// we expect the collection to remain stable
+		int TOTAL_EXPECTED_RESULTS = 5;
 		assertEquals(TOTAL_EXPECTED_RESULTS, res.getTotalResults());
-		
 
 		int count = 0;
 		for (EuropeanaApi2Item item : res.getAllItems()) {
