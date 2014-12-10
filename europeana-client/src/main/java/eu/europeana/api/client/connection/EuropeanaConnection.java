@@ -16,9 +16,9 @@ import com.google.gson.Gson;
 import eu.europeana.api.client.EuropeanaComplexQuery;
 import eu.europeana.api.client.EuropeanaQueryInterface;
 import eu.europeana.api.client.config.ClientConfiguration;
-import eu.europeana.api.client.result.AbstractApiResponse;
 import eu.europeana.api.client.result.EuropeanaApi2Item;
 import eu.europeana.api.client.result.EuropeanaApi2Results;
+import eu.europeana.api.client.result.abstracts.ResponseContainer;
 import eu.europeana.api.client.util.BlockIterator;
 import eu.europeana.api.client.util.BlockIterator.BlockLoader;
 
@@ -66,12 +66,12 @@ public class EuropeanaConnection {
      * @return The results as a EuropeanaResults object
      * @throws IOException
      */
-    public AbstractApiResponse search(EuropeanaQueryInterface search, long offset) throws IOException {
+    public ResponseContainer search(EuropeanaQueryInterface search, long offset) throws IOException {
         String json = this.searchJsonPage(search, 12, offset);
 
         // Load results object from JSON
         Gson gson = new Gson();
-        AbstractApiResponse res = gson.fromJson(json, EuropeanaApi2Results.class);
+        ResponseContainer res = gson.fromJson(json, EuropeanaApi2Results.class);
 
         return res;
     }
@@ -115,8 +115,8 @@ public class EuropeanaConnection {
      * @return The results as a EuropeanaResults object
      * @throws IOException
      */
-    public AbstractApiResponse search(EuropeanaQueryInterface searchQuery) throws IOException {
-    	AbstractApiResponse results = search(searchQuery, -1, EuropeanaComplexQuery.DEFAULT_OFFSET);
+    public ResponseContainer search(EuropeanaQueryInterface searchQuery) throws IOException {
+    	ResponseContainer results = search(searchQuery, -1, EuropeanaComplexQuery.DEFAULT_OFFSET);
         return results;
     }
 

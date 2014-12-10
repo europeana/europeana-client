@@ -12,7 +12,7 @@ import eu.europeana.api.client.config.ClientConfiguration;
 import eu.europeana.api.client.exception.EuropeanaApiProblem;
 import eu.europeana.api.client.result.EuropeanaApi2Results;
 import eu.europeana.api.client.result.EuropeanaObject;
-import eu.europeana.api.client.result.EuropeanaObjects;
+import eu.europeana.api.client.result.EuropeanaObjectResponse;
 
 
 /**
@@ -27,7 +27,7 @@ import eu.europeana.api.client.result.EuropeanaObjects;
  */
 public class EuropeanaApi2Client extends EuropeanaConnection {
 	private String jsonResult = "";
-	private EuropeanaObjects objects;
+	private EuropeanaObjectResponse objects;
 	private Api2QueryBuilder queryBuilder;
 
 	/**
@@ -146,7 +146,7 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
 		this.jsonResult = getJSONResult(record_url);
 		
 		Gson gson = new GsonBuilder().create();
-		this.objects = gson.fromJson(this.jsonResult, EuropeanaObjects.class);
+		this.objects = gson.fromJson(this.jsonResult, EuropeanaObjectResponse.class);
 		result = this.objects.getObject();
 		
 		return result;

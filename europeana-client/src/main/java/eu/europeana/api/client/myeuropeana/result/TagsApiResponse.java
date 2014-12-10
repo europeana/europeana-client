@@ -1,7 +1,7 @@
 package eu.europeana.api.client.myeuropeana.result;
 
-import eu.europeana.api.client.result.AbstractApiResponse;
+import eu.europeana.api.client.result.abstracts.AbstractSearchResponse;
 
-public class TagsApiResponse extends AbstractApiResponse<TagItem> {
+public class TagsApiResponse extends AbstractSearchResponse<TagItem> {
 
 }

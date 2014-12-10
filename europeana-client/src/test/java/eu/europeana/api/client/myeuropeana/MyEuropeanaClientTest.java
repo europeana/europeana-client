@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 
 import org.junit.Test;
 
+import eu.europeana.api.client.connection.MyEuropeanaClient;
 import eu.europeana.api.client.myeuropeana.exception.MyEuropeanaApiException;
 import eu.europeana.api.client.myeuropeana.impl.MyEuropeanaClientImpl;
 import eu.europeana.api.client.myeuropeana.result.TagsApiResponse;

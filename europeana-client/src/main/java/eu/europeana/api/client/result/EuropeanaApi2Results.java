@@ -13,6 +13,8 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonWriter;
 
+import eu.europeana.api.client.result.abstracts.AbstractSearchResponse;
+
 /**
  * A EuropeanaResults is an object encapsulating the results of a query to
  * Europeana. It can be the result of multiple calls to the Europeana API with
@@ -20,9 +22,7 @@ import com.google.gson.stream.JsonWriter;
  *
  * @author Andres Viedma Pelaez
  */
-public class EuropeanaApi2Results extends AbstractApiResponse<EuropeanaApi2Item> {
-
-    //private List<EuropeanaApi2Item> items = new ArrayList<EuropeanaApi2Item>();
+public class EuropeanaApi2Results extends AbstractSearchResponse<EuropeanaApi2Item> {
 
     public EuropeanaApi2Results() {
     	setItems(new ArrayList<EuropeanaApi2Item>());
@@ -36,10 +36,6 @@ public class EuropeanaApi2Results extends AbstractApiResponse<EuropeanaApi2Item>
         this.getItems().add(item);
     }
 
-//    public void setItems(List<EuropeanaApi2Item> _items) {
-//        this.items.clear();
-//        this.items.addAll(_items);
-//    }
 
     /**
      * Returns a list of EuropeanaItem objects with all the stored results
@@ -71,7 +67,7 @@ public class EuropeanaApi2Results extends AbstractApiResponse<EuropeanaApi2Item>
     @Deprecated
     public void acumulate(EuropeanaApi2Results res2) {
     	this.getItems().addAll(res2.getItems());
-    	this.itemsCount += res2.itemsCount;
+    	this.setItemsCount(getItemsCount() + res2.getItemsCount());
     }
     
     /**
@@ -83,15 +79,21 @@ public class EuropeanaApi2Results extends AbstractApiResponse<EuropeanaApi2Item>
     {
         if (this.getItemCount() > limit) {
             this.setItems(this.getItems().subList (0, limit));
-            this.itemsCount = limit;
+            this.setItemsCount(limit);
         }
     }
 
+    /**
+     * This doesn't seems to be used. I also doesn't seem to be needed 
+     * @return
+     */
+    @Deprecated
     public String toJSON() {
         Gson gson = new Gson();
         return gson.toJson(this);
     }
 
+    @Deprecated
     public void toJSON(Writer out) throws IOException {
         Gson gson = new Gson();
         JsonWriter out2 = new JsonWriter(out);
