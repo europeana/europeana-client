@@ -8,10 +8,10 @@ import java.io.InputStreamReader;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import eu.europeana.api.client.MyEuropeanaClient;
 import eu.europeana.api.client.config.ClientConfiguration;
 import eu.europeana.api.client.config.EuropeanaApiConfiguration;
 import eu.europeana.api.client.connection.BaseApiConnection;
-import eu.europeana.api.client.connection.MyEuropeanaClient;
 import eu.europeana.api.client.exception.TechnicalRuntimeException;
 import eu.europeana.api.client.myeuropeana.exception.MyEuropeanaApiException;
 import eu.europeana.api.client.myeuropeana.result.TagsApiResponse;

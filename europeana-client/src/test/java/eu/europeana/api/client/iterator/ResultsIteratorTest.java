@@ -12,8 +12,8 @@ import org.junit.Test;
 
 import com.google.gson.Gson;
 
-import eu.europeana.api.client.Api2Query;
-import eu.europeana.api.client.connection.EuropeanaApi2Client;
+import eu.europeana.api.client.EuropeanaApi2Client;
+import eu.europeana.api.client.query.search.Api2Query;
 import eu.europeana.api.client.result.EuropeanaApi2Item;
 import eu.europeana.api.client.result.EuropeanaApi2Results;
 

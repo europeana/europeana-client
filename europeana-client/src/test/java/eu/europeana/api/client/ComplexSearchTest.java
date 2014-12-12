@@ -7,10 +7,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import eu.europeana.api.client.EuropeanaComplexQuery;
-import eu.europeana.api.client.adv.EuropeanaOperand;
-import eu.europeana.api.client.adv.EuropeanaSearchTerm;
 import eu.europeana.api.client.connection.EuropeanaConnection;
+import eu.europeana.api.client.query.search.EuropeanaComplexQuery;
+import eu.europeana.api.client.query.search.adv.EuropeanaOperand;
+import eu.europeana.api.client.query.search.adv.EuropeanaSearchTerm;
 import eu.europeana.api.client.result.EuropeanaApi2Item;
 import eu.europeana.api.client.result.EuropeanaApi2Results;
 import eu.europeana.api.common.EuropeanaFields;

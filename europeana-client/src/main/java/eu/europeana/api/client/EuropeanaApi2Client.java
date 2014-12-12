@@ -1,15 +1,16 @@
-package eu.europeana.api.client.connection;
+package eu.europeana.api.client;
 
 import java.io.IOException;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import eu.europeana.api.client.Api2QueryBuilder;
-import eu.europeana.api.client.Api2QueryInterface;
-import eu.europeana.api.client.EuropeanaQueryInterface;
 import eu.europeana.api.client.config.ClientConfiguration;
+import eu.europeana.api.client.connection.EuropeanaConnection;
 import eu.europeana.api.client.exception.EuropeanaApiProblem;
+import eu.europeana.api.client.query.search.Api2QueryBuilder;
+import eu.europeana.api.client.query.search.Api2QueryInterface;
+import eu.europeana.api.client.query.search.EuropeanaQueryInterface;
 import eu.europeana.api.client.result.EuropeanaApi2Results;
 import eu.europeana.api.client.result.EuropeanaObject;
 import eu.europeana.api.client.result.EuropeanaObjectResponse;

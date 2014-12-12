@@ -1,4 +1,4 @@
-package eu.europeana.api.client;
+package eu.europeana.api.client.query.search;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;

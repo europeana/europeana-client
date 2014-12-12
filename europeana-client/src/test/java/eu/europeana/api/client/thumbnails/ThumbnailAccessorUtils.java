@@ -15,11 +15,11 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
-import eu.europeana.api.client.Api2QueryBuilder;
-import eu.europeana.api.client.Api2QueryInterface;
 import eu.europeana.api.client.dataset.DatasetDescriptor;
 import eu.europeana.api.client.dataset.EuClientDatasetUtil;
 import eu.europeana.api.client.exception.TechnicalRuntimeException;
+import eu.europeana.api.client.query.search.Api2QueryBuilder;
+import eu.europeana.api.client.query.search.Api2QueryInterface;
 
 public class ThumbnailAccessorUtils extends EuClientDatasetUtil {
 

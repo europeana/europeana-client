@@ -13,9 +13,9 @@ import org.apache.commons.logging.LogFactory;
 
 import com.google.gson.Gson;
 
-import eu.europeana.api.client.EuropeanaComplexQuery;
-import eu.europeana.api.client.EuropeanaQueryInterface;
 import eu.europeana.api.client.config.ClientConfiguration;
+import eu.europeana.api.client.query.search.EuropeanaComplexQuery;
+import eu.europeana.api.client.query.search.EuropeanaQueryInterface;
 import eu.europeana.api.client.result.EuropeanaApi2Item;
 import eu.europeana.api.client.result.EuropeanaApi2Results;
 import eu.europeana.api.client.result.abstracts.ResponseContainer;
@@ -176,7 +176,7 @@ public class EuropeanaConnection {
 
          
 
-    String getJSONResult(String url) throws IOException {
+    protected String getJSONResult(String url) throws IOException {
         log.trace("Call to Europeana API: " + url);
         return http.getURLContent(url);
         

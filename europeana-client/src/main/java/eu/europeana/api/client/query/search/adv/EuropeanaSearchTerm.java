@@ -1,4 +1,4 @@
-package eu.europeana.api.client.adv;
+package eu.europeana.api.client.query.search.adv;
 
 import java.util.ArrayList;
 import java.util.Iterator;

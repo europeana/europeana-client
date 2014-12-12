@@ -6,8 +6,9 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import eu.europeana.api.client.connection.EuropeanaApi2Client;
 import eu.europeana.api.client.exception.EuropeanaApiProblem;
+import eu.europeana.api.client.query.search.Api2Query;
+import eu.europeana.api.client.query.search.EuropeanaComplexQuery;
 import eu.europeana.api.client.result.EuropeanaApi2Item;
 import eu.europeana.api.client.result.EuropeanaApi2Results;
 

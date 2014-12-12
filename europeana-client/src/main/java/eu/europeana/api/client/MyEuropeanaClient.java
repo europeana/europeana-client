@@ -1,4 +1,4 @@
-package eu.europeana.api.client.connection;
+package eu.europeana.api.client;
 
 import java.io.InputStream;
 

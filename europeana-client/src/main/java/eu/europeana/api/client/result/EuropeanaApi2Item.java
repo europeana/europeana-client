@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonWriter;
 
-import eu.europeana.api.client.EuropeanaComplexQuery;
+import eu.europeana.api.client.query.search.EuropeanaComplexQuery;
 
 /**
  * An item is a search result and is represented by a summary of its metadata
