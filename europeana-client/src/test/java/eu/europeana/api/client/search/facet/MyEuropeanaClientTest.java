@@ -1,4 +1,4 @@
-package eu.europeana.api.client.myeuropeana;
+package eu.europeana.api.client.search.facet;
 
 import static org.junit.Assert.*;
 
@@ -12,7 +12,7 @@ import org.junit.Test;
 import eu.europeana.api.client.MyEuropeanaClient;
 import eu.europeana.api.client.myeuropeana.exception.MyEuropeanaApiException;
 import eu.europeana.api.client.myeuropeana.impl.MyEuropeanaClientImpl;
-import eu.europeana.api.client.myeuropeana.result.TagsApiResponse;
+import eu.europeana.api.client.myeuropeana.response.TagsApiResponse;
 
 public class MyEuropeanaClientTest {
 
