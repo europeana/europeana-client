@@ -148,14 +148,19 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
 	 */
 	public EuropeanaObject getObject(String id) throws IOException {
 		EuropeanaObject result = null;
-		String record_url =  buildObjectAccessUrl(id);
-		this.jsonResult = getJSONResult(record_url);
+		getEuropeanaRecordResponse(id);
 		
 		Gson gson = new GsonBuilder().create();
 		this.objects = gson.fromJson(this.jsonResult, EuropeanaObjectResponse.class);
 		result = this.objects.getObject();
 		
 		return result;
+	}
+
+	public String getEuropeanaRecordResponse(String id) throws IOException {
+		String record_url =  buildObjectAccessUrl(id);
+		this.jsonResult = getJSONResult(record_url);
+		return this.jsonResult;
 	}
 
 	protected String buildObjectAccessUrl(String id) {

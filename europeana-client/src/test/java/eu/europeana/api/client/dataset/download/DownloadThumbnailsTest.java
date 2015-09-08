@@ -36,7 +36,7 @@ public class DownloadThumbnailsTest extends
 		//datasetDownloader.processThumbnailset(0, -1, 1000);
 		datasetDownloader.processThumbnailset(0, 21, 10);
 		
-		System.out.println("Skipped items: " + datasetDownloader.getFailureCount());
+		log.debug("Skipped items: " + datasetDownloader.getFailureCount());
 //		for (String itemId : skippedItems) {
 //			System.out.println(itemId);
 //		}
