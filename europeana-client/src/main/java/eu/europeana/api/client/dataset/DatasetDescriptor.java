@@ -35,4 +35,12 @@ public class DatasetDescriptor {
 		this.classifications = classifications;
 	}
 	
+	@Override
+	public String toString() {
+		return getCollectionName() + " - " + getImageSetName();
+	}
+	
+	public String getStringId() {
+		return getCollectionName() + " - " + getImageSetName();
+	}
 }
