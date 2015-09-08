@@ -14,11 +14,11 @@ import org.apache.commons.logging.LogFactory;
 import com.google.gson.Gson;
 
 import eu.europeana.api.client.config.ClientConfiguration;
-import eu.europeana.api.client.query.search.EuropeanaComplexQuery;
-import eu.europeana.api.client.query.search.EuropeanaQueryInterface;
-import eu.europeana.api.client.result.EuropeanaApi2Item;
-import eu.europeana.api.client.result.EuropeanaApi2Results;
-import eu.europeana.api.client.result.abstracts.ResponseContainer;
+import eu.europeana.api.client.model.EuropeanaApi2Results;
+import eu.europeana.api.client.model.search.EuropeanaApi2Item;
+import eu.europeana.api.client.response.abstracts.ResponseContainer;
+import eu.europeana.api.client.search.query.EuropeanaComplexQuery;
+import eu.europeana.api.client.search.query.EuropeanaQueryInterface;
 import eu.europeana.api.client.util.BlockIterator;
 import eu.europeana.api.client.util.BlockIterator.BlockLoader;
 
@@ -54,7 +54,7 @@ public class EuropeanaConnection {
     }
 
     public EuropeanaConnection() {
-    	this(ClientConfiguration.getInstance().getSearchUri(), ClientConfiguration.getInstance().getApiKey());
+    	this(ClientConfiguration.getInstance().getEuropeanaUri(), ClientConfiguration.getInstance().getApiKey());
     	
     }
     
