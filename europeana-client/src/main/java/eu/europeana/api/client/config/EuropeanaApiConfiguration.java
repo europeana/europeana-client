@@ -10,4 +10,6 @@ public interface EuropeanaApiConfiguration {
 	
 	public abstract String getEuropeanaUri();
 
+	public abstract String getSearchUrn();
+
 }

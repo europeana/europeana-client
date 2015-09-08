@@ -109,8 +109,19 @@ public class ClientConfiguration implements EuropeanaApiConfiguration,
 	 */
 	@Override
 	public String getSearchUri() {
-		return (getEuropeanaUri() + getProperties().getProperty(
-				PROP_EUROPEANA_SEARCH_URN));
+		return (getEuropeanaUri() + getSearchUrn());
+	}
+
+	/**
+	 * This method provides access to the search urn value defined in the
+	 * configuration file
+	 * 
+	 * @see PROP_EUROPEANA_SEARCH_URN
+	 */
+	@Override
+	public String getSearchUrn() {
+		return getProperties().getProperty(
+				PROP_EUROPEANA_SEARCH_URN);
 	}
 
 	/**
