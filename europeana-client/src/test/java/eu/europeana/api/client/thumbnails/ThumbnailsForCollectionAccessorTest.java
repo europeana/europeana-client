@@ -27,7 +27,7 @@ public class ThumbnailsForCollectionAccessorTest extends ThumbnailAccessorUtils{
 		assertTrue(thumbnails.size() == resultsSize);
 		
 		// check if the contnt of the collection was changed 
-		assertTrue(TEST_COLLECTION_SIZE == tca.totalResults);
+		assertTrue(TEST_COLLECTION_SIZE == tca.getTotalResults());
 				
 		
 	}
@@ -44,7 +44,7 @@ public class ThumbnailsForCollectionAccessorTest extends ThumbnailAccessorUtils{
 		int objectsWithThumbnailInDevCollection = 2;
 		
 		// check total 
-		assertTrue(tca.totalResults == objectsInDevCollection);
+		assertTrue(tca.getTotalResults() == objectsInDevCollection);
 				
 		// check correct thumbnail extraction
 		assertTrue(thumbnails.size() == objectsWithThumbnailInDevCollection);

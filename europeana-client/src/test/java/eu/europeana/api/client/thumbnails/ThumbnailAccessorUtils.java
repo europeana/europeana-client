@@ -1,38 +1,30 @@
 package eu.europeana.api.client.thumbnails;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Set;
 
-import org.apache.log4j.Logger;
+import javax.naming.OperationNotSupportedException;
 
 import eu.europeana.api.client.dataset.DatasetDescriptor;
 import eu.europeana.api.client.dataset.EuClientDatasetUtil;
 import eu.europeana.api.client.exception.TechnicalRuntimeException;
-import eu.europeana.api.client.query.search.Api2QueryBuilder;
-import eu.europeana.api.client.query.search.Api2QueryInterface;
+import eu.europeana.api.client.search.query.Api2QueryBuilder;
+import eu.europeana.api.client.search.query.Api2QueryInterface;
 
 public class ThumbnailAccessorUtils extends EuClientDatasetUtil {
 
-	protected Logger log = Logger.getLogger(getClass());
-	
 	protected static final String TEST_COLLECTION_NAME = "07501_*";
 	protected static final int TEST_COLLECTION_SIZE = 40811;
 	protected static final String DEVELOPMENT_COLLECTION_NAME = "00000_*";
-	protected final int DEFAULT_BLOCK_SIZE = 1000;
-	protected final int POLICY_SKIP_EXISTING = 0;
-	protected final int POLICY_OVERWRITE_FILE = 1;
-	protected final int POLICY_APPEND_TO_FILE = 2;
-	
+
 	Api2QueryBuilder queryBuilder = new Api2QueryBuilder();
 
 	public Api2QueryBuilder getQueryBuilder() {
@@ -42,128 +34,63 @@ public class ThumbnailAccessorUtils extends EuClientDatasetUtil {
 	protected void writeThumbnailsToCsvFile(DatasetDescriptor dataset,
 			Map<String, String> thumbnails, File file) throws IOException {
 
-		writeThumbnailsToCsvFile(dataset, thumbnails, file, POLICY_OVERWRITE_FILE);
+		writeThumbnailsToCsvFile(dataset, thumbnails, file,
+				POLICY_OVERWRITE_FILE);
 	}
 
 	protected void writeThumbnailsToCsvFile(DatasetDescriptor dataset,
 			Map<String, String> thumbnails, File file, int fileWritePolicy)
 			throws IOException {
 
-		// create parent dirs
-		file.getParentFile().mkdirs();
-
-		if(file.exists() && POLICY_SKIP_EXISTING == fileWritePolicy){
-			log.warn("Existing files will not be overwritten, change write policy! " + file);
-			return;
-		}
-			
-		boolean append = (POLICY_APPEND_TO_FILE == fileWritePolicy);
-		if(append && file.exists())
-			log.warn("Appending data to existing files! " + file);
-		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(file, append));
-		
-		writeCvsFileHeader(writer, dataset.getImageSetName(), thumbnails,
-				dataset.getClassifications());
-
-		int count = 0;
-		for (Entry<String, String> thumbnail : thumbnails.entrySet()) {
-
-			writer.write(thumbnail.getKey());
-			writer.write(";");
-			writer.write(thumbnail.getValue());
-			writer.write("\n");
-			count++;
-			if (count % 1000 == 0)
-				writer.flush();
-		}
-		writer.flush();
-		writer.close();
+		writeMapToCsvFile(dataset, thumbnails, file, fileWritePolicy);
 	}
 
 	/**
 	 * use {@link #writeThumbnailsToCsvFile(DatasetDescriptor, Map, File)}
 	 * instead
 	 * 
-	 * @param imageSet
+	 * @param subset
 	 * @param thumbnails
 	 * @param classifications
 	 * @param file
 	 * @throws IOException
 	 */
-//	@Deprecated
-//	private void writeThumbnailsToCsvFile(String imageSet,
-//			Map<String, String> thumbnails, String[] classifications, File file)
-//			throws IOException {
-//
-//		// create parent dirs
-//		file.getParentFile().mkdirs();
-//
-//		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-//		writeCvsFileHeader(writer, imageSet, thumbnails, classifications);
-//
-//		int count = 0;
-//		for (Entry<String, String> thumbnail : thumbnails.entrySet()) {
-//
-//			writer.write(thumbnail.getKey());
-//			writer.write(";");
-//			writer.write(thumbnail.getValue());
-//			writer.write("\n");
-//			count++;
-//			if (count % 1000 == 0)
-//				writer.flush();
-//		}
-//		writer.flush();
-//		writer.close();
-//	}
-
-	protected void writeCvsFileHeader(BufferedWriter writer, String imageSet,
-			Map<String, String> thumbnails, String[] classifications)
-			throws IOException {
-
-		writer.write("#");
-		writer.write(imageSet);
-		writer.write("; ");
-		writer.write("" + thumbnails.size());
-		writer.write("; ");
-		if (classifications != null) {
-			for (int i = 0; i < classifications.length; i++) {
-				writer.write(classifications[i]);
-				writer.write("; ");
-			}
-		}
-		writer.write("\n");
-
-	}
+	// @Deprecated
+	// private void writeThumbnailsToCsvFile(String imageSet,
+	// Map<String, String> thumbnails, String[] classifications, File file)
+	// throws IOException {
+	//
+	// // create parent dirs
+	// file.getParentFile().mkdirs();
+	//
+	// BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+	// writeCvsFileHeader(writer, imageSet, thumbnails, classifications);
+	//
+	// int count = 0;
+	// for (Entry<String, String> thumbnail : thumbnails.entrySet()) {
+	//
+	// writer.write(thumbnail.getKey());
+	// writer.write(";");
+	// writer.write(thumbnail.getValue());
+	// writer.write("\n");
+	// count++;
+	// if (count % 1000 == 0)
+	// writer.flush();
+	// }
+	// writer.flush();
+	// writer.close();
+	// }
 
 	/**
 	 * use {@link #getCollectionCsvFile(DatasetDescriptor)} instead
 	 */
-//	@Deprecated
-//	private File getCollectionCsvFile(String imageSet, String collectionName) {
-//		String fileName = getCollectionsCvsFolder() + imageSet + "_"
-//				+ encode(collectionName) + ".csv";
-//		return new File(fileName);
-//	}
-
-	protected File getCollectionCsvFile(DatasetDescriptor dataset) {
-		String fileName = getCollectionsCvsFolder() + dataset.getImageSetName()
-				+ "_" + encode(dataset.getCollectionName()) + ".csv";
-		return new File(fileName);
-	}
-
-	protected String getCollectionsCvsFolder() {
-		return getConfiguration().getBaseFolder() + "/collections";
-	}
-
-	protected String encode(String collectionName) {
-
-		if (collectionName == null)
-			return null;
-
-		return collectionName.replace('*', 'X');
-
-	}
+	// @Deprecated
+	// private File getCollectionCsvFile(String imageSet, String collectionName)
+	// {
+	// String fileName = getCollectionsCvsFolder() + imageSet + "_"
+	// + encode(collectionName) + ".csv";
+	// return new File(fileName);
+	// }
 
 	public int buildImageSet(DatasetDescriptor dataset, Api2QueryInterface query)
 			throws IOException {
@@ -181,8 +108,7 @@ public class ThumbnailAccessorUtils extends EuClientDatasetUtil {
 		// generalTerms, what,
 		// creator, objectType, provider, dataProvider, refinements);
 		File cvsFile = getCollectionCsvFile(dataset);
-		
-		
+
 		ThumbnailsForCollectionAccessor tca = new ThumbnailsForCollectionAccessor(
 				query, null);
 		tca.setQuery(query);
@@ -198,7 +124,7 @@ public class ThumbnailAccessorUtils extends EuClientDatasetUtil {
 		} catch (TechnicalRuntimeException e) {
 			System.out.println("error: " + e);
 			System.out.println(tca.getQuery().toString());
-			System.out.println(tca.res.size());
+			System.out.println(tca.getResults().size());
 		}
 
 		if (thumbnails != null) {
@@ -206,66 +132,113 @@ public class ThumbnailAccessorUtils extends EuClientDatasetUtil {
 		}
 
 		// assert all image urls are correct
-//		if (limit > 0)
-//			assertEquals(limit, thumbnails.size());
-//		else
-//			assertEquals(tca.totalResults, thumbnails.size());
+		// if (limit > 0)
+		// assertEquals(limit, thumbnails.size());
+		// else
+		// assertEquals(tca.totalResults, thumbnails.size());
 
 		return thumbnails.size();
 	}
-	
+
 	protected Map<String, String> readThumbnailsMap(File thumbnailsCsvFile)
 			throws FileNotFoundException, IOException {
-		
-		HashMap<String, String> thumbnailMap = null;
-		if(blockSize > 0)
-			thumbnailMap = new HashMap<String, String>(blockSize);
-		else thumbnailMap = new HashMap<String, String>(ThumbnailsAccessor.DEFAULT_BLOCKSIZE);
-		
-		
+
+		Map<String, String> thumbnailMap = null;
+		if (blockSize > 0)
+			thumbnailMap = new LinkedHashMap<String, String>(blockSize);
+		else
+			thumbnailMap = new LinkedHashMap<String, String>(
+					ThumbnailsAccessor.DEFAULT_BLOCKSIZE);
+
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader(thumbnailsCsvFile));
 			String line = null;
 			String idAndThumbnail[];
 			while ((line = reader.readLine()) != null) {
-				//ignore comments
-				if(line.startsWith("#"))
+				// ignore comments
+				if (line.startsWith("#"))
 					continue;
-				
+
 				idAndThumbnail = line.split(";", 2);
-				thumbnailMap.put(idAndThumbnail[0], idAndThumbnail[1]); 
+				thumbnailMap.put(idAndThumbnail[0], idAndThumbnail[1]);
 			}
-			
-			//process last incomplete block
+
+			// process last incomplete block
 		} finally {
-				if(reader!=null)
-					reader.close();
+			if (reader != null)
+				reader.close();
 		}
-		
+
 		return thumbnailMap;
 	}
 
 	protected void closeReader(BufferedReader reader) {
-		try{
-			if(reader != null)
+		try {
+			if (reader != null)
 				reader.close();
-		} catch (Exception e){
-			log.warn("cannot close reader" + e); 
+		} catch (Exception e) {
+			log.warn("cannot close reader" + e);
 		}
 	}
 
-	protected int createSubset(String subsetName, String collectionName, String portalUrl,
-			int start, int expectedResults) throws MalformedURLException,
-			UnsupportedEncodingException, IOException {
-			
-				DatasetDescriptor dataset = new DatasetDescriptor(subsetName,
-						collectionName);
-				Api2QueryInterface query = getQueryBuilder().buildQuery(portalUrl);
-				log.info("Create subset with query: " + portalUrl);
-				int objects = buildImageSet(dataset, query, start, -1,
-						ThumbnailsAccessor.ERROR_POLICY_CONTINUE);
-				//assertEquals(expectedResults, objects);
-				return expectedResults - objects;
+	protected int createSubset(String subsetName, String collectionName,
+			String portalUrl, int start, int expectedResults)
+			throws MalformedURLException, UnsupportedEncodingException,
+			IOException {
+
+		DatasetDescriptor dataset = new DatasetDescriptor(subsetName,
+				collectionName);
+		Api2QueryInterface query = getQueryBuilder().buildQuery(portalUrl);
+		log.info("Create subset with query: " + portalUrl);
+		int objects = buildImageSet(dataset, query, start, -1,
+				ThumbnailsAccessor.ERROR_POLICY_CONTINUE);
+		// assertEquals(expectedResults, objects);
+		return expectedResults - objects;
+	}
+	
+	
+//	protected void copyDatasetImages(File imageFolder, File destination) throws FileNotFoundException, IOException{
+//		Map<String, String> datasetMap = readThumbnailsMap(getDataSetFile(false));
+//		Set<String> ids = datasetMap.keySet();
+//		File imageSrcFile;
+//		File imageDestFile;
+//		
+//		for (String id : ids) {
+//			imageSrcFile = new File(imageFolder, id + ".jpg");
+//			imageDestFile = new File(destination, id + ".jpg");
+//			copyFile(imageSrcFile, imageDestFile);
+//		}
+//	}
+	
+	public void copyThumbnails() throws FileNotFoundException, IOException{
+		//setDataset("culturecam");
+		File datasetFile = getDataSetFile(false);
+		Map<String, String> thumbnailMap = readThumbnailsMap(datasetFile);
+		File imageFile;
+		File destFile = null;
+		int cnt = 0;
+		for (String id : thumbnailMap.keySet()) {
+			System.out.println("copying image with id: " + id);
+			imageFile = getImageFile(id);
+			if(!imageFile.exists())
+				System.out.println("Error: file not found + " + imageFile.getCanonicalPath());
+			else{
+				destFile = new File(imageFile.getPath().replaceFirst("app", "inst"));
+				copyFile(imageFile, destFile);
+				cnt++;
 			}
+				
+		}
+		String parentFolder = null;
+		if(destFile != null)
+			parentFolder = destFile.getParentFile().getParentFile().getPath();
+		
+		System.out.println("Successfully copied: " + cnt + " files to folder: " + parentFolder);
+	}
+
+	protected File getImageFile(String id){
+		throw new RuntimeException(new OperationNotSupportedException("getImageFile(): method must be implemented in subclasses!")); 
+	}
+
 }

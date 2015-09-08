@@ -33,7 +33,8 @@ public class DownloadThumbnailsTest extends
 
 		LargeThumbnailsetProcessing datasetDownloader = new LargeThumbnailsetProcessing(datasetFile);
 		datasetDownloader.addObserver(new ThumbnailDownloader(downloadFolder));
-		datasetDownloader.processThumbnailset(0, -1, 1000);
+		//datasetDownloader.processThumbnailset(0, -1, 1000);
+		datasetDownloader.processThumbnailset(0, 21, 10);
 		
 		System.out.println("Skipped items: " + datasetDownloader.getFailureCount());
 //		for (String itemId : skippedItems) {

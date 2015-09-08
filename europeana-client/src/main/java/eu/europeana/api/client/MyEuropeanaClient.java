@@ -3,7 +3,7 @@ package eu.europeana.api.client;
 import java.io.InputStream;
 
 import eu.europeana.api.client.myeuropeana.exception.MyEuropeanaApiException;
-import eu.europeana.api.client.myeuropeana.result.TagsApiResponse;
+import eu.europeana.api.client.myeuropeana.response.TagsApiResponse;
 
 /**
  * see http://labs.europeana.eu/api/myeuropeana/#response-2 for the MyEuropeanaApi documentation

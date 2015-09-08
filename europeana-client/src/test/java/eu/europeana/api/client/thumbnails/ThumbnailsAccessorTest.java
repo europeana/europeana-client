@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import eu.europeana.api.client.EuropeanaApi2Client;
 import eu.europeana.api.client.exception.EuropeanaApiProblem;
-import eu.europeana.api.client.query.search.Api2Query;
-import eu.europeana.api.client.query.search.EuropeanaQueryInterface;
+import eu.europeana.api.client.search.query.Api2Query;
+import eu.europeana.api.client.search.query.EuropeanaQueryInterface;
 
 public class ThumbnailsAccessorTest {
 

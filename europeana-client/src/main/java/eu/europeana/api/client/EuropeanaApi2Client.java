@@ -8,12 +8,12 @@ import com.google.gson.GsonBuilder;
 import eu.europeana.api.client.config.ClientConfiguration;
 import eu.europeana.api.client.connection.EuropeanaConnection;
 import eu.europeana.api.client.exception.EuropeanaApiProblem;
-import eu.europeana.api.client.query.search.Api2QueryBuilder;
-import eu.europeana.api.client.query.search.Api2QueryInterface;
-import eu.europeana.api.client.query.search.EuropeanaQueryInterface;
-import eu.europeana.api.client.result.EuropeanaApi2Results;
-import eu.europeana.api.client.result.EuropeanaObject;
-import eu.europeana.api.client.result.EuropeanaObjectResponse;
+import eu.europeana.api.client.model.EuropeanaApi2Results;
+import eu.europeana.api.client.model.EuropeanaObjectResponse;
+import eu.europeana.api.client.model.search.EuropeanaObject;
+import eu.europeana.api.client.search.query.Api2QueryBuilder;
+import eu.europeana.api.client.search.query.Api2QueryInterface;
+import eu.europeana.api.client.search.query.EuropeanaQueryInterface;
 
 
 /**
@@ -99,9 +99,14 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
 		// Execute Europeana API request
         this.jsonResult = getJSONResult(url);
 		
-        // Load results object from JSON
+        return parseApiResponse(jsonResult);
+	}
+
+	public EuropeanaApi2Results parseApiResponse(String jsonResult)
+			throws EuropeanaApiProblem {
+		// Load results object from JSON
         Gson gson = new GsonBuilder().create();
-        EuropeanaApi2Results res = gson.fromJson(this.jsonResult, EuropeanaApi2Results.class);
+        EuropeanaApi2Results res = gson.fromJson(jsonResult, EuropeanaApi2Results.class);
         
         if(!res.getSuccess())
         	throw new EuropeanaApiProblem(res.getError(), res.getRequestNumber());
@@ -143,7 +148,7 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
 	 */
 	public EuropeanaObject getObject(String id) throws IOException {
 		EuropeanaObject result = null;
-		String record_url =  ClientConfiguration.getInstance().getRecordUri() + id + ".json?wskey=" + ClientConfiguration.getInstance().getApiKey();
+		String record_url =  buildObjectAccessUrl(id);
 		this.jsonResult = getJSONResult(record_url);
 		
 		Gson gson = new GsonBuilder().create();
@@ -152,5 +157,13 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
 		
 		return result;
 	}
+
+	protected String buildObjectAccessUrl(String id) {
+		
+		return ClientConfiguration.getInstance().getRecordUri() + id + ".json" + buildApiKeyParam();
+	}
 	
+	protected String buildApiKeyParam() {
+		return "?wskey=" + getApiKey();
+	}
 }
