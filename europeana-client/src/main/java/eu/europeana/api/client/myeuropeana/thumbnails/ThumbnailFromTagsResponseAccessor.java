@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import eu.europeana.api.client.exception.TechnicalRuntimeException;
-import eu.europeana.api.client.myeuropeana.result.TagItem;
-import eu.europeana.api.client.myeuropeana.result.TagsApiResponse;
+import eu.europeana.api.client.model.myeuropeana.TagItem;
+import eu.europeana.api.client.myeuropeana.response.TagsApiResponse;
 import eu.europeana.api.client.thumbnails.ThumbnailsAccessor;
 
 public class ThumbnailFromTagsResponseAccessor extends ThumbnailsAccessor {
