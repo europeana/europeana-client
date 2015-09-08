@@ -14,7 +14,7 @@ import eu.europeana.api.client.config.EuropeanaApiConfiguration;
 import eu.europeana.api.client.connection.BaseApiConnection;
 import eu.europeana.api.client.exception.TechnicalRuntimeException;
 import eu.europeana.api.client.myeuropeana.exception.MyEuropeanaApiException;
-import eu.europeana.api.client.myeuropeana.result.TagsApiResponse;
+import eu.europeana.api.client.myeuropeana.response.TagsApiResponse;
 
 public class MyEuropeanaClientImpl extends BaseApiConnection implements
 		MyEuropeanaClient {
@@ -59,7 +59,7 @@ public class MyEuropeanaClientImpl extends BaseApiConnection implements
 	 */
 	protected String buildInvokationUrl(String action, String apiKey) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(getConfiguration().getSearchUri());
+		sb.append(getServiceUri());
 		sb.append(action);
 		sb.append("?wsKey=").append(apiKey);
 
