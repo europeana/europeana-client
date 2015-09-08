@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Observable;
 
@@ -60,7 +60,7 @@ public class LargeThumbnailsetProcessing extends Observable{
 	public void processThumbnailset(int start, int limit, int blockSize)
 			throws FileNotFoundException, IOException {
 		
-		thumbnailBlock = new HashMap<String, String>(blockSize);
+		thumbnailBlock = new LinkedHashMap<String, String>(blockSize);
 		
 		BufferedReader reader = null;
 		try {
@@ -123,7 +123,7 @@ public class LargeThumbnailsetProcessing extends Observable{
 	protected String[] extractValues(String europeanaUriAndObject) {
 		String[] values;
 		//parse file entries, first one should be the object id
-		values = europeanaUriAndObject.split(";", 2);
+		values = europeanaUriAndObject.split(";", 3);
 		thumbnailBlock.put(values[0], values[1]);
 		return values;
 	}
