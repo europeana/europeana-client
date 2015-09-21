@@ -158,14 +158,25 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
 	}
 
 	public String getEuropeanaRecordResponse(String id) throws IOException {
-		String record_url =  buildObjectAccessUrl(id);
+		return getEuropeanaRecordResponse(id, null);
+	}
+	
+	
+	public String getEuropeanaRecordResponse(String id, String profile) throws IOException {
+		String record_url =  buildObjectAccessUrl(id, profile);
 		this.jsonResult = getJSONResult(record_url);
 		return this.jsonResult;
 	}
 
-	protected String buildObjectAccessUrl(String id) {
+	protected String buildObjectAccessUrl(String id, String profile) {
+		StringBuilder builder = new StringBuilder();
+		builder.append(ClientConfiguration.getInstance().getRecordUri());
+		builder.append(id).append(".json");
+		builder.append(buildApiKeyParam());
+		if(profile != null)
+			builder.append("&profile=").append(profile);
 		
-		return ClientConfiguration.getInstance().getRecordUri() + id + ".json" + buildApiKeyParam();
+		return builder.toString();
 	}
 	
 	protected String buildApiKeyParam() {
