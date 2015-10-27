@@ -29,12 +29,15 @@ public class MetadataAccessor {
 			.getLog(ThumbnailsAccessor.class);
 	protected HttpConnector http = new HttpConnector();
 	protected EuropeanaApi2Client europeanaClient;
-	boolean skipExistingFiles = true;
-	int metadataItems = 0;
-	int savedFiles = 0;
-	int skippedItems = 0;
-	boolean storeItemsAsJson = false;
-	int errorHandlingPolicy = ERROR_POLICY_RETHROW;
+	private boolean skipExistingFiles = true;
+	private int metadataItems = 0;
+	private int savedFiles = 0;
+	private int savedBlockFiles = 0;
+	private int skippedItems = 0;
+	private boolean storeItemsAsJson = false;
+	private boolean storeBlockwiseAsJson = false;
+	private int errorHandlingPolicy = ERROR_POLICY_RETHROW;
+	private String metadataFolder = null;
 	
 	public static final int DEFAULT_BLOCKSIZE = 100;
 	protected int blockSize = DEFAULT_BLOCKSIZE;
@@ -182,10 +185,13 @@ public class MetadataAccessor {
 		
 		try {
 			EuropeanaApi2Results searchResults = europeanaClient.searchApi2(getQuery(), limit, start);
- 			if(totalResults < 0)
+			
+			if(totalResults < 0)
 				totalResults = searchResults.getTotalResults();
 			//else .. we could use defensive programming and expect the same number of total results after each query
-				
+			if(isStoreBlockwiseAsJson() && getQuery().getCollectionName() != null)
+				storeResultsBlockInJsnFile(searchResults, start, getQuery().getCollectionName());
+			
  			for (EuropeanaApi2Item item : searchResults.getAllItems()) {
 				if(isStoreItemsAsJson())
 					storeItemsInJsonFile(item);
@@ -207,6 +213,28 @@ public class MetadataAccessor {
 		} catch (IOException e) {
 			throw new TechnicalRuntimeException("Cannot fetch search results!", e);
 		} 
+	}
+
+	protected void storeResultsBlockInJsnFile(EuropeanaApi2Results searchResults,
+			int start, String collectionName) {
+		
+		//
+		String collectionNumber = collectionName.split("_", 2)[0];
+			
+		String metadataFolder = getMetadataFolder();
+		String filePath = metadataFolder + collectionNumber + "/offset_"+ start + ".json";
+		File jsonFile = new File(filePath);
+		if(jsonFile.exists() && skipExistingFiles)
+			log.trace("Skip existing file: " + jsonFile.getAbsolutePath());
+		else{
+			try {
+				FileUtils.writeStringToFile(jsonFile, searchResults.toJSON(), "UTF-8");
+				savedBlockFiles++;
+			} catch (IOException e) {
+				handleException(e);
+			}
+		}		
+		
 	}
 
 	int addContentFieldToMap(EuropeanaApi2Item item, int edmField,
@@ -242,10 +270,12 @@ public class MetadataAccessor {
 	}
 
 	String getMetadataFolder() {
-//		String datasetFolder = ((ThumbnailAccessConfiguration)ClientConfiguration.getInstance()).getDatasetsFolder();
-//		String metadataFolder = datasetFolder + "/eusounds/metadata";
-//		return metadataFolder;
-		return "s:\\Projects\\EU EU Sounds\\MIR\\metadata";
+		if(metadataFolder == null){
+			String datasetFolder = ((ThumbnailAccessConfiguration)ClientConfiguration.getInstance()).getDatasetsFolder();
+			metadataFolder = datasetFolder + "/collections/metadata/";
+		}
+		return metadataFolder;
+//		return "s:\\Projects\\EU EU Sounds\\MIR\\metadata";
 	}
 
 	protected String getFieldContent(CommonMetadata item,
@@ -317,7 +347,7 @@ public class MetadataAccessor {
 	 * @param imageFolder
 	 *            : folder where images are to be saved.
 	 * @param id
-	 *            : id of spcefic image file.
+	 *            : id of specific image file.
 	 * @return FileOutputStream object prepared to store images.
 	 * @throws FileNotFoundException
 	 */
@@ -330,6 +360,22 @@ public class MetadataAccessor {
 
 	protected int getSavedFiles() {
 		return savedFiles;
+	}
+
+	protected boolean isStoreBlockwiseAsJson() {
+		return storeBlockwiseAsJson;
+	}
+
+	protected void setStoreBlockwiseAsJson(boolean storeBlockwiseAsJson) {
+		this.storeBlockwiseAsJson = storeBlockwiseAsJson;
+	}
+
+	protected int getSavedBlockFiles() {
+		return savedBlockFiles;
+	}
+
+	protected void setMetadataFolder(String metadataFolder) {
+		this.metadataFolder = metadataFolder;
 	}
 
 }

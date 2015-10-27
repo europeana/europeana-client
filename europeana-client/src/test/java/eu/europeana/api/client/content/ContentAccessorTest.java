@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import eu.europeana.api.client.dataset.DatasetDescriptor;
@@ -14,6 +15,13 @@ import eu.europeana.api.client.model.search.CommonMetadata;
 import eu.europeana.api.client.search.query.Api2QueryBuilder;
 import eu.europeana.api.client.search.query.Api2QueryInterface;
 
+/**
+ * this class is computing intensive it must be run manually when needed 
+ * 
+ * @author Sergiu Gordea 
+ *
+ */
+@Ignore
 public class ContentAccessorTest extends EuClientDatasetUtil {
 
 	@Test

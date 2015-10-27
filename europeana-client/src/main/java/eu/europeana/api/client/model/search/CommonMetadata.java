@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 
 public abstract class CommonMetadata {
 
+	public static final int EDM_FIELD_IGNORE = -1;
 	public static final int EDM_FIELD_PREVIEW = 1;
 	public static final int EDM_FIELD_IS_SHOWN_BY = 2;
 	public static final int EDM_FIELD_LARGEST_THUMBNAIL = 101;

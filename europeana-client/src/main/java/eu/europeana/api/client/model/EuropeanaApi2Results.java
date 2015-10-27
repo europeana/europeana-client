@@ -85,16 +85,14 @@ public class EuropeanaApi2Results extends AbstractListResponse<EuropeanaApi2Item
     }
 
     /**
-     * This doesn't seems to be used. I also doesn't seem to be needed 
+     * This doesn't seems to be used.  
      * @return
      */
-    @Deprecated
     public String toJSON() {
         Gson gson = new Gson();
         return gson.toJson(this);
     }
 
-    @Deprecated
     public void toJSON(Writer out) throws IOException {
         Gson gson = new Gson();
         JsonWriter out2 = new JsonWriter(out);

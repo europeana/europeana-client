@@ -3,12 +3,20 @@ package eu.europeana.api.client.metadata;
 import java.io.IOException;
 import java.util.Map;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import eu.europeana.api.client.dataset.EuClientDatasetUtil;
 import eu.europeana.api.client.search.query.Api2QueryBuilder;
 import eu.europeana.api.client.search.query.Api2QueryInterface;
 
+/**
+ * this class is computing intensive it must be run manually when needed 
+ * 
+ * @author Sergiu Gordea 
+ *
+ */
+@Ignore
 public class RichSearchProfileAccessorTest extends EuClientDatasetUtil {
 
 	@Test

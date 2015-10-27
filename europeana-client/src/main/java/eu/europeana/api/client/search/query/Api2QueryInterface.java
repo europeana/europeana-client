@@ -29,6 +29,10 @@ public interface Api2QueryInterface extends EuropeanaQueryInterface {
 	 */
 	public List<String> getQueryRefinements();
 
+	public abstract String getCollectionName();
+	
+	
+
 	
 
 }

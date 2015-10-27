@@ -118,6 +118,7 @@ public class Api2Query extends EuropeanaQuery implements Api2QueryInterface {
 			addSearchField(buf, EuropeanaFields.EUROPEANA_COLLECTION_NAME, collectionName);
 	}
 	
+	@Override
 	public String getCollectionName() {
 		return collectionName;
 	}
