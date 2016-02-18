@@ -87,6 +87,26 @@ public class EuropeanaComplexQuery implements EuropeanaQueryInterface {
         //System.err.println(url);
         return url.toString();
     }
+    
+    public String getQueryUrl(EuropeanaConnection connection, String cursor, int rows) throws UnsupportedEncodingException {
+        String seachTerms = this.searchTerms.toString();
+        StringBuilder url = new StringBuilder();
+        url.append(connection.getEuropeanaUri());
+        url.append(ClientConfiguration.getInstance().getSearchUrn());
+        url.append("?query=").append(URLEncoder.encode(seachTerms, "UTF-8"));
+	    url.append("&rows=").append(rows);
+        if (this.type!=null) {
+            url.append("&qf=TYPE:").append(this.type);
+        }
+	    if (cursor == null || cursor.isEmpty())
+	    	cursor = "*";
+	    url.append("&cursorMark=").append(cursor);
+	    url.append("&sort=id asc");
+        url.append("&wskey=").append(connection.getApiKey());
+        //System.err.println(url);
+        return url.toString();
+    }
+    
 
 	@Override
 	public void setWhatTerms(String what) {

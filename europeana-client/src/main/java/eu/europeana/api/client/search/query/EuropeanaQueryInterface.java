@@ -55,6 +55,19 @@ public interface EuropeanaQueryInterface {
      */
     public String getQueryUrl(EuropeanaConnection connection, long limit, long offset) throws UnsupportedEncodingException;
     
+    
+    /**
+     * Returns the full Europeana query url employing the cursor
+     * 
+     * @param connection
+     * @param cursor
+     * @param rows
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    public String getQueryUrl(EuropeanaConnection connection, String cursor, int rows) throws UnsupportedEncodingException;
+    
+    
     /**
      * Retrieves the used query type.
      * 

@@ -9,12 +9,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.naming.OperationNotSupportedException;
 
 import eu.europeana.api.client.dataset.DatasetDescriptor;
 import eu.europeana.api.client.dataset.EuClientDatasetUtil;
+import eu.europeana.api.client.exception.EuropeanaApiProblem;
 import eu.europeana.api.client.exception.TechnicalRuntimeException;
 import eu.europeana.api.client.search.query.Api2QueryBuilder;
 import eu.europeana.api.client.search.query.Api2QueryInterface;
@@ -93,7 +93,7 @@ public class ThumbnailAccessorUtils extends EuClientDatasetUtil {
 	// }
 
 	public int buildImageSet(DatasetDescriptor dataset, Api2QueryInterface query)
-			throws IOException {
+			throws IOException, EuropeanaApiProblem {
 
 		return buildImageSet(dataset, query, 0, -1,
 				ThumbnailsAccessor.ERROR_POLICY_RETHROW);
@@ -102,7 +102,7 @@ public class ThumbnailAccessorUtils extends EuClientDatasetUtil {
 
 	protected int buildImageSet(DatasetDescriptor dataset,
 			Api2QueryInterface query, int start, int limit,
-			int errorHandlingPolicy) throws IOException {
+			int errorHandlingPolicy) throws IOException, EuropeanaApiProblem {
 
 		// Api2QueryInterface query = getQueryBuilder().buildQuery(dataset,
 		// generalTerms, what,
@@ -185,7 +185,7 @@ public class ThumbnailAccessorUtils extends EuClientDatasetUtil {
 	protected int createSubset(String subsetName, String collectionName,
 			String portalUrl, int start, int expectedResults)
 			throws MalformedURLException, UnsupportedEncodingException,
-			IOException {
+			IOException, EuropeanaApiProblem {
 
 		DatasetDescriptor dataset = new DatasetDescriptor(subsetName,
 				collectionName);

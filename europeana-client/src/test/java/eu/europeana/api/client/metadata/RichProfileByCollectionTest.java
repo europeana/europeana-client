@@ -9,6 +9,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import eu.europeana.api.client.dataset.EuClientDatasetUtil;
+import eu.europeana.api.client.exception.EuropeanaApiProblem;
 import eu.europeana.api.client.model.search.CommonMetadata;
 import eu.europeana.api.client.search.query.Api2Query;
 import eu.europeana.api.client.search.query.Api2QueryInterface;
@@ -23,7 +24,7 @@ import eu.europeana.api.client.search.query.Api2QueryInterface;
 public class RichProfileByCollectionTest extends EuClientDatasetUtil {
 
 	@Test
-	public void saveMedataForCollections() throws IOException{
+	public void saveMedataForCollections() throws IOException, EuropeanaApiProblem {
 
 		File collectionsFile = new File("/tmp/europeana/collections/europeana_collections.csv");
 		List<String> collections = FileUtils.readLines(collectionsFile);
@@ -36,7 +37,8 @@ public class RichProfileByCollectionTest extends EuClientDatasetUtil {
 		}
 	}
 	
-	public void saveMinimalResponseForCollection(String collectionId) throws IOException{
+	public void saveMinimalResponseForCollection(String collectionId) 
+			throws IOException, EuropeanaApiProblem {
 		
 		Api2QueryInterface apiQuery = new Api2Query(collectionId + "_*");
 		apiQuery.setProfile("rich");
