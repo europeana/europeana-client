@@ -371,42 +371,16 @@ public class MetadataAccessor {
 	
 	
 	private Map<String, String> getContentMapBasicPagination(int edmField, int start, int limit,
-			int errorHandlingPolicy) {
+			int errorHandlingPolicy) throws IOException, EuropeanaApiProblem {
 		this.errorHandlingPolicy = errorHandlingPolicy;
 		//if no limit set, search Integer.MAX_VALUE
 		int lastItemPosition;
 		
-		if(limit < 0)
-			limit = Integer.MAX_VALUE / 2;
-		
-		lastItemPosition = start + limit -1;
-		
-		int blockStartPosition = start;
-		
-		//first position is 1 in the search API
-		if(start <= 0){
-			blockStartPosition = 1;
-			lastItemPosition++;
-		}
-		
-		//if one block
-			if(limit <= getBlockSize())
-				//TODO: move it o while to simplify code
-				fetchBlock(edmField, blockStartPosition, limit); 
-			else{
-				int blockLimit;
-				//iteratively fetch results
-				while(totalResults < 0 || blockStartPosition <= Math.min(totalResults, lastItemPosition)){ 
-					blockLimit = Math.min(getBlockSize(), (lastItemPosition - blockStartPosition +1));
-					
-					fetchBlock(edmField, blockStartPosition,
-							blockLimit);
-					//move to next block
-					blockStartPosition += getBlockSize();
-				} 
-			}
-			
-		return results;
+		EuropeanaApi2Results searchResults = europeanaClient.searchApi2(getQuery(), 0, start);
+		if(searchResults.getTotalResults() <= 1000)
+			return getContentMapBasicPagination(edmField, start, limit, errorHandlingPolicy);
+		else
+			return getContetnMapCursorPagination(edmField, start, limit, errorHandlingPolicy);		
 	}
 
 	/**
