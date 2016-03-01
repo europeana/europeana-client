@@ -1,5 +1,6 @@
 package eu.europeana.api.client.thumbnails;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -60,7 +61,8 @@ public class ThumbnailsForCollectionAccessor extends ThumbnailsAccessor{
 	 * @return
 	 * @throws EuropeanaApiProblem 
 	 */
-	public Map<String, String> getThumbnailsForCollection(int start, int limit, int errorHandlingPolicy) throws TechnicalRuntimeException{
+	public Map<String, String> getThumbnailsForCollection(int start, int limit, int errorHandlingPolicy) 
+			throws TechnicalRuntimeException, IOException, EuropeanaApiProblem {
 		return getContentMap(CommonMetadata.EDM_FIELD_LARGEST_THUMBNAIL, start, limit, errorHandlingPolicy);
 	}
 

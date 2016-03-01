@@ -7,6 +7,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import eu.europeana.api.client.dataset.EuClientDatasetUtil;
+import eu.europeana.api.client.exception.EuropeanaApiProblem;
 import eu.europeana.api.client.search.query.Api2QueryBuilder;
 import eu.europeana.api.client.search.query.Api2QueryInterface;
 
@@ -20,7 +21,7 @@ import eu.europeana.api.client.search.query.Api2QueryInterface;
 public class RichSearchProfileAccessorTest extends EuClientDatasetUtil {
 
 	@Test
-	public void saveSoundContentMap() throws IOException{
+	public void saveSoundContentMap() throws IOException, EuropeanaApiProblem {
 		Api2QueryBuilder queryBuilder = new Api2QueryBuilder();
 		String portalUrl = "http://www.europeana.eu/portal/search.html?query=provider_aggregation_edm_isShownBy%3Ahttp*&rows=24&qf=TYPE%3ASOUND&qt=false";
 		Api2QueryInterface apiQuery = queryBuilder.buildQuery(portalUrl);
