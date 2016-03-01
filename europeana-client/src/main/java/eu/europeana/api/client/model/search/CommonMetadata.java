@@ -13,6 +13,10 @@ public abstract class CommonMetadata {
 	public static final int EDM_FIELD_LARGEST_THUMBNAIL = 101;
 	public static final int EDM_OBJECT_URL = 1001;
 	
+	public static final int LIMIT_ALL = -1;
+	public static final int START_BEGINING = -1;
+	
+	
 	public final String SIZE_IS_LARGE = "size=LARGE";
 
 	private String type;

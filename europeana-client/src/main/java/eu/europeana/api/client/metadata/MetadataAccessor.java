@@ -230,6 +230,8 @@ public class MetadataAccessor {
 			try {
 				FileUtils.writeStringToFile(jsonFile, searchResults.toJSON(), "UTF-8");
 				savedBlockFiles++;
+				log.debug("Stored chunk : " + start + " for collection: " + collectionNumber);
+				log.trace("New File Stored locally: " + jsonFile.getAbsolutePath());
 			} catch (IOException e) {
 				handleException(e);
 			}
@@ -300,45 +302,22 @@ public class MetadataAccessor {
 	 * @param start - first position in results. if smaller than 0, this parameter will default to 1
 	 * @param limit - the number or returned results. If <code>start + limit > totalResults</code>, the (last) available result starting with the start position will be returned
 	 * @return
+	 * @throws IOException 
 	 * @throws EuropeanaApiProblem 
 	 */
-	public Map<String, String> getContentMap(int edmField, int start, int limit, int errorHandlingPolicy) throws TechnicalRuntimeException{
+	public Map<String, String> getContentMap(int edmField, int start, int limit, int errorHandlingPolicy) throws TechnicalRuntimeException, IOException, EuropeanaApiProblem{
 		
-		this.errorHandlingPolicy = errorHandlingPolicy;
-		//if no limit set, search Integer.MAX_VALUE
-		int lastItemPosition;
+//		boolean useCursor = false;
+		//first read the number of total results
+//		if(start + limit <= 1000)
+//			return getContentMapBasicPagination(edmField, start, limit, errorHandlingPolicy);
 		
-		if(limit < 0)
-			limit = Integer.MAX_VALUE / 2;
 		
-		lastItemPosition = start + limit -1;
-		
-		int blockStartPosition = start;
-		
-		//first position is 1 in the search API
-		if(start <= 0){
-			blockStartPosition = 1;
-			lastItemPosition++;
-		}
-		
-		//if one block
-			if(limit <= getBlockSize())
-				//TODO: move it o while to simplify code
-				fetchBlock(edmField, blockStartPosition, limit); 
-			else{
-				int blockLimit;
-				//iteratively fetch results
-				while(totalResults < 0 || blockStartPosition <= Math.min(totalResults, lastItemPosition)){ 
-					blockLimit = Math.min(getBlockSize(), (lastItemPosition - blockStartPosition +1));
-					
-					fetchBlock(edmField, blockStartPosition,
-							blockLimit);
-					//move to next block
-					blockStartPosition += getBlockSize();
-				} 
-			}
-			
-		return results;
+		EuropeanaApi2Results searchResults = europeanaClient.searchApi2(getQuery(), 0, start);
+		if(searchResults.getTotalResults() <= 1000)
+			return getContentMapBasicPagination(edmField, start, limit, errorHandlingPolicy);
+		else
+			return getContetnMapCursorPagination(edmField, start, limit, errorHandlingPolicy);		
 	}
 
 	/**
