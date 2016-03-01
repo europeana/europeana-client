@@ -230,6 +230,8 @@ public class MetadataAccessor {
 			try {
 				FileUtils.writeStringToFile(jsonFile, searchResults.toJSON(), "UTF-8");
 				savedBlockFiles++;
+				log.debug("Stored chunk : " + start + " for collection: " + collectionNumber);
+				log.trace("New File Stored locally: " + jsonFile.getAbsolutePath());
 			} catch (IOException e) {
 				handleException(e);
 			}
@@ -309,7 +311,6 @@ public class MetadataAccessor {
 		//first read the number of total results
 //		if(start + limit <= 1000)
 //			return getContentMapBasicPagination(edmField, start, limit, errorHandlingPolicy);
-		
 		
 		EuropeanaApi2Results searchResults = europeanaClient.searchApi2(getQuery(), 0, start);
 		if(searchResults.getTotalResults() <= 1000)

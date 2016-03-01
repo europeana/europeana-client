@@ -15,9 +15,9 @@ import eu.europeana.api.client.search.query.Api2Query;
 import eu.europeana.api.client.search.query.Api2QueryInterface;
 
 /**
- * this class is computing intensive it must be run manually when needed 
+ * this class is computing intensive it must be run manually when needed
  * 
- * @author Sergiu Gordea 
+ * @author Sergiu Gordea
  *
  */
 //@Ignore
@@ -30,13 +30,12 @@ public class RichProfileByCollectionTest extends EuClientDatasetUtil {
 		List<String> collections = FileUtils.readLines(collectionsFile);
 		String collectionId = null;
 		for (String collection : collections) {
-			if(!collection.startsWith("#")) {
+			if (!collection.startsWith("#")) {
 				collectionId = collection.split(";", 2)[0];
 				saveMinimalResponseForCollection(collectionId);
 			}
 		}
 	}
-	
 	public void saveMinimalResponseForCollection(String collectionId) 
 			throws IOException, EuropeanaApiProblem {
 		
@@ -45,16 +44,9 @@ public class RichProfileByCollectionTest extends EuClientDatasetUtil {
 		MetadataAccessor ma = new MetadataAccessor(apiQuery, null);
 		ma.setMetadataFolder("/tmp/europeana/collections/metadata/");
 		ma.setStoreBlockwiseAsJson(true);
-		//Map<String, String> contentMap =
-		ma.getContentMap(CommonMetadata.EDM_FIELD_IGNORE, -1, -1, MetadataAccessor.ERROR_POLICY_CONTINUE);
-		
-//		for (Map.Entry<String, String> pair : contentMap.entrySet()) {
-//			System.out.println(pair.getKey() + ";" + pair.getValue());
-//		}
-		
-//		File toFile = new File("/tmp/eusounds", "europeana_allsound_metadata_test.csv");
-//		writeContentMapToFile(contentMap, toFile);
-//		DatasetDescriptor descriptor = new DatasetDescriptor("allsound", "europeana");
-//		writeMapToCsvFile(descriptor, contentMap, toFile, POLICY_OVERWRITE_FILE);
+		// Map<String, String> contentMap =
+		ma.getContentMap(CommonMetadata.EDM_FIELD_IGNORE, CommonMetadata.START_BEGINING, CommonMetadata.LIMIT_ALL,
+				MetadataAccessor.ERROR_POLICY_CONTINUE);
+
 	}
 }
