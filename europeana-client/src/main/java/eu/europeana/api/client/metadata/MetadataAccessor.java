@@ -314,9 +314,20 @@ public class MetadataAccessor {
 		
 		EuropeanaApi2Results searchResults = europeanaClient.searchApi2(getQuery(), 0, start);
 		if(searchResults.getTotalResults() <= 1000)
-			return getContentMapBasicPagination(edmField, start, limit, errorHandlingPolicy);
+			return getContentMapBasicPagination(
+					edmField
+					, start
+					, limit
+					, errorHandlingPolicy
+					);
 		else
-			return getContetnMapCursorPagination(edmField, start, limit, errorHandlingPolicy);		
+			return getContentMapCursorPagination(
+					edmField
+					, start
+					, limit
+					, (int) searchResults.getTotalResults()
+					, errorHandlingPolicy
+					);		
 	}
 
 	
@@ -324,44 +335,67 @@ public class MetadataAccessor {
 	 * @param edmField
 	 * @param start
 	 * @param limit
+	 * @param totalResults
 	 * @param errorHandlingPolicy
 	 * @return
 	 * @throws IOException
 	 * @throws EuropeanaApiProblem
 	 */
-	private Map<String, String> getContetnMapCursorPagination(int edmField, int start, int limit,
-			int errorHandlingPolicy) throws IOException, EuropeanaApiProblem {
+	private Map<String, String> getContentMapCursorPagination(
+			int edmField, int start, int limit, int totalResults, int errorHandlingPolicy) 
+					throws IOException, EuropeanaApiProblem {
+		
 		this.errorHandlingPolicy = errorHandlingPolicy;
 
 		try {
+			
 			int noContentCount = 0;
-
-			EuropeanaApi2Results searchResults = europeanaClient.searchApi2(getQuery(), "*", limit);
+			int metadataItems = 0;
 			
-			if(totalResults < 0)
-				totalResults = searchResults.getTotalResults();
-			//else .. we could use defensive programming and expect the same number of total results after each query
-			if(isStoreBlockwiseAsJson() && getQuery().getCollectionName() != null)
-				storeResultsBlockInJsnFile(searchResults, start, getQuery().getCollectionName());
-			
- 			for (EuropeanaApi2Item item : searchResults.getAllItems()) {
+			String cursor = "*";
+			EuropeanaApi2Results resultsBlock;
+			int iteration = 0;
+			int blockStart = 0;
+			do {
+				int rows = getBlockSize();
+				if (limit < metadataItems + rows) {
+					rows = Math.abs(metadataItems - limit);
+				}
+				resultsBlock = europeanaClient.searchApi2(getQuery(), cursor, rows);
+				blockStart = iteration * getBlockSize();
+						
+				if(isStoreBlockwiseAsJson() && getQuery().getCollectionName() != null)
+					storeResultsBlockInJsnFile(resultsBlock, blockStart , getQuery().getCollectionName());
+				
+				
+				for (EuropeanaApi2Item item : resultsBlock.getAllItems()) {
+					if(isStoreItemsAsJson())
+						storeItemsInJsonFile(item);
+					
+					if(isReturnContentMap(edmField))
+		 				noContentCount = addContentFieldToMap(item, edmField,
+								noContentCount);
+					
+					metadataItems++;
+				}
+				
+				log.info("Metadata Items fetched : " + metadataItems);
 				if(isStoreItemsAsJson())
-					storeItemsInJsonFile(item);
+					log.trace("New saved metadata files (json): " + savedFiles);	
+				if(edmField > 0)
+					log.trace("Items with empty field value: " + noContentCount);	
 				
-				if(isReturnContentMap(edmField))
-	 				noContentCount = addContentFieldToMap(item, edmField,
-							noContentCount);
 				
-				metadataItems++;
-			}
+				cursor = resultsBlock.getNextCursor();
+				iteration++;						
+			} while(cursor!= null && limit > metadataItems);
 			
-			log.info("Metadata Items fetched : " + metadataItems);
-			if(isStoreItemsAsJson())
-				log.trace("New saved metadata files (json): " + savedFiles);	
-			if(edmField > 0)
-				log.trace("Items with empty field value: " + noContentCount);	
+//			EuropeanaApi2Results searchResults = europeanaClient.searchApi2(getQuery(), "*", limit);
+//			
+//			if(totalResults < 0)
+//				totalResults = searchResults.getTotalResults();
+			//else .. we could use defensive programming and expect the same number of total results after each query
 			
-		
 		} catch (IOException e) {
 			throw new TechnicalRuntimeException("Cannot fetch search results!", e);
 		} 
@@ -372,15 +406,42 @@ public class MetadataAccessor {
 	
 	private Map<String, String> getContentMapBasicPagination(int edmField, int start, int limit,
 			int errorHandlingPolicy) throws IOException, EuropeanaApiProblem {
+		
 		this.errorHandlingPolicy = errorHandlingPolicy;
 		//if no limit set, search Integer.MAX_VALUE
 		int lastItemPosition;
 		
-		EuropeanaApi2Results searchResults = europeanaClient.searchApi2(getQuery(), 0, start);
-		if(searchResults.getTotalResults() <= 1000)
-			return getContentMapBasicPagination(edmField, start, limit, errorHandlingPolicy);
-		else
-			return getContetnMapCursorPagination(edmField, start, limit, errorHandlingPolicy);		
+		if(limit < 0)
+			limit = Integer.MAX_VALUE / 2;
+		
+		lastItemPosition = start + limit -1;
+		
+		int blockStartPosition = start;
+		
+		//first position is 1 in the search API
+		if(start <= 0){
+			blockStartPosition = 1;
+			lastItemPosition++;
+		}
+		
+		//if one block
+			if(limit <= getBlockSize())
+				//TODO: move it o while to simplify code
+				fetchBlock(edmField, blockStartPosition, limit); 
+			else{
+				int blockLimit;
+				//iteratively fetch results
+				while(totalResults < 0 || blockStartPosition <= Math.min(totalResults, lastItemPosition)){ 
+					blockLimit = Math.min(getBlockSize(), (lastItemPosition - blockStartPosition +1));
+					
+					fetchBlock(edmField, blockStartPosition,
+							blockLimit);
+					//move to next block
+					blockStartPosition += getBlockSize();
+				} 
+			}
+			
+		return results;		
 	}
 
 	/**

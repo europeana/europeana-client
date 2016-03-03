@@ -280,21 +280,12 @@ public class EuropeanaQuery implements EuropeanaQueryInterface, EuropeanaOperato
         return getQueryUrl(connection, 12, offset);
     }
     
+    
     public String getQueryUrl(EuropeanaConnection connection, String cursor, int rows) throws UnsupportedEncodingException {
-	    connection.setEuropeanaUri("http://api.europeana.eu/api/opensearch.json");
-	    StringBuilder url = new StringBuilder();
-	    url.append(connection).append("?searchTerms=");
-	    String searchTerms = getSearchTerms();
-	    url.append(searchTerms);
-	    url.append("&rows=").append(rows);
-	    if (cursor == null || cursor.isEmpty())
-	    	cursor = "*";
-	    url.append("&cursorMark=").append(cursor);
-	    url.append("&sort=id asc");
-	    url.append("&wskey=").append(connection.getApiKey());
-	    return url.toString();
+	   throw new RuntimeException("Operation not supported");
 	}
 
+    
     public String getQueryUrl(EuropeanaConnection connection, long limit, long offset) throws UnsupportedEncodingException {
         connection.setEuropeanaUri("http://api.europeana.eu/api/opensearch.json");
         StringBuilder url = new StringBuilder();
@@ -306,7 +297,7 @@ public class EuropeanaQuery implements EuropeanaQueryInterface, EuropeanaOperato
         url.append("&wskey=").append(connection.getApiKey());
         return url.toString();
     }
-
+       
     protected void addSearchField(StringBuffer buf, String field, String value) {
         this.addSearchField(buf, field, value, false, false, true);
     }

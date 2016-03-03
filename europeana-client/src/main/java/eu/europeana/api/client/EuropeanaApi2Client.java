@@ -1,6 +1,7 @@
 package eu.europeana.api.client;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -105,6 +106,7 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
 
 		// String cadenaBusq = search.getSearchTerms();
 		String url = query.getQueryUrl(this, cursor, rows);
+//    	url = URLEncoder.encode(url, "UTF-8");
 		return getSearchResults(url);
 	}
 

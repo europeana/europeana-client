@@ -57,11 +57,20 @@ public class Api2Query extends EuropeanaQuery implements Api2QueryInterface {
 	public String getQueryUrl(EuropeanaConnection connection, long limit,
 			long offset) throws UnsupportedEncodingException {
 				
-		StringBuilder url = new StringBuilder();
-		url.append(connection.getEuropeanaUri());
-        url.append(ClientConfiguration.getInstance().getSearchUrn());
-        url.append("?");
+		StringBuilder url = buildBaseSearchUrl(connection);
+		appendSearchQueryParams(url);
 		
+		if (limit > 0)
+			url.append("&rows=").append(limit);
+		if (offset > 0)
+			url.append("&start=").append(offset);
+		if(getProfile()!= null)
+			url.append("&profile=").append(getProfile());
+			
+		return url.toString();
+	}
+
+	private void appendSearchQueryParams(StringBuilder url) throws UnsupportedEncodingException {
 		if(getQueryParams() != null){
 			url.append(queryParams);
 		}else{
@@ -69,18 +78,33 @@ public class Api2Query extends EuropeanaQuery implements Api2QueryInterface {
 			url.append("query=").append(searchTerms);
 			appendQueryRefinements(url);			
 		}
+	}
+
+	private StringBuilder buildBaseSearchUrl(EuropeanaConnection connection) {
+		StringBuilder url = new StringBuilder();
+		url.append(connection.getEuropeanaUri());
+        url.append(ClientConfiguration.getInstance().getSearchUrn());
+        url.append("?wskey=").append(connection.getApiKey()).append("&");
 		
-		if (limit > 0)
-			url.append("&rows=").append(limit);
-		if (offset > 0)
-			url.append("&start=").append(offset);
-		url.append("&wskey=").append(connection.getApiKey());
-		if(getProfile()!= null)
-			url.append("&profile=").append(getProfile());
-			
-		return url.toString();
+		return url;
 	}
 	
+	
+	@Override
+	public String getQueryUrl(EuropeanaConnection connection, String cursor, int rows) throws UnsupportedEncodingException {
+		 
+		 StringBuilder url = buildBaseSearchUrl(connection);
+		 appendSearchQueryParams(url);
+		
+		 url.append("&cursor=").append(cursor);
+		 if(rows >= 0)
+			 url.append("&rows=").append(rows);
+		 
+		 //url.append("&sort=id asc");
+				
+		return url.toString();
+	}
+	 
 	void appendQueryRefinements(StringBuilder url) throws UnsupportedEncodingException {
 		
 		if(getQueryRefinements() == null)
