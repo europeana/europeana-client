@@ -28,6 +28,7 @@ import eu.europeana.api.client.search.query.EuropeanaComplexQuery;
 public class EuropeanaApi2Item extends CommonMetadata{
 
     protected List<String> title;
+	protected List<String> dcDescription;
     protected String link;
     protected String guid;
     
@@ -228,6 +229,14 @@ public class EuropeanaApi2Item extends CommonMetadata{
     public void setTitle(List<String> title) {
         this.title = title;
     }
+
+    public List<String> getDcDescription() {
+		return dcDescription;
+	}
+
+	public void setDcDescription(List<String> dcDescription) {
+		this.dcDescription = dcDescription;
+	}
 
     public String getLink() {
         return link;
