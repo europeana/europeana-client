@@ -64,8 +64,6 @@ public class Api2Query extends EuropeanaQuery implements Api2QueryInterface {
 			url.append("&rows=").append(limit);
 		if (offset > 0)
 			url.append("&start=").append(offset);
-		if(getProfile()!= null)
-			url.append("&profile=").append(getProfile());
 			
 		return url.toString();
 	}
@@ -84,8 +82,12 @@ public class Api2Query extends EuropeanaQuery implements Api2QueryInterface {
 		StringBuilder url = new StringBuilder();
 		url.append(connection.getEuropeanaUri());
         url.append(ClientConfiguration.getInstance().getSearchUrn());
-        url.append("?wskey=").append(connection.getApiKey()).append("&");
+        url.append("?wskey=").append(connection.getApiKey());
 		
+        if(getProfile()!= null)
+			url.append("&profile=").append(getProfile());
+		
+        url.append("&");
 		return url;
 	}
 	
