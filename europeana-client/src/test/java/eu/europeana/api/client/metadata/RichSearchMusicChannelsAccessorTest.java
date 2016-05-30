@@ -4,10 +4,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import com.google.gson.JsonElement;
@@ -30,7 +28,7 @@ import eu.europeana.api.client.search.query.Api2QueryInterface;
 public class RichSearchMusicChannelsAccessorTest extends EuClientDatasetUtil {
 
 	String MUSIC_CHANNEL_FILTER_FILE_NAME = "/music_channel_filter";
-	String JSON_FIELD_EDM_IS_SHOWN_BY = "edmIsSnownBy";
+	String JSON_FIELD_EDM_IS_SHOWN_BY = "edmIsShownBy";
 	
 
 	@Test
@@ -43,8 +41,7 @@ public class RichSearchMusicChannelsAccessorTest extends EuClientDatasetUtil {
 			String portalUrl = "http://www.europeana.eu/portal/collections/music?q=TYPE:SOUND&" + musicChannelFilterStr
 					+ "&qf=MIME_TYPE:audio%2Fmpeg"
 					// + "&qf=MIME_TYPE:audio%2Fx-flac"
-					// + "&f[TYPE][]=SOUND"
-					// + "&qf=provider_aggregation_edm_isShownBy%3Ahttp*"
+					+ "&qf=provider_aggregation_edm_isShownBy%3Ahttp*"
 					// + "&qt=false"
 			;
 			Api2QueryInterface apiQuery = queryBuilder.buildQuery(portalUrl);
@@ -52,11 +49,12 @@ public class RichSearchMusicChannelsAccessorTest extends EuClientDatasetUtil {
 			MetadataAccessor ma = new MetadataAccessor(apiQuery, null);
 			ma.setStoreItemsAsJson(true);
 			ma.setBlockSize(30);
+			ma.setStoreBlockwiseAsJson(true);
 			// Map<String, String> contentMap = ma.getContentMap(-1, 223000, -1,
 			// MetadataAccessor.ERROR_POLICY_CONTINUE);
 			// Map<String, String> contentMap = ma.getContentMap(1, 1, 1002,
 			// MetadataAccessor.ERROR_POLICY_CONTINUE);
-			Map<String, String> contentMap = ma.getContentMap(CommonMetadata.EDM_FIELD_IS_SHOWN_BY, 1, 61732,
+			Map<String, String> contentMap = ma.getContentMap(CommonMetadata.EDM_FIELD_IS_SHOWN_BY, 1, 45000,
 					MetadataAccessor.ERROR_POLICY_CONTINUE);
 
 			for (Map.Entry<String, String> pair : contentMap.entrySet()) {
@@ -76,29 +74,42 @@ public class RichSearchMusicChannelsAccessorTest extends EuClientDatasetUtil {
 	}
 
 
-	@Test
+//	@Test
 	public void saveMusicChannelsEdmIsShownBy() throws Throwable {
 		
 		try {
 			Map<String, String> contentMap = new HashMap<String, String>();
 
-			for (Map.Entry<String, String> pair : contentMap.entrySet()) {
-				System.out.println(pair.getKey() + ";" + pair.getValue());
-			}
 			File toFile = new File(getConfiguration().getDatasetsFolder(), "europeana_music_channel_metadata_edmIsShownBy.csv");
-			Iterator<File> it = FileUtils.iterateFiles(new File(getConfiguration().getDatasetsFolder()), null, false);
-	        while(it.hasNext()){
-	            String jsonFileName = ((File) it.next()).getName();
-				System.out.println(jsonFileName);
-				contentMap.put(jsonFileName, getIsShownByValue(jsonFileName, JSON_FIELD_EDM_IS_SHOWN_BY));
-	        }
-//			writeContentMapToFile(contentMap, toFile);
+		    File[] files = new File(getConfiguration().getDatasetsFolder()).listFiles();
+		    traverseFiles(files, contentMap);
 			DatasetDescriptor descriptor = new DatasetDescriptor("music_channel", "europeana");
 			writeMapToCsvFile(descriptor, contentMap, toFile, POLICY_OVERWRITE_FILE);
 		} catch (Throwable th) {
 			th.printStackTrace();
 			throw th;
 		}
+	}
+	
+
+	/**
+	 * Traverse directories containing metadata JSON files storing required values in a map.
+	 * @param files
+	 * @param contentMap
+	 * @throws Throwable 
+	 */
+	public void traverseFiles(File[] files, Map<String, String> contentMap) throws Throwable {
+	    for (File file : files) {
+	        String fileName = file.getPath();
+			if (file.isDirectory()) {
+	            System.out.println("Directory: " + fileName);
+	            traverseFiles(file.listFiles(), contentMap); 
+	        } else {
+	            System.out.println("File: " + fileName);
+				if (!fileName.contains(".csv"))
+					contentMap.put(fileName, getIsShownByValue(fileName, JSON_FIELD_EDM_IS_SHOWN_BY));
+	        }
+	    }
 	}
 	
 	
@@ -122,7 +133,7 @@ public class RichSearchMusicChannelsAccessorTest extends EuClientDatasetUtil {
             res = jsonObject.get(fieldName).getAsString();
 		} catch (Throwable th) {
 			th.printStackTrace();
-			throw th;
+//			throw th;
 		}
 		return res;
 	}
