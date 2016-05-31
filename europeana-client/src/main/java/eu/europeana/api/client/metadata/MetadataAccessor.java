@@ -370,9 +370,9 @@ public class MetadataAccessor {
 				cursor = URLEncoder.encode(resultsBlock.getNextCursor(), "UTF-8");
 				log.trace("cursor:" + cursor);
 				iteration++;
-			} catch (IOException e) {
-				handleException(e);
-			}
+			} catch (Throwable th) {
+				handleException(th);
+			} 
 			
 		} while (cursor != null && limit > metadataItems);
 

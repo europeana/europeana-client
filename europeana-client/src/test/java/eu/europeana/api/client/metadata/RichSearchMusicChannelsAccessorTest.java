@@ -37,18 +37,24 @@ public class RichSearchMusicChannelsAccessorTest extends EuClientDatasetUtil {
 
 			Api2QueryBuilder queryBuilder = new Api2QueryBuilder();
 			String pathToFile = getClass().getResource(MUSIC_CHANNEL_FILTER_FILE_NAME).getFile();
-			String musicChannelFilterStr = URLEncoder.encode(readStringFromFile(pathToFile), "UTF-8");
-			String portalUrl = "http://www.europeana.eu/portal/collections/music?q=TYPE:SOUND&" + musicChannelFilterStr
-					+ "&qf=MIME_TYPE:audio%2Fmpeg"
+//			String musicChannelFilterStr = URLEncoder.encode(readStringFromFile(pathToFile), "UTF-8");
+			String musicChannelFilterStr = readStringFromFile(pathToFile);
+			String portalUrl = "http://www.europeana.eu/portal/collections/music?query="+
+					URLEncoder.encode("TYPE:SOUND")
+					+ "&qf="+ URLEncoder.encode(musicChannelFilterStr, "UTF-8")
+					+ "&MIME_TYPE=" + URLEncoder.encode("audio/mpeg", "UTF-8")
+					+ "&media=true"
+//					+ "&qf[MIME_TYPE][]=" + URLEncoder.encode("audio/mpeg","UTF-8")
 					// + "&qf=MIME_TYPE:audio%2Fx-flac"
-					+ "&qf=provider_aggregation_edm_isShownBy%3Ahttp*"
-					// + "&qt=false"
+//					+ "&qf=" + URLEncoder.encode("provider_aggregation_edm_isShownBy:http*", "utf-8")
+//					+ "&media=true"
+					
 			;
 			Api2QueryInterface apiQuery = queryBuilder.buildQuery(portalUrl);
 			apiQuery.setProfile("rich");
 			MetadataAccessor ma = new MetadataAccessor(apiQuery, null);
 			ma.setStoreItemsAsJson(true);
-			ma.setBlockSize(30);
+			ma.setBlockSize(100);
 			ma.setStoreBlockwiseAsJson(true);
 			// Map<String, String> contentMap = ma.getContentMap(-1, 223000, -1,
 			// MetadataAccessor.ERROR_POLICY_CONTINUE);
@@ -74,7 +80,7 @@ public class RichSearchMusicChannelsAccessorTest extends EuClientDatasetUtil {
 	}
 
 
-//	@Test
+	@Test
 	public void saveMusicChannelsEdmIsShownBy() throws Throwable {
 		
 		try {
@@ -106,8 +112,15 @@ public class RichSearchMusicChannelsAccessorTest extends EuClientDatasetUtil {
 	            traverseFiles(file.listFiles(), contentMap); 
 	        } else {
 	            System.out.println("File: " + fileName);
-				if (!fileName.contains(".csv"))
-					contentMap.put(fileName, getIsShownByValue(fileName, JSON_FIELD_EDM_IS_SHOWN_BY));
+				if (!fileName.contains(".csv")) {
+					String isShownByValue = getIsShownByValue(fileName, JSON_FIELD_EDM_IS_SHOWN_BY);
+					if (!isShownByValue.equals("")) {
+						String[] path = fileName.replace("\\", "\\\\").split("\\\\");
+						int len = path.length;
+						String id = "\\" + path[len-3] + "\\" + path[len-1];
+						contentMap.put(id, isShownByValue);
+					}
+				}
 	        }
 	    }
 	}

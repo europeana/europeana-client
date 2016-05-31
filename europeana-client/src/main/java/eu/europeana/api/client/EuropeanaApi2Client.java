@@ -134,7 +134,9 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
 		Gson gson = new GsonBuilder().create();
 		EuropeanaApi2Results res = gson.fromJson(jsonResult, EuropeanaApi2Results.class);
 
-		if (res == null || !res.getSuccess())
+		if (res == null)
+			throw new EuropeanaApiProblem("Cannot parse (empty?) json result: " + jsonResult);
+		else if(!res.getSuccess())
 			throw new EuropeanaApiProblem(res.getError(), res.getRequestNumber());
 
 		return res;
