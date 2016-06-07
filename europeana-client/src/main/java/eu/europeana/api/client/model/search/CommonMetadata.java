@@ -10,6 +10,8 @@ public abstract class CommonMetadata {
 	public static final int EDM_FIELD_IGNORE = -1;
 	public static final int EDM_FIELD_PREVIEW = 1;
 	public static final int EDM_FIELD_IS_SHOWN_BY = 2;
+	public static final int FIELD_TITLE = 3;
+	public static final int FIELD_DC_DESCRIPTION = 4;
 	public static final int EDM_FIELD_LARGEST_THUMBNAIL = 101;
 	public static final int EDM_OBJECT_URL = 1001;
 	
@@ -22,7 +24,8 @@ public abstract class CommonMetadata {
 	private String type;
 	private List<String> edmIsShownAt;
 	private List<String> edmIsShownBy;
-	
+//	private List<String> title;
+
 	public abstract String getFieldContent(int edmField);
 	public abstract String getLargestThumbnail();
 	
@@ -50,6 +53,15 @@ public abstract class CommonMetadata {
 	public void setEdmIsShownBy(List<String> edmIsShownBy) {
 		this.edmIsShownBy = edmIsShownBy;
 	}
+	
+	
+//	public List<String> getTitle() {
+//		return title;
+//	}
+//
+//	public void setTitle(List<String> title) {
+//		this.title = title;
+//	}
 	
 	  /**
      * Returns a JSON representation of this item. This JSON representation will
