@@ -31,7 +31,7 @@ public class DownloadFullObjectsTest extends
 
 		ensureParamsInit();
 		
-		File datasetFile = new File("/tmp/eusounds", "europeana_allsound.csv");
+		File datasetFile = getDatasetFile();
 		if(!datasetFile.exists())
 			fail("required dataset file doesn't exist" + datasetFile);
 		
@@ -83,6 +83,12 @@ public class DownloadFullObjectsTest extends
 		log.info("Failed downloads: " + failedCounter);
 		log.info("Skipped downloads: " + skipCounter);
 		
+	}
+
+
+	private File getDatasetFile() {
+		File datasetFile = new File("/tmp/eusounds", "europeana_allsound.csv");
+		return datasetFile;
 	}
 
 
