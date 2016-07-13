@@ -2,11 +2,14 @@ package eu.europeana.api.client.dataset;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import eu.europeana.api.client.config.ClientConfiguration;
@@ -94,7 +97,29 @@ public class EuClientDatasetUtil extends BaseDatasetUtil {
 		writer.write("\n");
 
 	}
+	
+	
+	protected void writeContentMapToFile(Map<String, String> contentMap, File file) 
+			throws IOException {
+		Properties properties = new Properties();
 
+		for (Map.Entry<String,String> entry : contentMap.entrySet()) {
+		    properties.put(entry.getKey(), entry.getValue());
+		}
+		
+		FileOutputStream fos = new FileOutputStream(file);
+
+		properties.store(fos, null);
+	}
+
+	
+	protected String readStringFromFile(String filename) throws IOException {
+		File file = new File(filename);
+		String string = FileUtils.readFileToString(file);
+		return string;
+	}
+	
+	
 	protected File getCollectionCsvFile(DatasetDescriptor dataset) {
 		String fileName = getCollectionsCvsFolder() + dataset.getImageSetName()
 				+ "_" + encode(dataset.getCollectionName()) + ".csv";

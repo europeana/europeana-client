@@ -11,6 +11,9 @@ europeana.record.urn = record
 # the user key used to access Europeana API. For more information see http://pro.europeana.eu/api
 europeana.api.key = 
 
+#datasets folder configuration
+europeana.client.datasets.folder = /europeana-client/datasets
+
 # the folder used for downloading images locally
 europeana.client.base.image.folder = ./src/test/resources/image
 

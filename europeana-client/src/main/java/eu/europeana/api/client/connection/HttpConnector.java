@@ -27,7 +27,7 @@ import org.apache.commons.logging.LogFactory;
 public class HttpConnector {
 
     private static final int CONNECTION_RETRIES = 3;
-    private static final int TIMEOUT_CONNECTION = 300000;//5 minutes
+    private static final int TIMEOUT_CONNECTION = 900000;//15 minutes
     private static final int STATUS_OK_START = 200;
     private static final int STATUS_OK_END = 299;
     private static final String ENCODING = "UTF-8";

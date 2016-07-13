@@ -1,6 +1,7 @@
 package eu.europeana.api.client;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -105,6 +106,7 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
 
 		// String cadenaBusq = search.getSearchTerms();
 		String url = query.getQueryUrl(this, cursor, rows);
+//    	url = URLEncoder.encode(url, "UTF-8");
 		return getSearchResults(url);
 	}
 
@@ -132,7 +134,9 @@ public class EuropeanaApi2Client extends EuropeanaConnection {
 		Gson gson = new GsonBuilder().create();
 		EuropeanaApi2Results res = gson.fromJson(jsonResult, EuropeanaApi2Results.class);
 
-		if (!res.getSuccess())
+		if (res == null)
+			throw new EuropeanaApiProblem("Cannot parse (empty?) json result: " + jsonResult);
+		else if(!res.getSuccess())
 			throw new EuropeanaApiProblem(res.getError(), res.getRequestNumber());
 
 		return res;

@@ -25,7 +25,13 @@ import eu.europeana.api.client.response.abstracts.AbstractListResponse;
  */
 public class EuropeanaApi2Results extends AbstractListResponse<EuropeanaApi2Item> {
 
-    public EuropeanaApi2Results() {
+	private String nextCursor;
+	
+    public void setNextCursor(String nextCursor) {
+		this.nextCursor = nextCursor;
+	}
+
+	public EuropeanaApi2Results() {
     	setItems(new ArrayList<EuropeanaApi2Item>());
     }
 
@@ -100,6 +106,12 @@ public class EuropeanaApi2Results extends AbstractListResponse<EuropeanaApi2Item
         out2.flush();
     }
 
+    
+    public String getNextCursor() {
+    	return this.nextCursor;
+    }
+    
+    
     //TODO: remove commented code
 //    public static AbstractApiResponse loadJSON(String json) {
 //        Gson gson = new Gson();

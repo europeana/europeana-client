@@ -70,12 +70,25 @@ public class Api2QueryBuilder {
 		URL portalUrl = new URL(portalSearchUrl); 
 		Api2Query apiQuery = new Api2Query();
 		
+		
 		String queryParams = portalUrl.getQuery();
 		queryParams = removeStartRows(queryParams);
+		queryParams = updateSearchQueryParameterName(queryParams);
 		
 		apiQuery.setQueryParams(queryParams);
 		
 		return apiQuery;
+	}
+
+
+	private String updateSearchQueryParameterName(String queryParams) {
+		if(queryParams.indexOf("?q=") > -1)
+			return queryParams.replaceFirst("?q=", "?query=");
+		else if(queryParams.indexOf("&q=") > -1)
+			return queryParams.replaceFirst("&q=", "&query=");
+		else if(queryParams.indexOf("q=") > -1)
+			return queryParams.replaceFirst("q=", "query=");
+		return queryParams;
 	}
 	
 	private String removeStartRows(String queryParams) {

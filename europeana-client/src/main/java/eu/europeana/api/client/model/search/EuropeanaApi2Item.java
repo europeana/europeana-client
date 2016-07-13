@@ -28,6 +28,7 @@ import eu.europeana.api.client.search.query.EuropeanaComplexQuery;
 public class EuropeanaApi2Item extends CommonMetadata{
 
     protected List<String> title;
+	protected List<String> dcDescription;
     protected String link;
     protected String guid;
     
@@ -229,6 +230,14 @@ public class EuropeanaApi2Item extends CommonMetadata{
         this.title = title;
     }
 
+    public List<String> getDcDescription() {
+		return dcDescription;
+	}
+
+	public void setDcDescription(List<String> dcDescription) {
+		this.dcDescription = dcDescription;
+	}
+
     public String getLink() {
         return link;
     }
@@ -387,7 +396,21 @@ public class EuropeanaApi2Item extends CommonMetadata{
 
 		return largestThumbnail;
 	}
+	
+	
+	private String listToString(List<String> list) {
+		String res = "";
+		StringBuilder sb = new StringBuilder();
+		for (String s : list)
+		{
+		    sb.append(s);
+		    sb.append(";");
+		}		
+		res = sb.toString();
+		return res;
+	}
 
+	
 	@Override
 	public String getFieldContent(int edmField) {
 		switch (edmField) {
@@ -400,10 +423,20 @@ public class EuropeanaApi2Item extends CommonMetadata{
 				return getLargestThumbnail();
 			
 		case EDM_FIELD_IS_SHOWN_BY:
-//			case EDM_FIELD_IS_SHOWN_BY:
 			if (getEdmIsShownBy() != null && !getEdmIsShownBy().isEmpty())
 				return getEdmIsShownBy().get(0);
 			break;
+
+		case FIELD_TITLE:
+			if (getTitle() != null && !getTitle().isEmpty())
+				return listToString(getTitle());
+			break;
+		
+		case FIELD_DC_DESCRIPTION:
+			if (getDcDescription() != null && !getDcDescription().isEmpty())
+				return listToString(getDcDescription());
+			break;
+		
 		case EDM_OBJECT_URL:
 			if (getLink() != null && !getLink().isEmpty())
 				return getLink();
