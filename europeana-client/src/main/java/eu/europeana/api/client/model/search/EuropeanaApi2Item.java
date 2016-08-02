@@ -442,6 +442,11 @@ public class EuropeanaApi2Item extends CommonMetadata{
 				return getLink();
 			break;
 			
+		case FIELD_DC_CREATOR:
+			if (getDcCreator() != null && !getDcCreator().isEmpty())
+				return listToString(getDcCreator());
+			break;
+		
 		default:
 			throw new IllegalArgumentException(
 					"edmField not supported for content URL extraction: "

@@ -12,6 +12,7 @@ public abstract class CommonMetadata {
 	public static final int EDM_FIELD_IS_SHOWN_BY = 2;
 	public static final int FIELD_TITLE = 3;
 	public static final int FIELD_DC_DESCRIPTION = 4;
+	public static final int FIELD_DC_CREATOR = 5;
 	public static final int EDM_FIELD_LARGEST_THUMBNAIL = 101;
 	public static final int EDM_OBJECT_URL = 1001;
 	
