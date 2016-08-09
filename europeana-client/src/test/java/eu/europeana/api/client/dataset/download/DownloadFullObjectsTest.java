@@ -16,6 +16,10 @@ import eu.europeana.api.client.dataset.EuClientDatasetUtil;
 public class DownloadFullObjectsTest extends
 		EuClientDatasetUtil {
 
+	// this file should be placed in /tmp/eusounds folder
+	String EUROPEANA_ID_LIST_CSV = "overview.csv"; //"europeana_allsound.csv";
+	
+	
 	boolean overwrite = false;
 	// public static String CLASS_WW1 = "ww1";
 	
@@ -87,7 +91,7 @@ public class DownloadFullObjectsTest extends
 
 
 	private File getDatasetFile() {
-		File datasetFile = new File("/tmp/eusounds", "europeana_allsound.csv");
+		File datasetFile = new File("/tmp/eusounds", EUROPEANA_ID_LIST_CSV);
 		return datasetFile;
 	}
 

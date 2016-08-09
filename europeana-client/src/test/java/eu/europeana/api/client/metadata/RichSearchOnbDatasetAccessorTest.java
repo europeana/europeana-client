@@ -78,11 +78,11 @@ public class RichSearchOnbDatasetAccessorTest extends EuClientDatasetUtil {
 		    	
 				writer.write(europeanaId);
 				writer.write(";");
-				writer.write(title);
+				writer.write(title.replace(";", "\t"));
 				writer.write(";");
-				writer.write(description);
+				writer.write(description.replace(";", "\t"));
 				writer.write(";");
-				writer.write(creator);
+				writer.write(creator.replace(";", "\t"));
 				writer.write(";");
 				writer.write("\n");
 	    	}		
