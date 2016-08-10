@@ -12,6 +12,7 @@ import org.junit.runner.JUnitCore;
 
 import eu.europeana.api.client.EuropeanaApi2Client;
 import eu.europeana.api.client.dataset.EuClientDatasetUtil;
+import eu.europeana.api.client.metadata.MetadataAccessor;
 
 public class DownloadFullObjectsTest extends
 		EuClientDatasetUtil {
@@ -61,7 +62,8 @@ public class DownloadFullObjectsTest extends
 				continue;
 			
 			try{
-				recordFile = new File(datasetFile.getParentFile(), "metadata/response/record"+ europeanaId + ".json");
+				recordFile = new File(datasetFile.getParentFile(), "metadata/full"+ europeanaId + ".json");
+//				recordFile = new File(datasetFile.getParentFile(), "metadata/response/record"+ europeanaId + ".json");
 				
 				if(!recordFile.exists() || overwrite){
 					//read file
@@ -91,7 +93,9 @@ public class DownloadFullObjectsTest extends
 
 
 	private File getDatasetFile() {
-		File datasetFile = new File("/tmp/eusounds", EUROPEANA_ID_LIST_CSV);
+		String metadataFolder = (new MetadataAccessor()).getMetadataFolder();
+		File datasetFile = new File(metadataFolder, EUROPEANA_ID_LIST_CSV);
+//		File datasetFile = new File("/tmp/eusounds", EUROPEANA_ID_LIST_CSV);
 		return datasetFile;
 	}
 

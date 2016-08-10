@@ -53,6 +53,8 @@ public class MetadataAccessor {
 	protected Api2QueryInterface query;
 	protected long totalResults = -1;
 
+	public MetadataAccessor() {}
+	
 	public MetadataAccessor(Api2QueryInterface query, EuropeanaApi2Client apiClient) {
 
 		if (apiClient != null)
@@ -208,7 +210,7 @@ public class MetadataAccessor {
 		String collectionNumber = collectionName.split("_", 2)[0];
 
 		String metadataFolder = getMetadataFolder();
-		String filePath = metadataFolder + collectionNumber + "/offset_" + start + ".json";
+		String filePath = metadataFolder + collectionNumber + "_blocks/offset_" + start + ".json";
 		File jsonFile = new File(filePath);
 		if (jsonFile.exists() && skipExistingFiles)
 			log.trace("Skip existing file: " + jsonFile.getAbsolutePath());
@@ -241,10 +243,10 @@ public class MetadataAccessor {
 	protected void storeItemsInJsonFile(EuropeanaApi2Item item) {
 		//
 		String metadataFolder = getMetadataFolder();
-		String filePath = metadataFolder + item.getId() + ".json";
+		String filePath = metadataFolder + "preview/" + item.getId() + ".json";
 		File jsonFile = new File(filePath);
 		if (jsonFile.exists() && skipExistingFiles)
-			log.trace("Ski existing file: " + jsonFile.getAbsolutePath());
+			log.trace("Skip existing file: " + jsonFile.getAbsolutePath());
 		else {
 			try {
 				FileUtils.writeStringToFile(jsonFile, item.toJSON());
@@ -256,7 +258,8 @@ public class MetadataAccessor {
 
 	}
 
-	String getMetadataFolder() {
+	
+	public String getMetadataFolder() {
 		if (metadataFolder == null) {
 			String datasetFolder = ((ThumbnailAccessConfiguration) ClientConfiguration.getInstance())
 					.getDatasetsFolder();

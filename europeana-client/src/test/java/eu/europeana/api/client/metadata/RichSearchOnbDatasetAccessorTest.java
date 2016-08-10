@@ -33,6 +33,7 @@ public class RichSearchOnbDatasetAccessorTest extends EuClientDatasetUtil {
 
 	String searchOnbDatasetFodler = "./src/test/resources/onb";
 
+	String EUROPEANA_ID_LIST_CSV = "overview.csv"; 
 	
 
 	@Test
@@ -51,13 +52,15 @@ public class RichSearchOnbDatasetAccessorTest extends EuClientDatasetUtil {
 			ma.setBlockSize(100);
 			ma.setStoreBlockwiseAsJson(true);
 			
-			File toFile = new File(searchOnbDatasetFodler, "europeana_onb_dataset_metadata.csv");
+//			File toFile = new File(searchOnbDatasetFodler, "europeana_onb_dataset_metadata.csv");
+			File toFile = new File(searchOnbDatasetFodler, EUROPEANA_ID_LIST_CSV);
 			// create parent dirs
 			toFile.getParentFile().mkdirs();
 //			BufferedWriter writer = new BufferedWriter(new FileWriter(toFile));
 			BufferedWriter writer = new BufferedWriter(
 					new OutputStreamWriter(
-							new FileOutputStream(searchOnbDatasetFodler + "/europeana_onb_dataset_metadata.csv"), "UTF-8"));            
+							new FileOutputStream(searchOnbDatasetFodler + "/" + EUROPEANA_ID_LIST_CSV), "UTF-8"));            
+//							new FileOutputStream(searchOnbDatasetFodler + "/europeana_onb_dataset_metadata.csv"), "UTF-8"));            
 			writer.write("Europeana ID;Title;Description;Creator;\n"); // header
 			
 			Map<String, String> contentMap = ma.getContentMap(CommonMetadata.FIELD_TITLE, 1, 1691,
