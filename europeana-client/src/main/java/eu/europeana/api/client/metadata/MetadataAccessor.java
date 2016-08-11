@@ -259,6 +259,16 @@ public class MetadataAccessor {
 	}
 
 	
+	public File getDatasetFile(String fileName) {
+		
+		if (fileName == null || fileName.length() == 0) 
+			fileName = "overview.csv";
+		String metadataFolder = getMetadataFolder();
+		File datasetFile = new File(metadataFolder, fileName);
+		return datasetFile;
+	}
+
+	
 	public String getMetadataFolder() {
 		if (metadataFolder == null) {
 			String datasetFolder = ((ThumbnailAccessConfiguration) ClientConfiguration.getInstance())

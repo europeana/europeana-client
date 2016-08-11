@@ -17,12 +17,10 @@ import eu.europeana.api.client.metadata.MetadataAccessor;
 public class DownloadFullObjectsTest extends
 		EuClientDatasetUtil {
 
-	// this file should be placed in /tmp/eusounds folder
-	String EUROPEANA_ID_LIST_CSV = "overview.csv"; //"europeana_allsound.csv";
+	String EUROPEANA_ID_LIST_CSV = "overview.csv"; 
 	
 	
 	boolean overwrite = false;
-	// public static String CLASS_WW1 = "ww1";
 	
 	//support running the test as stand alone class
 	public static void main(String[] args) throws Exception {                    
@@ -36,7 +34,7 @@ public class DownloadFullObjectsTest extends
 
 		ensureParamsInit();
 		
-		File datasetFile = getDatasetFile();
+		File datasetFile = (new MetadataAccessor()).getDatasetFile(EUROPEANA_ID_LIST_CSV);
 		if(!datasetFile.exists())
 			fail("required dataset file doesn't exist" + datasetFile);
 		
@@ -62,7 +60,7 @@ public class DownloadFullObjectsTest extends
 				continue;
 			
 			try{
-				recordFile = new File(datasetFile.getParentFile(), "metadata/full"+ europeanaId + ".json");
+				recordFile = new File(datasetFile.getParentFile(), "full"+ europeanaId + ".json");
 //				recordFile = new File(datasetFile.getParentFile(), "metadata/response/record"+ europeanaId + ".json");
 				
 				if(!recordFile.exists() || overwrite){
@@ -89,14 +87,6 @@ public class DownloadFullObjectsTest extends
 		log.info("Failed downloads: " + failedCounter);
 		log.info("Skipped downloads: " + skipCounter);
 		
-	}
-
-
-	private File getDatasetFile() {
-		String metadataFolder = (new MetadataAccessor()).getMetadataFolder();
-		File datasetFile = new File(metadataFolder, EUROPEANA_ID_LIST_CSV);
-//		File datasetFile = new File("/tmp/eusounds", EUROPEANA_ID_LIST_CSV);
-		return datasetFile;
 	}
 
 
