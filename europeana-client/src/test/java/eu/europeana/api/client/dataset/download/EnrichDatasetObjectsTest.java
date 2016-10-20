@@ -68,7 +68,7 @@ public class EnrichDatasetObjectsTest extends
 			line = (String) iterator.next();
 			String[] items = line.split(cellSeparator);
 			if (items != null && items.length >= CREATOR_ID_COL_POS && items[CREATOR_ID_COL_POS] != null) {
-				String row = new StringBuilder().append(line).append(cellSeparator)
+				String row = new StringBuilder().append(line)
 						.append(DBPEDIA_ID_STR).append(cellSeparator)
 						.append(IA_ID_STR).append(lineBreak)
 						.toString();
@@ -80,12 +80,12 @@ public class EnrichDatasetObjectsTest extends
 					title = items[TITLE_COL_POS];
 					description = items[DESC_COL_POS];
 					creator = items[CREATOR_ID_COL_POS];
-					iaId = IA_ID_BASE_URL + creator.replaceAll("\"", "").replaceAll(" ", "_");
+					iaId = IA_ID_BASE_URL + creator.replaceAll("\"", "").replaceAll(" ", "");
 					if (creator.contains(DBPEDIA_ID_BASE_URL)) {
 						String[] creatorArr = creator.split(DBPEDIA_ID_BASE_URL);
 						creator = creatorArr[0].replaceAll("\"", "");
 						dbpediaId = DBPEDIA_ID_BASE_URL + creatorArr[1].replaceAll("\"", "");
-						iaId = IA_ID_BASE_URL + creatorArr[1].replaceAll("\"", "").replaceAll(" ", "_");
+						iaId = IA_ID_BASE_URL + creatorArr[1].replaceAll("\"", "").replaceAll(" ", "").replaceAll("_", "");
 					}
 					row = new StringBuilder().append(europeanaId).append(cellSeparator)
 							.append(title).append(cellSeparator)
