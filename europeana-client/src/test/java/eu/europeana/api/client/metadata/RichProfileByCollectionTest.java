@@ -20,7 +20,7 @@ import eu.europeana.api.client.search.query.Api2QueryInterface;
  * @author Sergiu Gordea
  *
  */
-//@Ignore
+@Ignore
 public class RichProfileByCollectionTest extends EuClientDatasetUtil {
 
 	@Test
