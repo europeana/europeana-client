@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import eu.europeana.api.client.MyEuropeanaClient;
@@ -14,6 +15,8 @@ import eu.europeana.api.client.myeuropeana.exception.MyEuropeanaApiException;
 import eu.europeana.api.client.myeuropeana.impl.MyEuropeanaClientImpl;
 import eu.europeana.api.client.myeuropeana.response.TagsApiResponse;
 
+@Ignore
+/** my europeana is not available for the time being */
 public class MyEuropeanaClientTest {
 
 	@Test

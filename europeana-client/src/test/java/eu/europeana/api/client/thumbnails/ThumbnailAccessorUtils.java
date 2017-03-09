@@ -45,53 +45,6 @@ public class ThumbnailAccessorUtils extends EuClientDatasetUtil {
 		writeMapToCsvFile(dataset, thumbnails, file, fileWritePolicy);
 	}
 
-	/**
-	 * use {@link #writeThumbnailsToCsvFile(DatasetDescriptor, Map, File)}
-	 * instead
-	 * 
-	 * @param subset
-	 * @param thumbnails
-	 * @param classifications
-	 * @param file
-	 * @throws IOException
-	 */
-	// @Deprecated
-	// private void writeThumbnailsToCsvFile(String imageSet,
-	// Map<String, String> thumbnails, String[] classifications, File file)
-	// throws IOException {
-	//
-	// // create parent dirs
-	// file.getParentFile().mkdirs();
-	//
-	// BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-	// writeCvsFileHeader(writer, imageSet, thumbnails, classifications);
-	//
-	// int count = 0;
-	// for (Entry<String, String> thumbnail : thumbnails.entrySet()) {
-	//
-	// writer.write(thumbnail.getKey());
-	// writer.write(";");
-	// writer.write(thumbnail.getValue());
-	// writer.write("\n");
-	// count++;
-	// if (count % 1000 == 0)
-	// writer.flush();
-	// }
-	// writer.flush();
-	// writer.close();
-	// }
-
-	/**
-	 * use {@link #getCollectionCsvFile(DatasetDescriptor)} instead
-	 */
-	// @Deprecated
-	// private File getCollectionCsvFile(String imageSet, String collectionName)
-	// {
-	// String fileName = getCollectionsCvsFolder() + imageSet + "_"
-	// + encode(collectionName) + ".csv";
-	// return new File(fileName);
-	// }
-
 	public int buildImageSet(DatasetDescriptor dataset, Api2QueryInterface query)
 			throws IOException, EuropeanaApiProblem {
 
@@ -104,9 +57,6 @@ public class ThumbnailAccessorUtils extends EuClientDatasetUtil {
 			Api2QueryInterface query, int start, int limit,
 			int errorHandlingPolicy) throws IOException, EuropeanaApiProblem {
 
-		// Api2QueryInterface query = getQueryBuilder().buildQuery(dataset,
-		// generalTerms, what,
-		// creator, objectType, provider, dataProvider, refinements);
 		File cvsFile = getCollectionCsvFile(dataset);
 
 		ThumbnailsForCollectionAccessor tca = new ThumbnailsForCollectionAccessor(

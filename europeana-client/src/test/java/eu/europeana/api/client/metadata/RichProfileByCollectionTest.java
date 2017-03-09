@@ -32,11 +32,11 @@ public class RichProfileByCollectionTest extends EuClientDatasetUtil {
 		for (String collection : collections) {
 			if (!collection.startsWith("#")) {
 				collectionId = collection.split(";", 2)[0];
-				saveMinimalResponseForCollection(collectionId);
+				saveRichResponseForCollection(collectionId);
 			}
 		}
 	}
-	public void saveMinimalResponseForCollection(String collectionId) 
+	public void saveRichResponseForCollection(String collectionId) 
 			throws IOException, EuropeanaApiProblem {
 		
 		Api2QueryInterface apiQuery = new Api2Query(collectionId + "_*");

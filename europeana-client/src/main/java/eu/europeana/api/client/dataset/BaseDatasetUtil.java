@@ -75,6 +75,7 @@ public abstract class BaseDatasetUtil {
 		
 	}
 	
+	@SuppressWarnings("resource")
 	protected void copyFile(File sourceFile, File destFile) throws IOException {
 	    if(!destFile.exists()) {
 	    	destFile.getParentFile().mkdirs();
