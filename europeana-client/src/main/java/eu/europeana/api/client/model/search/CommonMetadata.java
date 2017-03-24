@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
+import eu.europeana.api.client.util.StringUrlProcessor;
+
 
 public abstract class CommonMetadata {
 
@@ -13,22 +15,35 @@ public abstract class CommonMetadata {
 	public static final int FIELD_TITLE = 3;
 	public static final int FIELD_DC_DESCRIPTION = 4;
 	public static final int FIELD_DC_CREATOR = 5;
-	public static final int EDM_FIELD_LARGEST_THUMBNAIL = 101;
+	public static final int EDM_FIELD_THUMBNAIL_LARGE = 101;
+	public static final int EDM_FIELD_THUMBNAIL_W400 = 102;
+	public static final String PARAM_SIZE = "&size=";
+	public static final String PARAM_SIZE_W400 = "&size=w400";
+	public static final String PARAM_SIZE_LARGE = "&size=LARGE";
+	
 	public static final int EDM_OBJECT_URL = 1001;
 	
 	public static final int LIMIT_ALL = -1;
 	public static final int START_BEGINING = -1;
 	
 	
-	public final String SIZE_IS_LARGE = "size=LARGE";
-
+	
 	private String type;
 	private List<String> edmIsShownAt;
 	private List<String> edmIsShownBy;
 //	private List<String> title;
 
+	private StringUrlProcessor urlProcessor;
+	
+	protected StringUrlProcessor getUrlProcessor() {
+		if(urlProcessor == null)
+			urlProcessor = new StringUrlProcessor();
+		return urlProcessor;
+	}
+	
 	public abstract String getFieldContent(int edmField);
-	public abstract String getLargestThumbnail();
+	public abstract String getThumbnailLarge();
+	public abstract String getThumbnailOfSize(String sizeParam);
 	
 	
 	public String getType() {

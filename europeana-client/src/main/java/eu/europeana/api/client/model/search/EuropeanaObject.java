@@ -30,7 +30,7 @@ public class EuropeanaObject extends CommonMetadata{
 	private long timestamp_update_epoch;
 	private String timestamp_created;
 	private String timestamp_update;
-
+	
 	public long getIndex() {
 		return index;
 	}
@@ -184,9 +184,13 @@ public class EuropeanaObject extends CommonMetadata{
 				return getEuropeanaAggregation().getEdmPreview();
 			break;
 
-		case EDM_FIELD_LARGEST_THUMBNAIL:
+		case EDM_FIELD_THUMBNAIL_LARGE:
 			if (getEuropeanaAggregation() != null)
-				return getLargestThumbnail();
+				return getThumbnailLarge();
+			break;
+		case EDM_FIELD_THUMBNAIL_W400:
+			if (getEuropeanaAggregation() != null)
+				return getThumbnailOfSize(PARAM_SIZE_W400);
 			break;
 		case EDM_FIELD_IS_SHOWN_BY:
 			if (getEdmIsShownBy() != null && !getEdmIsShownBy().isEmpty())
@@ -208,19 +212,28 @@ public class EuropeanaObject extends CommonMetadata{
 
 	}
 
-	public String getLargestThumbnail() {
-		return getEdmPreviewFromAggregation();
+	public String getThumbnailLarge() {
+		return getThumbnailOfSize(PARAM_SIZE_LARGE);
 	}
 
-	private String getEdmPreviewFromAggregation() {
-		if (getEuropeanaAggregation() != null)
-			return getEuropeanaAggregation().getEdmPreview();
-		else
-			// cannot find edmPreview
-			return null;
-
+	public String getThumbnailOfSize(String sizeParam) {
+		return getEdmPreviewFromAggregation(sizeParam);
+	}
+	
+	private String getEdmPreviewFromAggregation(String sizeParam) {
+		if (getEuropeanaAggregation() == null)
+			return null; // cannot find edmPreview
+		else{
+			String defaultThumbnail = getEuropeanaAggregation().getEdmPreview();
+			if(defaultThumbnail.contains(sizeParam))
+				return defaultThumbnail;
+			else{
+				String ret = getUrlProcessor().removeParam(PARAM_SIZE, defaultThumbnail);
+				return ret +  sizeParam;
+			}
+		}
+		
 		// System.out.println("No thumbnail found! for item: " + item.getId());
 	}
-
 	
 }

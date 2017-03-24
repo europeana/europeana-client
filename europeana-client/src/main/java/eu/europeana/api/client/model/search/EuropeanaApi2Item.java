@@ -21,7 +21,7 @@ import eu.europeana.api.client.search.query.EuropeanaComplexQuery;
 /**
  * An item is a search result and is represented by a summary of its metadata
  * record. The actual content depends of the profile parameter.
- *
+ * see {@link http://labs.europeana.eu/api/record}
  * @author Andres Viedma Pelaez
  * @author Sergiu Gordea
  */
@@ -376,27 +376,26 @@ public class EuropeanaApi2Item extends CommonMetadata{
 	 *            : Europeana item where the thumbnail is searched.
 	 * @return string containing a uri of the largest thumbnail.
 	 */
-	public String getLargestThumbnail() {
+	public String getThumbnailLarge() {
+		return getThumbnailOfSize(PARAM_SIZE_LARGE);
+	}
+	
+	public String getThumbnailOfSize(String paramSize) {
 
 		if (getEdmPreview() == null || getEdmPreview().isEmpty()) 
 			return null;
 		
-		// if there is an edmPreviewList
-		String largestThumbnail = getEdmPreview().get(0);
-
-		// search for large thumbnail if not default
-		if (largestThumbnail.indexOf(SIZE_IS_LARGE) < 0) {
-			for (String url : getEdmPreview()) {
-				if (url.indexOf(SIZE_IS_LARGE) > 0) {
-					largestThumbnail = url;
-					break;// the large version of the thumbnail was found
-				}
-			}
+		String firstValue = getEdmPreview().get(0);
+		if(firstValue.contains(paramSize))
+			return firstValue;
+		else{
+			String ret = getUrlProcessor().removeParam(PARAM_SIZE, firstValue);
+			return ret + paramSize;
 		}
 
-		return largestThumbnail;
+		
 	}
-	
+
 	
 	private String listToString(List<String> list) {
 		String res = "";
@@ -419,8 +418,13 @@ public class EuropeanaApi2Item extends CommonMetadata{
 				return getEdmPreview().get(0);
 			break;
 
-		case EDM_FIELD_LARGEST_THUMBNAIL:
-				return getLargestThumbnail();
+		case EDM_FIELD_THUMBNAIL_LARGE:
+				return getThumbnailLarge();
+		
+		case EDM_FIELD_THUMBNAIL_W400:
+			if (getEdmPreview() != null)
+				return getThumbnailOfSize(PARAM_SIZE_W400);
+			break;
 			
 		case EDM_FIELD_IS_SHOWN_BY:
 			if (getEdmIsShownBy() != null && !getEdmIsShownBy().isEmpty())

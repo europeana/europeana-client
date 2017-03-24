@@ -120,14 +120,14 @@ public class EuClientDatasetUtil extends BaseDatasetUtil {
 	}
 	
 	
-	protected File getCollectionCsvFile(DatasetDescriptor dataset) {
-		String fileName = getCollectionsCvsFolder() + dataset.getImageSetName()
+	protected File getDatasetOverviewCsvFile(DatasetDescriptor dataset) {
+		String fileName = getDatasetsOverviewCsvFolder() + dataset.getImageSetName()
 				+ "_" + encode(dataset.getCollectionName()) + ".csv";
 		return new File(fileName);
 	}
 
-	protected String getCollectionsCvsFolder() {
-		return getConfiguration().getBaseFolder() + "/collections";
+	protected String getDatasetsOverviewCsvFolder() {
+		return getConfiguration().getDatasetsFolder()+ "/" + getDataset() + "/overview/";
 	}
 
 	protected String encode(String collectionName) {

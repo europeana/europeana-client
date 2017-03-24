@@ -63,9 +63,24 @@ public class ThumbnailsForCollectionAccessor extends ThumbnailsAccessor{
 	 */
 	public Map<String, String> getThumbnailsForCollection(int start, int limit, int errorHandlingPolicy) 
 			throws TechnicalRuntimeException, IOException, EuropeanaApiProblem {
-		return getContentMap(CommonMetadata.EDM_FIELD_LARGEST_THUMBNAIL, start, limit, errorHandlingPolicy);
+		return getThumbnailsForCollection(CommonMetadata.EDM_FIELD_THUMBNAIL_LARGE, start, limit, errorHandlingPolicy);		
 	}
 
+	/**
+	 * This method extracts the map of <thumbnailId, thumbnailURL> by invoking the search API.
+	 * If available the URL of the LARGE version of thumbnails is returned, otherwise the first available   
+	 * 
+	 * If <code>limit > DEFAULT_BLOCKSIZE</code>, the thumbnails will be be fetched iteratively in DEFAULT_BLOCKSIZE chuncks
+	 * 
+	 * @param start - first position in results. if smaller than 0, this parameter will default to 1
+	 * @param limit - the number or returned results. If <code>start + limit > totalResults</code>, the (last) available result starting with the start position will be returned
+	 * @return
+	 * @throws EuropeanaApiProblem 
+	 */
+	public Map<String, String> getThumbnailsForCollection(int thumbnailSizeCode, int start, int limit, int errorHandlingPolicy) 
+			throws TechnicalRuntimeException, IOException, EuropeanaApiProblem {
+		return getContentMap(thumbnailSizeCode, start, limit, errorHandlingPolicy);
+	}
 	
 	
 }

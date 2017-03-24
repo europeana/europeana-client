@@ -16,6 +16,7 @@ import eu.europeana.api.client.dataset.DatasetDescriptor;
 import eu.europeana.api.client.dataset.EuClientDatasetUtil;
 import eu.europeana.api.client.exception.EuropeanaApiProblem;
 import eu.europeana.api.client.exception.TechnicalRuntimeException;
+import eu.europeana.api.client.model.search.CommonMetadata;
 import eu.europeana.api.client.search.query.Api2QueryBuilder;
 import eu.europeana.api.client.search.query.Api2QueryInterface;
 
@@ -57,11 +58,13 @@ public class ThumbnailAccessorUtils extends EuClientDatasetUtil {
 			Api2QueryInterface query, int start, int limit,
 			int errorHandlingPolicy) throws IOException, EuropeanaApiProblem {
 
-		File cvsFile = getCollectionCsvFile(dataset);
+		File cvsFile = getDatasetOverviewCsvFile(dataset);
 
 		ThumbnailsForCollectionAccessor tca = new ThumbnailsForCollectionAccessor(
 				query, null);
 		tca.setQuery(query);
+		//store json files if needed
+		tca.setStoreItemsAsJson(dataset.isStoreItemPreview());
 
 		int resultsSize = -1;
 		if (limit > 0)
@@ -69,7 +72,11 @@ public class ThumbnailAccessorUtils extends EuClientDatasetUtil {
 
 		Map<String, String> thumbnails = null;
 		try {
-			thumbnails = tca.getThumbnailsForCollection(start, resultsSize,
+			int imageSizeCode = CommonMetadata.EDM_FIELD_THUMBNAIL_LARGE;
+			if(dataset.getThumbnailWithSize() > 0)
+				imageSizeCode = dataset.getThumbnailWithSize(); 
+			
+			thumbnails = tca.getThumbnailsForCollection(imageSizeCode, start, resultsSize,
 					errorHandlingPolicy);
 		} catch (TechnicalRuntimeException e) {
 			System.out.println("error: " + e);

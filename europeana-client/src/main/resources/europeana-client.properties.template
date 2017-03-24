@@ -15,7 +15,8 @@ europeana.api.key =
 europeana.client.datasets.folder = /europeana-client/datasets
 
 # the folder used for downloading images locally
-europeana.client.base.image.folder = ./src/test/resources/image
+europeana.client.base.image.folder = /europeana-client/image
 
 # the folder used to store the thumbnail urls of all collections locally
-europeana.client.base.cvs.folder = ./src/test/resources/cvs
+# deprecated .. not used anymore
+#europeana.client.base.cvs.folder = /europeana-client/cvs

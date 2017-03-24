@@ -71,6 +71,9 @@ public class ThumbnailsAccessor extends MetadataAccessor{
 	 */
 	public List<String> copyThumbnails(EuropeanaQueryInterface search,
 			File dir, int maxResults) throws IOException, EuropeanaApiProblem {
+
+		//TODO: add thumbnail size as parameter
+		
 		EuropeanaApi2Results res = europeanaClient.searchApi2(search,
 				maxResults, 0);
 
@@ -246,7 +249,7 @@ public class ThumbnailsAccessor extends MetadataAccessor{
 			throws FileNotFoundException, IOException, EuropeanaClientException {
 
 		EuropeanaObject euObject = europeanaClient.getObject(europeanaId);
-		String thumbnailUrl = euObject.getLargestThumbnail();
+		String thumbnailUrl = euObject.getThumbnailLarge();
 
 		if (!writeThumbnailToFolder(europeanaId, thumbnailUrl, imageFolder))
 			throw new EuropeanaClientException(

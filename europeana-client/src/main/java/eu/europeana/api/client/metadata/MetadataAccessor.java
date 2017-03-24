@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 
 import eu.europeana.api.client.EuropeanaApi2Client;
 import eu.europeana.api.client.config.ClientConfiguration;
+import eu.europeana.api.client.config.EuropeanaApiConfiguration;
 import eu.europeana.api.client.config.ThumbnailAccessConfiguration;
 import eu.europeana.api.client.connection.HttpConnector;
 import eu.europeana.api.client.exception.EuropeanaApiProblem;
@@ -271,12 +272,15 @@ public class MetadataAccessor {
 	
 	public String getMetadataFolder() {
 		if (metadataFolder == null) {
-			String datasetFolder = ((ThumbnailAccessConfiguration) ClientConfiguration.getInstance())
+			String datasetFolder = ((ThumbnailAccessConfiguration) getConfiguration())
 					.getDatasetsFolder();
-			metadataFolder = datasetFolder + "/collections/metadata/";
+			metadataFolder = datasetFolder + "/metadata/";
 		}
 		return metadataFolder;
-		// return "s:\\Projects\\EU EU Sounds\\MIR\\metadata";
+	}
+
+	protected EuropeanaApiConfiguration getConfiguration() {
+		return ClientConfiguration.getInstance();
 	}
 
 	protected String getFieldContent(CommonMetadata item, int edmField) {

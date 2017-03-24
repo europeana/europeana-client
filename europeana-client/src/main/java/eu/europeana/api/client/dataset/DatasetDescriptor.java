@@ -4,17 +4,39 @@ public class DatasetDescriptor {
 
 	String imageSetName, collectionName;
 	String[] classifications;
+	int thumbnailWithSize = -1;
+	boolean storeItemPreview;
 	
+	public boolean isStoreItemPreview() {
+		return storeItemPreview;
+	}
+
+	public void setStoreItemPreview(boolean storeItemPreview) {
+		this.storeItemPreview = storeItemPreview;
+	}
+
+	public int getThumbnailWithSize() {
+		return thumbnailWithSize;
+	}
+
+	public void setThumbnailWithSize(int thumbnailWithSize) {
+		this.thumbnailWithSize = thumbnailWithSize;
+	}
+
 	public DatasetDescriptor(String imageSetName, String collectionName){
-		this.imageSetName = imageSetName;
-		this.collectionName = collectionName;
+		this(imageSetName, collectionName, null);
 	}
 	
 	public DatasetDescriptor(String imageSetName, String collectionName, String[] classifications){
-		this(imageSetName, collectionName);
-		this.classifications = classifications;
+		this(imageSetName, collectionName, classifications, -1);
 	}
 	
+	public DatasetDescriptor(String imageSetName, String collectionName, String[] classifications, int thumbnailSize){
+		this.imageSetName = imageSetName;
+		this.collectionName = collectionName;
+		this.classifications = classifications;
+		this.thumbnailWithSize = thumbnailSize;
+	}
 	
 	public String getImageSetName() {
 		return imageSetName;

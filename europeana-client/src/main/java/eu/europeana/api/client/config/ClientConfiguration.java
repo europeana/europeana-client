@@ -29,7 +29,7 @@ public class ClientConfiguration implements EuropeanaApiConfiguration,
 	/**
 	 * Hide the default constructor
 	 */
-	private ClientConfiguration() {
+	protected ClientConfiguration() {
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class ClientConfiguration implements EuropeanaApiConfiguration,
 	 * 
 	 * @return
 	 */
-	Properties getProperties() {
+	protected Properties getProperties() {
 		return properties;
 	}
 
