@@ -68,6 +68,7 @@
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
+				<includes></includes>
 			</resource>
 		</resources>
 		<testResources>

@@ -354,11 +354,14 @@ public class MetadataAccessor {
 		EuropeanaApi2Results resultsBlock;
 		int iteration = 0;
 		int blockStart = 0;
+		if(limit < 0)
+			limit = totalResults;
 		do {
 
 			try {
 
 				int rows = getBlockSize();
+				//COMPUTE SIZE FOR THE LAST PAGE
 				if (limit < metadataItems + rows) {
 					rows = Math.abs(metadataItems - limit);
 				}
@@ -391,7 +394,7 @@ public class MetadataAccessor {
 				handleException(th);
 			} 
 			
-		} while (cursor != null && limit > metadataItems);
+		} while (cursor != null && ((limit > metadataItems)) );
 
 		return results;
 	}

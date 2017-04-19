@@ -12,4 +12,8 @@ public interface ThumbnailAccessConfiguration {
 	
 	public abstract String getImageFolder(String dataset);
 
+	public String getBaseImageFolder();
+
+	public int getImageMinSize();
+
 }

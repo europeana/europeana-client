@@ -20,3 +20,6 @@ europeana.client.base.image.folder = /europeana-client/image
 # the folder used to store the thumbnail urls of all collections locally
 # deprecated .. not used anymore
 #europeana.client.base.cvs.folder = /europeana-client/cvs
+
+# the minimal size of images in kB. Smaller sized images will be ignored during downloading 
+europeana.client.image.min.size = 10

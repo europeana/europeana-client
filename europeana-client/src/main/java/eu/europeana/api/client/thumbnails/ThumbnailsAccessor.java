@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import eu.europeana.api.client.EuropeanaApi2Client;
+import eu.europeana.api.client.config.ThumbnailAccessConfiguration;
 import eu.europeana.api.client.exception.EuropeanaApiProblem;
 import eu.europeana.api.client.exception.EuropeanaClientException;
 import eu.europeana.api.client.metadata.MetadataAccessor;
@@ -141,7 +142,7 @@ public class ThumbnailsAccessor extends MetadataAccessor{
 				this.http.silentWriteURLContent(thumbnailUrl, out, mime);
 			}
 		} catch (IOException e) {
-			log.trace("Cannot write file to disk!", e);
+			log.warn("Cannot write file to disk!", e);
 
 		} finally {
 			if (out != null) {
@@ -162,22 +163,31 @@ public class ThumbnailsAccessor extends MetadataAccessor{
 		
 		if(!imageFile.exists()){
 			return false;
-		}else	if (imageFile.length() < 100) {
+		}else	if (imageFile.length() < getMinThumbailSize()) {
 			// if not correctly written to disk
 			imageFile.delete();
-			System.out.println("rejected corupted image!");
+			log.debug("Rejected image smaller than image.min.size. Image size smaller than "
+			+getMinThumbailSize() + "kB! " + thumbnailUrl );
 			return false;
-		} else if(filterThumbnails && imageFile.length() < LOW_QUALITY_SIZE){
+		} else if(filterThumbnails && imageFile.length() < getImageLowQualitySize()){
 			imageFile.delete();
-			System.out.println("rejected image too small < 1MB");
+			log.debug("rejected image too small < 1MB: " + thumbnailUrl);
 			return false;
 		} else if(filterThumbnails && imageFile.length() == PLACEHOLDER_SIZE){
 			imageFile.delete();
-			System.out.println("rejected placeholder image");
+			log.debug("rejected placeholder image: " + thumbnailUrl);
 			return false;
 		} 
 
 		return true;
+	}
+
+	protected int getImageLowQualitySize() {
+		return LOW_QUALITY_SIZE;
+	}
+
+	protected int getMinThumbailSize() {
+		return ((ThumbnailAccessConfiguration)getConfiguration()).getImageMinSize();	
 	}
 
 	/**

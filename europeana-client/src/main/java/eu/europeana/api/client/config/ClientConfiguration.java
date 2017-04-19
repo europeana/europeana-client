@@ -18,9 +18,13 @@ public class ClientConfiguration implements EuropeanaApiConfiguration,
 	// Thumbnail Access KEYS
 	public static final String PROP_BASE_FOLDER_KEY = "europeana.client.base.folder";
 	public static final String PROP_DATASETS_FOLDER_KEY = "europeana.client.datasets.folder";
-
+	public static final String PROP_BASE_IMAGE_FOLDER_KEY = "europeana.client.base.image.folder";
+	public static final String PROP_IMAGE_MIN_SIZE = "europeana.client.image.min.size";
+	
 	// static configs
 	public static final String DATASET_FILE_EXTENSION = ".csv";
+	public static final String DEFAULT_IMAGE_MIN_SIZE = "1";
+	
 
 	// local attributes
 	private static Properties properties = null;
@@ -145,12 +149,12 @@ public class ClientConfiguration implements EuropeanaApiConfiguration,
 
 	@Override
 	public String getImageFolder(String dataset) {
-		String ret = getBaseFolder();
+		
+		String ret = getBaseImageFolder();
 		final String separator = "/";
 		if (!ret.endsWith(separator))
 			ret += separator;
 
-		ret += ("image" + separator);
 		ret += dataset;
 
 		return ret;
@@ -162,6 +166,11 @@ public class ClientConfiguration implements EuropeanaApiConfiguration,
 	}
 
 	@Override
+	public String getBaseImageFolder() {
+		return (getProperties().getProperty(PROP_BASE_IMAGE_FOLDER_KEY));
+	}
+	
+	@Override
 	public File getDatasetFile(String dataset) {
 		return new File(getDatasetsFolder(), dataset + DATASET_FILE_EXTENSION);
 	}
@@ -169,6 +178,11 @@ public class ClientConfiguration implements EuropeanaApiConfiguration,
 	@Override
 	public String getEuropeanaUri() {
 		return getProperties().getProperty(PROP_EUROPEANA_API_URI);
+	}
+
+	@Override
+	public int getImageMinSize() {
+		return Integer.valueOf(getProperties().getProperty(PROP_IMAGE_MIN_SIZE, DEFAULT_IMAGE_MIN_SIZE)) ;
 	}
 
 }
