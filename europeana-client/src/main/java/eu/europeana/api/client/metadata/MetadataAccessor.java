@@ -38,8 +38,7 @@ public class MetadataAccessor {
 	private boolean storeItemsAsJson = false;
 	private boolean storeBlockwiseAsJson = false;
 	private int errorHandlingPolicy = ERROR_POLICY_RETHROW;
-	private String metadataFolder = null;
-
+	
 	public static final int DEFAULT_BLOCKSIZE = 100;
 	protected int blockSize = DEFAULT_BLOCKSIZE;
 	public static int ERROR_POLICY_RETHROW = 1;
@@ -210,7 +209,7 @@ public class MetadataAccessor {
 		//
 		String collectionNumber = collectionName.split("_", 2)[0];
 
-		String metadataFolder = getMetadataFolder();
+		String metadataFolder = getConfiguration().getMetadataFolder();
 		String filePath = metadataFolder + collectionNumber + "_blocks/offset_" + start + ".json";
 		File jsonFile = new File(filePath);
 		if (jsonFile.exists() && skipExistingFiles)
@@ -243,8 +242,10 @@ public class MetadataAccessor {
 
 	protected void storeItemsInJsonFile(EuropeanaApi2Item item) {
 		//
-		String metadataFolder = getMetadataFolder();
-		String filePath = metadataFolder + "preview/" + item.getId() + ".json";
+		String id = item.getId();
+		String metadataFolder = getConfiguration().getMetadataFolder();
+		String filePath = getConfiguration().getJsonMetadataFile(id, metadataFolder, 
+				EuropeanaApiConfiguration.REPRESENTATION_PREVIEW);
 		File jsonFile = new File(filePath);
 		if (jsonFile.exists() && skipExistingFiles)
 			log.trace("Skip existing file: " + jsonFile.getAbsolutePath());
@@ -258,26 +259,18 @@ public class MetadataAccessor {
 		}
 
 	}
-
 	
 	public File getDatasetFile(String fileName) {
 		
 		if (fileName == null || fileName.length() == 0) 
 			fileName = "overview.csv";
-		String metadataFolder = getMetadataFolder();
+		String metadataFolder = getConfiguration().getMetadataFolder();
 		File datasetFile = new File(metadataFolder, fileName);
 		return datasetFile;
 	}
 
 	
-	public String getMetadataFolder() {
-		if (metadataFolder == null) {
-			String datasetFolder = ((ThumbnailAccessConfiguration) getConfiguration())
-					.getDatasetsFolder();
-			metadataFolder = datasetFolder + "/metadata/";
-		}
-		return metadataFolder;
-	}
+	
 
 	protected EuropeanaApiConfiguration getConfiguration() {
 		return ClientConfiguration.getInstance();
@@ -470,8 +463,8 @@ public class MetadataAccessor {
 		return savedBlockFiles;
 	}
 
-	protected void setMetadataFolder(String metadataFolder) {
-		this.metadataFolder = metadataFolder;
-	}
+//	protected void setMetadataFolder(String metadataFolder) {
+//		this.metadataFolder = metadataFolder;
+//	}
 
 }

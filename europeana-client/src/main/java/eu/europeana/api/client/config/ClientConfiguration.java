@@ -25,7 +25,6 @@ public class ClientConfiguration implements EuropeanaApiConfiguration,
 	public static final String DATASET_FILE_EXTENSION = ".csv";
 	public static final String DEFAULT_IMAGE_MIN_SIZE = "1";
 	
-
 	// local attributes
 	private static Properties properties = null;
 	private static ClientConfiguration singleton;
@@ -185,4 +184,22 @@ public class ClientConfiguration implements EuropeanaApiConfiguration,
 		return Integer.valueOf(getProperties().getProperty(PROP_IMAGE_MIN_SIZE, DEFAULT_IMAGE_MIN_SIZE)) ;
 	}
 
+	@Override
+	public File getImageFile(File dir, String id) {
+		String fileName = id + ".jpg";
+		File imageFile = new File(dir, fileName);
+		return imageFile;
+	}
+	
+	
+	@Override
+	public String getMetadataFolder() {
+			String datasetFolder = getDatasetsFolder();
+			return datasetFolder + "/metadata/";	
+	}
+	
+	@Override
+	public String getJsonMetadataFile(String id, String metadataFolder, String representation) {
+		return metadataFolder + representation + id + ".json";	
+	}
 }

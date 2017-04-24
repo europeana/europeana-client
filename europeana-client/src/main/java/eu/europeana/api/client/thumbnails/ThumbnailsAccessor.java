@@ -129,7 +129,8 @@ public class ThumbnailsAccessor extends MetadataAccessor{
 		FileOutputStream out = null;
 		try {
 			// write thumbnail to output folder
-			File imageFile = getImageFile(imageFolder, id);
+			File imageFile = getThumbnailAccessConfiguration()
+					.getImageFile(imageFolder, id);
 			if (isSkipExistingFiles() && imageFile.exists()) {
 				// skip file
 				incrementSkippedItems();
@@ -158,8 +159,7 @@ public class ThumbnailsAccessor extends MetadataAccessor{
 		}
 
 		// verify file on disk
-		File imageFile = getImageFile(imageFolder, id);
-		
+		File imageFile = getThumbnailAccessConfiguration().getImageFile(imageFolder, id);
 		
 		if(!imageFile.exists()){
 			return false;
@@ -187,23 +187,14 @@ public class ThumbnailsAccessor extends MetadataAccessor{
 	}
 
 	protected int getMinThumbailSize() {
-		return ((ThumbnailAccessConfiguration)getConfiguration()).getImageMinSize();	
+		return getThumbnailAccessConfiguration().getImageMinSize();	
 	}
 
-	/**
-	 * Helper method to get an image file in a certain directory.
-	 * 
-	 * @param dir
-	 *            : directory where to search the image file.
-	 * @param id
-	 *            : id of the image file.
-	 * @return File object representing the found image.
-	 */
-	protected File getImageFile(File dir, String id) {
-		String fileName = id + ".jpg";
-		File imageFile = new File(dir, fileName);
-		return imageFile;
+	protected ThumbnailAccessConfiguration getThumbnailAccessConfiguration() {
+		return (ThumbnailAccessConfiguration)getConfiguration();
 	}
+
+	
 
 	/**
 	 * The copyThumbnails method iterates the provided thumbnails map and

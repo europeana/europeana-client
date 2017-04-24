@@ -42,7 +42,8 @@ public class RichProfileByCollectionTest extends EuClientDatasetUtil {
 		Api2QueryInterface apiQuery = new Api2Query(collectionId + "_*");
 		apiQuery.setProfile("rich");
 		MetadataAccessor ma = new MetadataAccessor(apiQuery, null);
-		ma.setMetadataFolder("/tmp/europeana/collections/metadata/");
+		//metadata folder is set through configuration
+		//ma.setMetadataFolder("/tmp/europeana/collections/metadata/");
 		ma.setStoreBlockwiseAsJson(true);
 		// Map<String, String> contentMap =
 		ma.getContentMap(CommonMetadata.EDM_FIELD_IGNORE, CommonMetadata.START_BEGINING, CommonMetadata.LIMIT_ALL,
