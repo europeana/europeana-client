@@ -37,8 +37,7 @@ public class RichSearchProfilePeripleoAccessorTest extends EuClientDatasetUtil {
 		String downloadUrl = "http://www.europeana.eu/portal/search.html?view=grid&query=where%3Arome&qf=sculpture&media=true&type=IMAGE&TYPE=IMAGE";
 		String downloadDir = "rome-sculptures/";
 		
-		downloadJsonResults(downloadUrl, downloadDir);
-	
+		downloadJsonResults(downloadUrl, downloadDir);	
 	}
 
 	//@Test
@@ -49,11 +48,10 @@ public class RichSearchProfilePeripleoAccessorTest extends EuClientDatasetUtil {
 				"http://www.europeana.eu/portal/en/search?view=grid&query=what%3Amonument&qf=%22%2Fplace%2Fbase%2F143433%22&media=true&TYPE=IMAGE&per_page=96";
 		String downloadDir = "rome-monuments/";
 		
-		downloadJsonResults(downloadUrl, downloadDir);
-	
+		downloadJsonResults(downloadUrl, downloadDir);	
 	}
 
-	@Test
+	//@Test
 	public void saveRomeInscriptionMonuments() throws IOException, EuropeanaApiProblem {
 		// http://www.europeana.eu/api/v2/search.json?country=italy&country=united+kingdom&country=austria&country=greece&media=true&per_page=96&query=inscription+monument+rome&view=grid&wskey=xxx
 		// total 237
@@ -61,8 +59,74 @@ public class RichSearchProfilePeripleoAccessorTest extends EuClientDatasetUtil {
 				"http://www.europeana.eu/portal/en/search?country=italy&country=united+kingdom&country=austria&country=greece&media=true&per_page=96&query=inscription+monument+rome&view=grid";
 		String downloadDir = "rome-inscription-monuments/";
 		
-		downloadJsonResults(downloadUrl, downloadDir);
-	
+		downloadJsonResults(downloadUrl, downloadDir);	
+	}
+
+	//@Test
+	public void saveNumismatics() throws IOException, EuropeanaApiProblem {
+		// http://www.europeana.eu/api/v2/search.json?view=grid&query=numismatic&media=true&fTYPE=IMAGE&per_page=96
+		// total 677
+		String downloadUrl = 
+				"http://www.europeana.eu/portal/en/search?view=grid&query=numismatic&media=true&fTYPE=IMAGE&per_page=96";
+		String downloadDir = "numismatics/";
+		
+		downloadJsonResults(downloadUrl, downloadDir);	
+	}
+
+
+	@Test
+	public void saveNumismaticsRoman() throws IOException, EuropeanaApiProblem {
+		// http://www.europeana.eu/api/v2/search.json?media=true&TYPE=IMAGE&per_page=96&query=what%3Anumismatics&qf=roman&view=grid
+		// total 857
+		String downloadUrl = 
+				"http://www.europeana.eu/portal/en/search?media=true&TYPE=IMAGE&per_page=96&query=what%3Anumismatics&qf=roman&view=grid";
+		String downloadDir = "numismatics-roman/";
+		
+		downloadJsonResults(downloadUrl, downloadDir);	
+	}
+
+	@Test
+	public void saveNumismaticsGreece() throws IOException, EuropeanaApiProblem {
+		// http://www.europeana.eu/api/v2/search.json?view=grid&query=what%3Anumismatics&qf=where%3Agreece&media=true&TYPE=IMAGE&per_page=96
+		// total 5324
+		String downloadUrl = 
+				"http://www.europeana.eu/portal/en/search?view=grid&query=what%3Anumismatics&qf=where%3Agreece&media=true&TYPE=IMAGE&per_page=96";
+		String downloadDir = "numismatics-greece/";
+		
+		downloadJsonResults(downloadUrl, downloadDir);	
+	}
+
+	@Test
+	public void saveNumismaticsSmall() throws IOException, EuropeanaApiProblem {
+		// http://www.europeana.eu/api/v2/search.json?view=grid&query=what%3A+münze&IMAGE_SIZE=small&media=true&TYPE=IMAGE&per_page=96
+		// total 5968
+		String downloadUrl = 
+				"http://www.europeana.eu/portal/en/search?view=grid&query=what%3A+münze&IMAGE_SIZE=small&media=true&TYPE=IMAGE&per_page=96";
+		String downloadDir = "numismatics-small/";
+		
+		downloadJsonResults(downloadUrl, downloadDir);	
+	}
+
+	@Test
+	public void saveNumismaticsLocaleEn() throws IOException, EuropeanaApiProblem {
+		// http://www.europeana.eu/api/v2/search.json?media=true&TYPE=IMAGE&locale=en&per_page=96&query=what%3A"Numismàtica"&qf=roman&view=grid
+		// total 685
+		String downloadUrl = 
+				"http://www.europeana.eu/portal/en/search?media=true&TYPE=IMAGE&locale=en&per_page=96&query=what%3A%22Numismàtica%22&qf=roman&view=grid";
+		String downloadDir = "numismatics-locale-en/";
+		
+		downloadJsonResults(downloadUrl, downloadDir);	
+	}
+
+	//@Test
+	public void saveInscriptions() throws IOException, EuropeanaApiProblem {
+		// http://www.europeana.eu/api/v2/search.json?media=true&locale=en&query=what%3A"type+of+inscription%3Afasti%2C+leges%2C+acta"&view=grid
+		// total 440
+		String downloadUrl = 
+				"http://www.europeana.eu/portal/en/search?media=true&locale=en&query=what%3A%22type+of+inscription%3Afasti%2C+leges%2C+acta%22&view=grid";
+		String downloadDir = "inscriptions/";
+		
+		downloadJsonResults(downloadUrl, downloadDir);	
 	}
 
 
