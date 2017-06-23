@@ -32,7 +32,7 @@ public class RichSearchProfilePeripleoAccessorTest extends EuClientDatasetUtil {
 
 	//@Test
 	public void saveRomeSculptures() throws IOException, EuropeanaApiProblem {
-		// http://www.europeana.eu/api/v2/search.json?view=grid&query=where%3Arome&qf=sculpture&media=true&type=IMAGE&TYPE=IMAGE&wskey=api2demo
+		// http://www.europeana.eu/api/v2/search.json?view=grid&query=where%3Arome&qf=sculpture&media=true&type=IMAGE&TYPE=IMAGE&wskey=xxx
 		// total 164
 		String downloadUrl = "http://www.europeana.eu/portal/search.html?view=grid&query=where%3Arome&qf=sculpture&media=true&type=IMAGE&TYPE=IMAGE";
 		String downloadDir = "rome-sculptures/";
@@ -41,9 +41,9 @@ public class RichSearchProfilePeripleoAccessorTest extends EuClientDatasetUtil {
 	
 	}
 
-	@Test
+	//@Test
 	public void saveRomeMonuments() throws IOException, EuropeanaApiProblem {
-		// http://www.europeana.eu/api/v2/search.json?view=grid&query=what%3Amonument&qf=%22%2Fplace%2Fbase%2F143433%22&media=true&TYPE=IMAGE&per_page=96&wskey=api2demo
+		// http://www.europeana.eu/api/v2/search.json?view=grid&query=what%3Amonument&qf=%22%2Fplace%2Fbase%2F143433%22&media=true&TYPE=IMAGE&per_page=96&wskey=xxx
 		// total 969
 		String downloadUrl = 
 				"http://www.europeana.eu/portal/en/search?view=grid&query=what%3Amonument&qf=%22%2Fplace%2Fbase%2F143433%22&media=true&TYPE=IMAGE&per_page=96";
@@ -52,6 +52,19 @@ public class RichSearchProfilePeripleoAccessorTest extends EuClientDatasetUtil {
 		downloadJsonResults(downloadUrl, downloadDir);
 	
 	}
+
+	@Test
+	public void saveRomeInscriptionMonuments() throws IOException, EuropeanaApiProblem {
+		// http://www.europeana.eu/api/v2/search.json?country=italy&country=united+kingdom&country=austria&country=greece&media=true&per_page=96&query=inscription+monument+rome&view=grid&wskey=xxx
+		// total 237
+		String downloadUrl = 
+				"http://www.europeana.eu/portal/en/search?country=italy&country=united+kingdom&country=austria&country=greece&media=true&per_page=96&query=inscription+monument+rome&view=grid";
+		String downloadDir = "rome-inscription-monuments/";
+		
+		downloadJsonResults(downloadUrl, downloadDir);
+	
+	}
+
 
 	private void downloadJsonResults(String portalUrl, String downloadDir)
 			throws MalformedURLException, UnsupportedEncodingException, IOException, EuropeanaApiProblem {
