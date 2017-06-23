@@ -74,7 +74,7 @@ public class RichSearchProfilePeripleoAccessorTest extends EuClientDatasetUtil {
 	}
 
 
-	@Test
+	//@Test
 	public void saveNumismaticsRoman() throws IOException, EuropeanaApiProblem {
 		// http://www.europeana.eu/api/v2/search.json?media=true&TYPE=IMAGE&per_page=96&query=what%3Anumismatics&qf=roman&view=grid
 		// total 857
@@ -85,10 +85,10 @@ public class RichSearchProfilePeripleoAccessorTest extends EuClientDatasetUtil {
 		downloadJsonResults(downloadUrl, downloadDir);	
 	}
 
-	@Test
+	//@Test
 	public void saveNumismaticsGreece() throws IOException, EuropeanaApiProblem {
 		// http://www.europeana.eu/api/v2/search.json?view=grid&query=what%3Anumismatics&qf=where%3Agreece&media=true&TYPE=IMAGE&per_page=96
-		// total 5324
+		// total 31
 		String downloadUrl = 
 				"http://www.europeana.eu/portal/en/search?view=grid&query=what%3Anumismatics&qf=where%3Agreece&media=true&TYPE=IMAGE&per_page=96";
 		String downloadDir = "numismatics-greece/";
@@ -96,12 +96,12 @@ public class RichSearchProfilePeripleoAccessorTest extends EuClientDatasetUtil {
 		downloadJsonResults(downloadUrl, downloadDir);	
 	}
 
-	@Test
+	//@Test
 	public void saveNumismaticsSmall() throws IOException, EuropeanaApiProblem {
 		// http://www.europeana.eu/api/v2/search.json?view=grid&query=what%3A+münze&IMAGE_SIZE=small&media=true&TYPE=IMAGE&per_page=96
 		// total 5968
 		String downloadUrl = 
-				"http://www.europeana.eu/portal/en/search?view=grid&query=what%3A+münze&IMAGE_SIZE=small&media=true&TYPE=IMAGE&per_page=96";
+				"http://www.europeana.eu/portal/en/search?view=grid&query=what%3A+m%C3%BCnze&IMAGE_SIZE=small&media=true&TYPE=IMAGE&per_page=96";
 		String downloadDir = "numismatics-small/";
 		
 		downloadJsonResults(downloadUrl, downloadDir);	
@@ -112,7 +112,7 @@ public class RichSearchProfilePeripleoAccessorTest extends EuClientDatasetUtil {
 		// http://www.europeana.eu/api/v2/search.json?media=true&TYPE=IMAGE&locale=en&per_page=96&query=what%3A"Numismàtica"&qf=roman&view=grid
 		// total 685
 		String downloadUrl = 
-				"http://www.europeana.eu/portal/en/search?media=true&TYPE=IMAGE&locale=en&per_page=96&query=what%3A%22Numismàtica%22&qf=roman&view=grid";
+				"http://www.europeana.eu/portal/en/search?media=true&TYPE=IMAGE&locale=en&per_page=96&query=what%3A%22Numism%C3%A0tica%22&qf=roman&view=grid";
 		String downloadDir = "numismatics-locale-en/";
 		
 		downloadJsonResults(downloadUrl, downloadDir);	
