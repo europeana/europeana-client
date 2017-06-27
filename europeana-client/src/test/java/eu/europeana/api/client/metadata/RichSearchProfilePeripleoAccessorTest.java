@@ -98,16 +98,16 @@ public class RichSearchProfilePeripleoAccessorTest extends EuClientDatasetUtil {
 
 	//@Test
 	public void saveNumismaticsSmall() throws IOException, EuropeanaApiProblem {
-		// http://www.europeana.eu/api/v2/search.json?view=grid&query=what%3A+münze&IMAGE_SIZE=small&media=true&TYPE=IMAGE&per_page=96
-		// total 5968
+		// http://www.europeana.eu/api/v2/search.json?view=grid&query=what%3A+m%C3%BCnze&qf=TYPE:IMAGE&IMAGE_SIZE=small&media=true&per_page=100
+		// total 5028
 		String downloadUrl = 
-				"http://www.europeana.eu/portal/en/search?view=grid&query=what%3A+m%C3%BCnze&IMAGE_SIZE=small&media=true&TYPE=IMAGE&per_page=96";
+				"http://www.europeana.eu/portal/en/search?view=grid&query=what%3A+m%C3%BCnze&IMAGE_SIZE=small&media=true&qf=TYPE:IMAGE&per_page=96";
 		String downloadDir = "numismatics-small/";
 		
 		downloadJsonResults(downloadUrl, downloadDir);	
 	}
 
-	@Test
+	//@Test
 	public void saveNumismaticsLocaleEn() throws IOException, EuropeanaApiProblem {
 		// http://www.europeana.eu/api/v2/search.json?media=true&TYPE=IMAGE&locale=en&per_page=96&query=what%3A"Numismàtica"&qf=roman&view=grid
 		// total 685
@@ -125,6 +125,18 @@ public class RichSearchProfilePeripleoAccessorTest extends EuClientDatasetUtil {
 		String downloadUrl = 
 				"http://www.europeana.eu/portal/en/search?media=true&locale=en&query=what%3A%22type+of+inscription%3Afasti%2C+leges%2C+acta%22&view=grid";
 		String downloadDir = "inscriptions/";
+		
+		downloadJsonResults(downloadUrl, downloadDir);	
+	}
+
+
+	@Test
+	public void saveFilteredPlaces() throws IOException, EuropeanaApiProblem {
+		// http://www.europeana.eu/api/v2/search.json?TYPE=IMAGE&per_page=96&query=%22%2Fagent%2Fbase%2F*%22&qf=%22%2Fplace%2Fbase%2F*%22&qf=ancient&view=grid
+		// total 183
+		String downloadUrl = 
+				"http://www.europeana.eu/portal/en/search?TYPE=IMAGE&per_page=96&query=%22%2Fagent%2Fbase%2F*%22&qf=%22%2Fplace%2Fbase%2F*%22&qf=ancient&view=grid";
+		String downloadDir = "filtered-places/";
 		
 		downloadJsonResults(downloadUrl, downloadDir);	
 	}
