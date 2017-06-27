@@ -132,10 +132,10 @@ public class RichSearchProfilePeripleoAccessorTest extends EuClientDatasetUtil {
 
 	@Test
 	public void saveFilteredPlaces() throws IOException, EuropeanaApiProblem {
-		// http://www.europeana.eu/api/v2/search.json?TYPE=IMAGE&per_page=96&query=%22%2Fagent%2Fbase%2F*%22&qf=%22%2Fplace%2Fbase%2F*%22&qf=ancient&view=grid
-		// total 183
+		// http://www.europeana.eu/api/v2/search.json?per_page=96&query=TYPE:IMAGE&qf="%2Fagent%2Fbase%2F*"&qf="%2Fplace%2Fbase%2F*"&qf=ancient&view=grid
+		// total 115
 		String downloadUrl = 
-				"http://www.europeana.eu/portal/en/search?TYPE=IMAGE&per_page=96&query=%22%2Fagent%2Fbase%2F*%22&qf=%22%2Fplace%2Fbase%2F*%22&qf=ancient&view=grid";
+				"http://www.europeana.eu/portal/en/search?per_page=96&query=TYPE:IMAGE&qf=%22%2Fagent%2Fbase%2F*%22&qf=%22%2Fplace%2Fbase%2F*%22&qf=ancient&view=grid";
 		String downloadDir = "filtered-places/";
 		
 		downloadJsonResults(downloadUrl, downloadDir);	
