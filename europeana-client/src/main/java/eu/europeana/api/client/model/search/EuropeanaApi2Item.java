@@ -49,6 +49,12 @@ public class EuropeanaApi2Item extends CommonMetadata{
     
     protected List<String> edmPreview;
 
+    protected List<String> dctermsSpatial;
+    protected List<String> edmPlace;
+    protected List<String> edmAgent;
+    protected Long timestamp;
+    
+    
     public EuropeanaApi2Item() {
     }
 
@@ -361,12 +367,44 @@ public class EuropeanaApi2Item extends CommonMetadata{
 		this.completeness = completeness;
 	}
 
+	public Long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Long timestamp) {
+		this.timestamp = timestamp;
+	}
+
 	public void setEdmPreview(List<String> edmPreview) {
 		this.edmPreview = edmPreview;
 	}
 
 	public List<String> getEdmPreview() {
 		return edmPreview;
+	}
+	
+	public void setDctermsSpatial(List<String> dctermsSpatial) {
+		this.dctermsSpatial = dctermsSpatial;
+	}
+
+	public List<String> getDctermsSpatial() {
+		return dctermsSpatial;
+	}
+	
+	public void setEdmPlace(List<String> edmPlace) {
+		this.edmPlace = edmPlace;
+	}
+
+	public List<String> getEdmPlace() {
+		return edmPlace;
+	}
+	
+	public void setEdmAgent(List<String> edmAgent) {
+		this.edmAgent = edmAgent;
+	}
+
+	public List<String> getEdmAgent() {
+		return edmAgent;
 	}
 	
 	/**
