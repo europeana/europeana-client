@@ -24,3 +24,9 @@ copy src/main/resources/log4j.xml.template src/main/resources/log4j.xml
 Run unit tests: SimpleSearchTest, ComplexSearchTest, ThumbnailsForCollectionAccessorTest
 
 == Check the code in the *Test classes to see  
+
+## License
+
+Licensed under the EUPL V.1.1.
+
+For full details, see [LICENSE.md](LICENSE.md).
